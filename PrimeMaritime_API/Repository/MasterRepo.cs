@@ -2230,6 +2230,10 @@ namespace PrimeMaritime_API.Repository
                   new SqlParameter("@TERM", SqlDbType.VarChar, 50) { Value = master.TERM },
                   new SqlParameter("@STATUS", SqlDbType.Bit) { Value = master.STATUS },
                   new SqlParameter("@CREATED_BY", SqlDbType.VarChar,50) { Value = master.CREATED_BY },
+                  new SqlParameter("@ADDRESS", ((long)SqlDbType.VarChar) ) { Value = master.ADDRESS},
+                  new SqlParameter("@CONTACT", SqlDbType.VarChar, 50) { Value = master.CONTACT},
+                  new SqlParameter("@EMAIL", SqlDbType.VarChar, 255) { Value = master.EMAIL },
+                  new SqlParameter("@SLOT_CODE", SqlDbType.VarChar, 20) { Value = master.SLOT_CODE },
                 };
 
                 SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_SLOT", parameters);
