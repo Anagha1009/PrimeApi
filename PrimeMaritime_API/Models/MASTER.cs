@@ -295,5 +295,13 @@ namespace PrimeMaritime_API.Models
         public bool STATUS { get; set; }
         public string CREATED_BY { get; set; }
         public DateTime CREATED_DATE { get; set; }
+
+        public string ADDRESS { get; set; }
+
+        public string CONTACT { get; set; }
+
+        public string EMAIL { get; set; }
+
+        public string SLOT_CODE { get; set; }
     }
 }
