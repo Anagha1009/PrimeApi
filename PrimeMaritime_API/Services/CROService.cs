@@ -83,7 +83,7 @@ namespace PrimeMaritime_API.Services
             return response;
         }
 
-        public Response<CRODetails> GetCRODetails(string CRO_NO, string AGENT_CODE)
+        public Response<CRODetails> GetCRODetails(string CRO_NO, string AGENT_CODE, string ORG_CODE, string PORT)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
 
@@ -96,7 +96,7 @@ namespace PrimeMaritime_API.Services
                 return response;
             }
 
-            var data = DbClientFactory<CRORepo>.Instance.GetCRODetails(dbConn, CRO_NO, AGENT_CODE);
+            var data = DbClientFactory<CRORepo>.Instance.GetCRODetails(dbConn, CRO_NO, AGENT_CODE,ORG_CODE,PORT);
 
             if ((data != null) && (data.Tables[0].Rows.Count > 0))
             {

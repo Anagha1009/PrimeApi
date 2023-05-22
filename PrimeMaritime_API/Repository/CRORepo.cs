@@ -99,7 +99,7 @@ namespace PrimeMaritime_API.Repository
             }
         }
 
-        public DataSet GetCRODetails(string connstring, string CRO_NO, string AGENT_CODE)
+        public DataSet GetCRODetails(string connstring, string CRO_NO, string AGENT_CODE, string ORG_CODE, string PORT)
         {
             try
             {
@@ -108,6 +108,8 @@ namespace PrimeMaritime_API.Repository
                 new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "GET_CRO_DETAILS" },
                 new SqlParameter("@CRO_NO", SqlDbType.VarChar, 100) { Value = CRO_NO },
                 new SqlParameter("@AGENT_CODE", SqlDbType.VarChar, 50) { Value = AGENT_CODE },
+                new SqlParameter("@ORG_CODE", SqlDbType.VarChar, 50) { Value = ORG_CODE },
+                new SqlParameter("@PORT", SqlDbType.VarChar, 100) { Value = PORT },
             };
 
                return SqlHelper.ExtecuteProcedureReturnDataSet(connstring, "SP_CRUD_CRO", parameters);

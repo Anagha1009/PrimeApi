@@ -20,15 +20,9 @@ namespace PrimeMaritime_API.Models
         public string CUSTOMER_NAME { get; set; }
         public string EMAIL { get; set; }
         public string VESSEL_NAME { get; set; }
-
         public string SERVICE_NAME { get; set; }
-
-        //public string SERVICE_MODE { get; set; }
-
         public string FINAL_DESTINATION { get; set; }
-
         public string SHIPPER_NAME { get; set; }
-
         public string ADDRESS { get; set; }
         public string STUFFING_TYPE { get; set; }
         public string EMPTY_CONT_PCKP { get; set; }
@@ -48,6 +42,6 @@ namespace PrimeMaritime_API.Models
         public string COMMODITY { get; set; }     
         public DateTime CREATED_DATE { get; set; }     
         public DateTime ETA { get; set; }     
-        public DateTime ETD { get; set; }     
+        public DateTime ETD { get; set; }
     }
 }
