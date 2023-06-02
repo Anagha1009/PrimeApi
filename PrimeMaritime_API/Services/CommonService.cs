@@ -42,7 +42,7 @@ namespace PrimeMaritime_API.Services
             return response;
         }
 
-        public Response<List<DROPDOWN>> GetDropdownData(string key, string port, string value, int value1, string value2)
+        public Response<List<DROPDOWN>> GetDropdownData(string key, string port, string value, string value1, string value2)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
 

@@ -68,7 +68,7 @@ namespace PrimeMaritime_API.Services
             if ((REPO_NO == "") || (REPO_NO == null))
             {
                 response.ResponseCode = 500;
-                response.ResponseMessage = "Please provide BL No";
+                response.ResponseMessage = "Please provide Repo No";
                 return response;
             }
 

@@ -56,9 +56,9 @@ namespace PrimeMaritime_API.Controllers
         }
 
         [HttpGet("GetMNRTariff")]
-        public ActionResult<Response<MNR_TARIFF>> GetMNRTariff(string COMPONENT, string REPAIR, string LENGTH, string WIDTH, string HEIGHT, string QUANTITY)
+        public ActionResult<Response<MNR_TARIFF>> GetMNRTariff(string COMPONENT, string REPAIR, string LENGTH, string WIDTH, string HEIGHT, string QUANTITY,string DEPO_CODE)
         {
-            return Ok(JsonConvert.SerializeObject(_depoService.GetMNRTariff(COMPONENT,REPAIR,LENGTH,WIDTH,HEIGHT,QUANTITY)));
+            return Ok(JsonConvert.SerializeObject(_depoService.GetMNRTariff(COMPONENT,REPAIR,LENGTH,WIDTH,HEIGHT,QUANTITY,DEPO_CODE)));
         }
 
         [HttpGet("GetMRDetails")]

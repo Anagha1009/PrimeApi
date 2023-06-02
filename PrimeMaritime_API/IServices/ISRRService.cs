@@ -17,8 +17,8 @@ namespace PrimeMaritime_API.IServices
         Response<string> InsertSRR(SRRRequest sRRRequest);
         Response<string> UpdateSRR(List<SRR_RATES> request);
         Response<string> InsertContainer(List<SRR_CONTAINERS> request);
-        Response<CommonResponse> ApproveRate(List<SRR_RATES> request);
-        Response<CommonResponse> CounterRate(List<SRR_RATES> request);
+        Response<CommonResponse> ApproveRate(List<SRR_RATES> request, int POL_FREE_DAYS, int POD_FREE_DAYS);
+        Response<CommonResponse> CounterRate(List<SRR_RATES> request, int POL_FREE_DAYS, int POD_FREE_DAYS);
         Response<RATES> GetCalRates(string POL, string POD, string CONTAINER_TYPE, string SRR_NO, int NO_OF_CONTAINERS);
         Response<string> InsertInvoice(INVOICELIST request);
         Response<string> InsertDestinationAgent(string DESTINATION_AGENT_CODE, string SRR_NO);
