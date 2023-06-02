@@ -130,7 +130,7 @@ namespace PrimeMaritime_API.Repository
             }
         }
 
-        public string InsertDestinationAgent(string connstring, string DESTINATION_AGENT_CODE, string SRR_NO, int POL_FREE_DAYS, int POD_FREE_DAYS)
+        public string InsertDestinationAgent(string connstring, string DESTINATION_AGENT_CODE, string SRR_NO)
         {
             try
             {
@@ -139,8 +139,6 @@ namespace PrimeMaritime_API.Repository
                   new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "INSERT_DESTINATION_AGENT_CODE" },
                   new SqlParameter("@DESTINATION_AGENT_CODE", SqlDbType.VarChar, 100) { Value = DESTINATION_AGENT_CODE },
                   new SqlParameter("@SRR_NO", SqlDbType.VarChar, 100) { Value = SRR_NO },
-                  new SqlParameter("@POL_FREE_DAYS", SqlDbType.Int) { Value = POL_FREE_DAYS },
-                  new SqlParameter("@POD_FREE_DAYS", SqlDbType.Int) { Value = POD_FREE_DAYS },
                 };
 
                 string ID = SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_SRR", parameters);
@@ -473,7 +471,7 @@ namespace PrimeMaritime_API.Repository
             }
         }
 
-        public void ApproveRate(string connstring, List<SRR_RATES> request)
+        public void ApproveRate(string connstring, List<SRR_RATES> request, int POL_FREE_DAYS, int POD_FREE_DAYS)
         {
             try
             {
@@ -495,6 +493,8 @@ namespace PrimeMaritime_API.Repository
                   new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "COUNTER_SRR" },
                   new SqlParameter("@SRR_NO", SqlDbType.VarChar, 100) { Value = request[0].SRR_NO },
                   new SqlParameter("@CREATED_BY", SqlDbType.VarChar, 100) { Value = request[0].CREATED_BY },
+                  new SqlParameter("@POL_FREE_DAYS", SqlDbType.Int) { Value = POL_FREE_DAYS },
+                  new SqlParameter("@POD_FREE_DAYS", SqlDbType.Int) { Value = POD_FREE_DAYS },
                 };
 
                 SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_SRR", parameters);
@@ -627,29 +627,6 @@ namespace PrimeMaritime_API.Repository
 
         public void InsertExcRate(string connstring, List<EXC_RATE> excRateList)
         {
-            //DataTable tbl = new DataTable();
-            //tbl.Columns.Add(new DataColumn("CURRENCY_CODE", typeof(string)));
-            //tbl.Columns.Add(new DataColumn("RATE", typeof(decimal)));
-            //tbl.Columns.Add(new DataColumn("AGENT_CODE", typeof(string)));
-
-            //foreach (var i in excRateList)
-            //{
-            //    DataRow dr = tbl.NewRow();
-
-            //    dr["CURRENCY_CODE"] = i.CURRENCY_CODE;
-            //    dr["RATE"] = i.RATE;
-            //    dr["AGENT_CODE"] = i.AGENT_CODE;
-
-            //    tbl.Rows.Add(dr);
-            //}
-
-            //string[] columns = new string[3];
-            //columns[1] = "CURRENCY_CODE";
-            //columns[2] = "RATE";
-            //columns[3] = "AGENT_CODE";
-
-            //SqlHelper.ExecuteProcedureBulkInsert(connstring, tbl, "TB_EXC_RATES", columns);
-
             try
             {
                 foreach(var item in excRateList)

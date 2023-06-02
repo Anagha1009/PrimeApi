@@ -52,7 +52,7 @@ namespace PrimeMaritime_API.Repository
 
             foreach (var i in request.CONTAINER_LIST)
             {
-                i.BL_NO = request.BL_NO;
+                i.BL_NO = BLNO;
                 i.BOOKING_NO = request.BOOKING_NO;
                 i.CRO_NO = request.CRO_NO;
                 i.MARKS_NOS = request.MARKS_NOS;

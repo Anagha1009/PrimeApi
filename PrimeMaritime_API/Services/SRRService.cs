@@ -19,11 +19,11 @@ namespace PrimeMaritime_API.Services
             _config = config;
         }
 
-        public Response<CommonResponse> ApproveRate(List<SRR_RATES> request)
+        public Response<CommonResponse> ApproveRate(List<SRR_RATES> request, int POL_FREE_DAYS, int POD_FREE_DAYS)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
 
-            DbClientFactory<SRRRepo>.Instance.ApproveRate(dbConn, request);
+            DbClientFactory<SRRRepo>.Instance.ApproveRate(dbConn, request, POL_FREE_DAYS, POD_FREE_DAYS);
 
             Response<CommonResponse> response = new Response<CommonResponse>();
             response.Succeeded = true;
@@ -107,11 +107,11 @@ namespace PrimeMaritime_API.Services
 
             return response;
         }
-        public Response<string> InsertDestinationAgent(string DESTINATION_AGENT_CODE, string SRR_NO, int POL_FREE_DAYS, int POD_FREE_DAYS)
+        public Response<string> InsertDestinationAgent(string DESTINATION_AGENT_CODE, string SRR_NO)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
 
-            DbClientFactory<SRRRepo>.Instance.InsertDestinationAgent(dbConn, DESTINATION_AGENT_CODE, SRR_NO,POL_FREE_DAYS,POD_FREE_DAYS);
+            DbClientFactory<SRRRepo>.Instance.InsertDestinationAgent(dbConn, DESTINATION_AGENT_CODE, SRR_NO);
 
             Response<string> response = new Response<string>();
             response.Succeeded = true;
@@ -120,6 +120,8 @@ namespace PrimeMaritime_API.Services
 
             return response;
         }
+
+
         public Response<List<INVOICELIST>> GetInvoiceList(string INVOICE_NO, string FROM_DATE, string TO_DATE, string AGENT_CODE)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
