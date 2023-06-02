@@ -26,7 +26,6 @@ namespace PrimeMaritime_API.Repository
         {
             try
             {
-                //empty repo entry
                 SqlParameter[] parameters =
                 {
                   new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "CREATE_EMPTY_REPO" },
@@ -55,23 +54,16 @@ namespace PrimeMaritime_API.Repository
 
                 var repoNO = SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_EMPTY_REPO", parameters);
 
-                //ERCONT ENTRY
                 DataTable tbl = new DataTable();
                 tbl.Columns.Add(new DataColumn("REPO_NO", typeof(string)));
                 tbl.Columns.Add(new DataColumn("CONTAINER_NO", typeof(string)));
                 tbl.Columns.Add(new DataColumn("CONTAINER_TYPE", typeof(string)));
                 tbl.Columns.Add(new DataColumn("CONTAINER_SIZE", typeof(string)));
-                //tbl.Columns.Add(new DataColumn("SEAL_NO", typeof(string)));
-                //tbl.Columns.Add(new DataColumn("MARKS_NOS", typeof(string)));
-                //tbl.Columns.Add(new DataColumn("DESC_OF_GOODS", typeof(string)));
-                //tbl.Columns.Add(new DataColumn("GROSS_WEIGHT", typeof(decimal)));
-                //tbl.Columns.Add(new DataColumn("MEASUREMENT", typeof(string)));
                 tbl.Columns.Add(new DataColumn("AGENT_CODE", typeof(string)));
                 tbl.Columns.Add(new DataColumn("AGENT_NAME", typeof(string)));
                 tbl.Columns.Add(new DataColumn("DEPO_CODE", typeof(string)));
                 tbl.Columns.Add(new DataColumn("CREATED_BY", typeof(string)));
 
-                //ER-CONTAINER ENTRY
                 foreach (var i in request.CONTAINER_LIST)
                 {
                     DataRow dr = tbl.NewRow();
@@ -98,11 +90,6 @@ namespace PrimeMaritime_API.Repository
                 columns[1] = "CONTAINER_NO";
                 columns[2] = "CONTAINER_TYPE";
                 columns[3] = "CONTAINER_SIZE";
-                //columns[4] = "SEAL_NO";
-                //columns[5] = "MARKS_NOS";
-                //columns[6] = "DESC_OF_GOODS";
-                //columns[7] = "GROSS_WEIGHT";
-                //columns[8] = "MEASUREMENT";
                 columns[4] = "AGENT_CODE";
                 columns[5] = "AGENT_NAME";
                 columns[6] = "DEPO_CODE";
@@ -110,14 +97,11 @@ namespace PrimeMaritime_API.Repository
 
                 SqlHelper.ExecuteProcedureBulkInsert(connstring, tbl, "TB_ER_CONTAINER", columns);
 
-                //CHARGEENTRY
                 DataTable tbl2 = new DataTable();
                 tbl2.Columns.Add(new DataColumn("REPO_NO", typeof(string)));
                 tbl2.Columns.Add(new DataColumn("CHARGE_CODE", typeof(string)));
                 tbl2.Columns.Add(new DataColumn("CURRENCY", typeof(string)));
                 tbl2.Columns.Add(new DataColumn("STANDARD_RATE", typeof(decimal)));
-                //tbl2.Columns.Add(new DataColumn("CHARGE_TYPE", typeof(string)));
-                //tbl2.Columns.Add(new DataColumn("REMARKS", typeof(string)));
                 tbl2.Columns.Add(new DataColumn("CREATED_BY", typeof(string)));
 
                 foreach (var i in request.CONTAINER_RATES)
@@ -128,8 +112,6 @@ namespace PrimeMaritime_API.Repository
                     dr["CHARGE_CODE"] = i.CHARGE_CODE;
                     dr["CURRENCY"] = i.CURRENCY;
                     dr["STANDARD_RATE"] = i.STANDARD_RATE;
-                    //dr["CHARGE_TYPE"] = ' ';
-                    //dr["REMARKS"] = ' ';
                     dr["CREATED_BY"] = request.CREATED_BY;
 
                     tbl2.Rows.Add(dr);
@@ -140,49 +122,83 @@ namespace PrimeMaritime_API.Repository
                 columns2[1] = "CHARGE_CODE";
                 columns2[2] = "CURRENCY";
                 columns2[3] = "STANDARD_RATE";
-                //columns2[4] = "CHARGE_TYPE";
-                //columns2[5] = "REMARKS";
                 columns2[4] = "CREATED_BY";
 
                 SqlHelper.ExecuteProcedureBulkInsert(connstring, tbl2, "TB_ER_RATES", columns2);
 
+                foreach (var items in request.CONTAINER_LIST)
+                {
+                    SqlParameter[] param =
+                    {
+                        new SqlParameter("@OPERATION", SqlDbType.VarChar,50) { Value = "DELETE_CONTAINER" },
+                        new SqlParameter("@CONTAINER_NO", SqlDbType.VarChar,50) { Value = items.CONTAINER_NO },
+                    };
+
+                    SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_CONTAINER_MOVEMENT", param);
+                }
+
+                DataTable tbl1 = new DataTable();
+                tbl1.Columns.Add(new DataColumn("CONTAINER_NO", typeof(string)));
+                tbl1.Columns.Add(new DataColumn("ACTIVITY", typeof(string)));
+                tbl1.Columns.Add(new DataColumn("ACTIVITY_DATE", typeof(DateTime)));
+                tbl1.Columns.Add(new DataColumn("LOCATION", typeof(string)));
+                tbl1.Columns.Add(new DataColumn("STATUS", typeof(string)));
+                tbl1.Columns.Add(new DataColumn("DEPO_CODE", typeof(string)));
+                tbl1.Columns.Add(new DataColumn("CREATED_BY", typeof(string)));
+
+                foreach (var i in request.CONTAINER_LIST)
+                {
+                    DataRow dr = tbl1.NewRow();
+
+                    dr["CONTAINER_NO"] = i.CONTAINER_NO;
+                    dr["ACTIVITY"] = "LODE";
+                    dr["ACTIVITY_DATE"] = request.MOVEMENT_DATE;
+                    dr["LOCATION"] = request.DISCHARGE_DEPOT;
+                    dr["STATUS"] = "Empty";
+                    dr["CREATED_BY"] = request.CREATED_BY;
+
+                    tbl1.Rows.Add(dr);
+                }
+
+                string[] columns1 = new string[6];
+                columns1[0] = "CONTAINER_NO";
+                columns1[1] = "ACTIVITY";
+                columns1[2] = "ACTIVITY_DATE";
+                columns1[3] = "LOCATION";
+                columns1[4] = "STATUS";
+                columns1[5] = "CREATED_BY";
+
+                SqlHelper.ExecuteProcedureBulkInsert(connstring, tbl1, "TB_CONTAINER_MOVEMENT", columns1);
+                SqlHelper.ExecuteProcedureBulkInsert(connstring, tbl1, "TB_CONTAINER_TRACKING", columns1);
+
                 //SLOTENTRY
                 if (isVessel)
                 {
-                    DataTable tbl1 = new DataTable();
-                    //tbl1.Columns.Add(new DataColumn("BOOKING_ID", typeof(int)));
-                    //tbl1.Columns.Add(new DataColumn("BOOKING_NO", typeof(string)));
-                    //tbl1.Columns.Add(new DataColumn("ROLLOVER_ID", typeof(int)));
-                    tbl1.Columns.Add(new DataColumn("REPO_NO", typeof(string)));
-                    tbl1.Columns.Add(new DataColumn("SLOT_OPERATOR", typeof(string)));
-                    tbl1.Columns.Add(new DataColumn("NO_OF_SLOTS", typeof(int)));
-                    tbl1.Columns.Add(new DataColumn("CREATED_BY", typeof(string)));
+                    DataTable tbl3 = new DataTable();
+                    tbl3.Columns.Add(new DataColumn("REPO_NO", typeof(string)));
+                    tbl3.Columns.Add(new DataColumn("SLOT_OPERATOR", typeof(string)));
+                    tbl3.Columns.Add(new DataColumn("NO_OF_SLOTS", typeof(int)));
+                    tbl3.Columns.Add(new DataColumn("CREATED_BY", typeof(string)));
 
                     foreach (var i in request.SLOT_LIST)
                     {
-                        DataRow dr = tbl1.NewRow();
+                        DataRow dr = tbl3.NewRow();
 
-                        //dr["BOOKING_ID"] = 0;
-                        //dr["BOOKING_NO"] = ' ';
-                        //dr["ROLLOVER_ID"] = 0;
                         dr["REPO_NO"] = request.REPO_NO;
                         dr["SLOT_OPERATOR"] = i.SLOT_OPERATOR;
                         dr["NO_OF_SLOTS"] = i.NO_OF_SLOTS;
                         dr["CREATED_BY"] = request.CREATED_BY;
 
-                        tbl1.Rows.Add(dr);
+                        tbl3.Rows.Add(dr);
                     }
 
-                    string[] columns1 = new string[4];
-                    //columns1[0] = "BOOKING_ID";
-                    //columns1[1] = "BOOKING_NO";
-                    //columns1[2] = "ROLLOVER_ID";
-                    columns1[0] = "REPO_NO";
-                    columns1[1] = "SLOT_OPERATOR";
-                    columns1[2] = "NO_OF_SLOTS";
-                    columns1[3] = "CREATED_BY";
+                    string[] columns3 = new string[4];
+                    columns3[0] = "REPO_NO";
+                    columns3[1] = "SLOT_OPERATOR";
+                    columns3[2] = "NO_OF_SLOTS";
+                    columns3[3] = "CREATED_BY";
 
-                    SqlHelper.ExecuteProcedureBulkInsert(connstring, tbl1, "TB_SLOT_DETAILS", columns1);
+                    SqlHelper.ExecuteProcedureBulkInsert(connstring, tbl3, "TB_SLOT_DETAILS", columns3);
                 }
             }
             catch (Exception)

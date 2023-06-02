@@ -83,9 +83,9 @@ namespace PrimeMaritime_API.Controllers
         }
 
         [HttpPost("InsertDestinationAgent")]
-        public ActionResult<Response<string>> InsertDestinationAgent(string DESTINATION_AGENT_CODE, string SRR_NO)
+        public ActionResult<Response<string>> InsertDestinationAgent(string DESTINATION_AGENT_CODE, string SRR_NO, int POL_FREE_DAYS, int POD_FREE_DAYS)
         {
-            return Ok(_srrService.InsertDestinationAgent(DESTINATION_AGENT_CODE, SRR_NO));
+            return Ok(_srrService.InsertDestinationAgent(DESTINATION_AGENT_CODE, SRR_NO,POL_FREE_DAYS,POD_FREE_DAYS));
         }
 
         [HttpGet("GetSRRList")]
@@ -194,9 +194,9 @@ namespace PrimeMaritime_API.Controllers
         }
 
         [HttpPost("CounterRate")]
-        public ActionResult<Response<CommonResponse>> CounterRate(List<SRR_RATES> request)
+        public ActionResult<Response<CommonResponse>> CounterRate(List<SRR_RATES> request,int POL_FREE_DAYS,int POD_FREE_DAYS)
         {
-            return Ok(_srrService.CounterRate(request));
+            return Ok(_srrService.CounterRate(request,POL_FREE_DAYS,POD_FREE_DAYS));
         }
 
         [HttpGet("GetSRRFiles")]

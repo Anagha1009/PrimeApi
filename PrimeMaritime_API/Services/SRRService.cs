@@ -32,11 +32,11 @@ namespace PrimeMaritime_API.Services
 
             return response;
         }
-        public Response<CommonResponse> CounterRate(List<SRR_RATES> request)
+        public Response<CommonResponse> CounterRate(List<SRR_RATES> request, int POL_FREE_DAYS, int POD_FREE_DAYS)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
 
-            DbClientFactory<SRRRepo>.Instance.CounterRate(dbConn, request);
+            DbClientFactory<SRRRepo>.Instance.CounterRate(dbConn, request,POL_FREE_DAYS,POD_FREE_DAYS);
 
             Response<CommonResponse> response = new Response<CommonResponse>();
             response.Succeeded = true;
@@ -107,11 +107,11 @@ namespace PrimeMaritime_API.Services
 
             return response;
         }
-        public Response<string> InsertDestinationAgent(string DESTINATION_AGENT_CODE, string SRR_NO)
+        public Response<string> InsertDestinationAgent(string DESTINATION_AGENT_CODE, string SRR_NO, int POL_FREE_DAYS, int POD_FREE_DAYS)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
 
-            DbClientFactory<SRRRepo>.Instance.InsertDestinationAgent(dbConn, DESTINATION_AGENT_CODE, SRR_NO);
+            DbClientFactory<SRRRepo>.Instance.InsertDestinationAgent(dbConn, DESTINATION_AGENT_CODE, SRR_NO,POL_FREE_DAYS,POD_FREE_DAYS);
 
             Response<string> response = new Response<string>();
             response.Succeeded = true;

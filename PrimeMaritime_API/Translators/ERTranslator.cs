@@ -80,6 +80,13 @@ namespace PrimeMaritime_API.Translators
             if (reader.IsColumnExists("CREATED_BY"))
                 item.CREATED_BY = SqlHelper.GetNullableString(reader, "CREATED_BY");
 
+            if (reader.IsColumnExists("CRO_NO"))
+                item.CRO_NO = SqlHelper.GetNullableString(reader, "CRO_NO");
+
+            if (reader.IsColumnExists("CRO_VALIDITY_DATE"))
+                item.CRO_VALIDITY_DATE = SqlHelper.GetDateTime(reader, "CRO_VALIDITY_DATE");
+
+
             return item;
         }
     }

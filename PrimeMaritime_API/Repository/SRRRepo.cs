@@ -130,7 +130,7 @@ namespace PrimeMaritime_API.Repository
             }
         }
 
-        public string InsertDestinationAgent(string connstring, string DESTINATION_AGENT_CODE, string SRR_NO)
+        public string InsertDestinationAgent(string connstring, string DESTINATION_AGENT_CODE, string SRR_NO, int POL_FREE_DAYS, int POD_FREE_DAYS)
         {
             try
             {
@@ -139,6 +139,8 @@ namespace PrimeMaritime_API.Repository
                   new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "INSERT_DESTINATION_AGENT_CODE" },
                   new SqlParameter("@DESTINATION_AGENT_CODE", SqlDbType.VarChar, 100) { Value = DESTINATION_AGENT_CODE },
                   new SqlParameter("@SRR_NO", SqlDbType.VarChar, 100) { Value = SRR_NO },
+                  new SqlParameter("@POL_FREE_DAYS", SqlDbType.Int) { Value = POL_FREE_DAYS },
+                  new SqlParameter("@POD_FREE_DAYS", SqlDbType.Int) { Value = POD_FREE_DAYS },
                 };
 
                 string ID = SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_SRR", parameters);
@@ -504,7 +506,7 @@ namespace PrimeMaritime_API.Repository
             }
         }
 
-        public void CounterRate(string connstring, List<SRR_RATES> request)
+        public void CounterRate(string connstring, List<SRR_RATES> request, int POL_FREE_DAYS, int POD_FREE_DAYS)
         {
             try
             {
@@ -526,6 +528,8 @@ namespace PrimeMaritime_API.Repository
                   new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "COUNTER_SRR" },
                   new SqlParameter("@SRR_NO", SqlDbType.VarChar, 100) { Value = request[0].SRR_NO },
                   new SqlParameter("@CREATED_BY", SqlDbType.VarChar, 100) { Value = request[0].CREATED_BY },
+                  new SqlParameter("@POL_FREE_DAYS", SqlDbType.Int) { Value = POL_FREE_DAYS },
+                  new SqlParameter("@POD_FREE_DAYS", SqlDbType.Int) { Value = POD_FREE_DAYS },
                 };
 
                 SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_SRR", parameters);
