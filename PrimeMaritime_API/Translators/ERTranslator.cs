@@ -80,12 +80,47 @@ namespace PrimeMaritime_API.Translators
             if (reader.IsColumnExists("CREATED_BY"))
                 item.CREATED_BY = SqlHelper.GetNullableString(reader, "CREATED_BY");
 
+            if (reader.IsColumnExists("CREATED_DATE"))
+                item.CREATED_DATE = SqlHelper.GetDateTime(reader, "CREATED_DATE");
+
             if (reader.IsColumnExists("CRO_NO"))
                 item.CRO_NO = SqlHelper.GetNullableString(reader, "CRO_NO");
 
             if (reader.IsColumnExists("CRO_VALIDITY_DATE"))
                 item.CRO_VALIDITY_DATE = SqlHelper.GetDateTime(reader, "CRO_VALIDITY_DATE");
 
+            if (reader.IsColumnExists("ORG_NAME"))
+                item.ORG_NAME = SqlHelper.GetNullableString(reader, "ORG_NAME");
+
+            if (reader.IsColumnExists("ORG_ADDRESS1"))
+                item.ORG_ADDRESS1 = SqlHelper.GetNullableString(reader, "ORG_ADDRESS1");
+
+            if (reader.IsColumnExists("CREATED_DATE"))
+                item.CREATED_DATE = SqlHelper.GetDateTime(reader, "CREATED_DATE");
+
+            if (reader.IsColumnExists("EMPTY_CONT_PCKP"))
+                item.EMPTY_CONT_PCKP = SqlHelper.GetNullableString(reader, "EMPTY_CONT_PCKP");
+
+            if (reader.IsColumnExists("SERVICE_NAME"))
+                item.SERVICE_NAME = SqlHelper.GetNullableString(reader, "SERVICE_NAME");
+
+            if (reader.IsColumnExists("ETA"))
+                item.ETA = SqlHelper.GetDateTime(reader, "ETA");
+
+            if (reader.IsColumnExists("ETD"))
+                item.ETD = SqlHelper.GetDateTime(reader, "ETD");
+
+            if (reader.IsColumnExists("POL"))
+                item.POL = SqlHelper.GetNullableString(reader, "POL");
+
+            if (reader.IsColumnExists("POD"))
+                item.POD = SqlHelper.GetNullableString(reader, "POD");
+
+            if (reader.IsColumnExists("FINAL_DESTINATION"))
+                item.FINAL_DESTINATION = SqlHelper.GetNullableString(reader, "FINAL_DESTINATION");
+
+            if (reader.IsColumnExists("REQ_QUANTITY"))
+                item.REQ_QUANTITY = SqlHelper.GetNullableInt32(reader, "REQ_QUANTITY");
 
             return item;
         }

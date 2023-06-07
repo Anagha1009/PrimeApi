@@ -15,7 +15,7 @@ namespace PrimeMaritime_API.Repository
     {
 
         #region "PARTY MASTER"
-        public void InsertPartyMaster(string connstring, PARTY_MASTER master)
+        public string InsertPartyMaster(string connstring, PARTY_MASTER master)
         {
             try
             {
@@ -33,9 +33,73 @@ namespace PrimeMaritime_API.Repository
                   new SqlParameter("@REMARKS", SqlDbType.VarChar, 200) { Value = master.REMARKS },
                   new SqlParameter("@AGENT_CODE", SqlDbType.VarChar, 100) { Value = master.AGENT_CODE },
                   new SqlParameter("@CREATED_BY", SqlDbType.VarChar,100) { Value = master.CREATED_BY },
+                  new SqlParameter("@COUNTRY", SqlDbType.VarChar,20) { Value = master.COUNTRY },
+                  new SqlParameter("@STATE", SqlDbType.VarChar,255) { Value = master.STATE },
+                  new SqlParameter("@CITY", SqlDbType.VarChar,255) { Value = master.CITY },
+                  new SqlParameter("@PINCODE", SqlDbType.VarChar,50) { Value = master.PINCODE },
+                  new SqlParameter("@PAN", SqlDbType.VarChar,50) { Value = master.PAN },
+                  new SqlParameter("@CONTACT_PERSON_NAME", SqlDbType.VarChar,255) { Value = master.CONTACT_PERSON_NAME },
+                  new SqlParameter("@CONTACT_PERSON_NO", SqlDbType.VarChar,50) { Value = master.CONTACT_PERSON_NO },
+                  new SqlParameter("@IS_GROUP_COMPANIES", SqlDbType.Bit) { Value = master.IS_GROUP_COMPANIES },
+                  new SqlParameter("@SALES_NAME", SqlDbType.VarChar,255) { Value = master.SALES_NAME },
+                  new SqlParameter("@SALES_CODE", SqlDbType.VarChar,50) { Value = master.SALES_CODE },
+                  new SqlParameter("@SALES_LOC", SqlDbType.VarChar,255) { Value = master.SALES_LOC },
+                  new SqlParameter("@SALES_EFFECTIVE_DATE", SqlDbType.DateTime) { Value = String.IsNullOrEmpty(master.SALES_EFFECTIVE_DATE) ? null : Convert.ToDateTime(master.SALES_EFFECTIVE_DATE)  },
+                  new SqlParameter("@BANK_NAME", SqlDbType.VarChar,255) { Value = master.BANK_NAME },
+                  new SqlParameter("@BANK_ACC_NO", SqlDbType.VarChar,50) { Value = master.BANK_ACC_NO },
+                  new SqlParameter("@BANK_IFSC", SqlDbType.VarChar,50) { Value = master.BANK_IFSC },
+                  new SqlParameter("@BANK_TAX_NO", SqlDbType.VarChar,100) { Value = master.BANK_TAX_NO },
+                  new SqlParameter("@BANK_TAX_TYPE", SqlDbType.VarChar,50) { Value = master.BANK_TAX_TYPE },
+                  new SqlParameter("@BANK_REMARKS", SqlDbType.VarChar,255) { Value = master.BANK_REMARKS },
                 };
 
-                SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_MASTER", parameters);
+                var ID = SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_MASTER", parameters);
+
+                DataTable tbl = new DataTable();
+                tbl.Columns.Add(new DataColumn("CUST_ID", typeof(int)));
+                tbl.Columns.Add(new DataColumn("BRANCH_NAME", typeof(string)));
+                tbl.Columns.Add(new DataColumn("COUNTRY", typeof(string)));
+                tbl.Columns.Add(new DataColumn("STATE", typeof(string)));
+                tbl.Columns.Add(new DataColumn("CITY", typeof(string)));
+                tbl.Columns.Add(new DataColumn("TAN", typeof(string)));
+                tbl.Columns.Add(new DataColumn("PIC_NAME", typeof(string)));
+                tbl.Columns.Add(new DataColumn("PIC_CONTACT", typeof(string)));
+                tbl.Columns.Add(new DataColumn("PIC_EMAIL", typeof(string)));
+                tbl.Columns.Add(new DataColumn("ADDRESS", typeof(string)));
+
+                foreach (var i in master.BRANCH_LIST)
+                {
+                    DataRow dr = tbl.NewRow();
+
+                    dr["CUST_ID"] = Convert.ToInt32(ID);
+                    dr["BRANCH_NAME"] = i.BRANCH_NAME;
+                    dr["COUNTRY"] = i.COUNTRY;
+                    dr["STATE"] = i.STATE;
+                    dr["CITY"] = i.CITY;
+                    dr["TAN"] = i.TAN;
+                    dr["PIC_NAME"] = i.PIC_NAME;
+                    dr["PIC_CONTACT"] = i.PIC_CONTACT;
+                    dr["PIC_EMAIL"] = i.PIC_EMAIL;
+                    dr["ADDRESS"] = i.ADDRESS;
+
+                    tbl.Rows.Add(dr);
+                }
+
+                string[] columns = new string[10];
+                columns[0] = "CUST_ID";
+                columns[1] = "BRANCH_NAME";
+                columns[2] = "COUNTRY";
+                columns[3] = "STATE";
+                columns[4] = "CITY";
+                columns[5] = "TAN";
+                columns[6] = "PIC_NAME";
+                columns[7] = "PIC_CONTACT";
+                columns[8] = "PIC_EMAIL";
+                columns[9] = "ADDRESS";
+
+                SqlHelper.ExecuteProcedureBulkInsert(connstring, tbl, "MST_CUSTOMER_BRANCH", columns);
+
+                return ID;
             }
             catch (Exception)
             {
@@ -72,7 +136,7 @@ namespace PrimeMaritime_API.Repository
 
         }
 
-        public PARTY_MASTER GetPartyMasterDetails(string connstring, string AGENT_CODE, int CUSTOMER_ID)
+        public DataSet GetPartyMasterDetails(string connstring, string AGENT_CODE, int CUSTOMER_ID)
         {
             try
             {
@@ -83,7 +147,7 @@ namespace PrimeMaritime_API.Repository
                    new SqlParameter("@OPERATION", SqlDbType.VarChar, 20) { Value = "GET_CUSTOMERDETAILS" }
                 };
 
-                return SqlHelper.ExtecuteProcedureReturnData<PARTY_MASTER>(connstring, "SP_CRUD_MASTER", r => r.TranslateAsCustomer(), parameters);
+                return SqlHelper.ExtecuteProcedureReturnDataSet(connstring, "SP_CRUD_MASTER", parameters);
             }
             catch (Exception)
             {
@@ -127,6 +191,24 @@ namespace PrimeMaritime_API.Repository
                   new SqlParameter("@STATUS", SqlDbType.Bit) { Value = master.STATUS},
                   new SqlParameter("@AGENT_CODE", SqlDbType.VarChar, 50) { Value = master.AGENT_CODE },
                   new SqlParameter("@CUST_ID", SqlDbType.Int) { Value = master.CUST_ID },
+                  new SqlParameter("@COUNTRY", SqlDbType.VarChar,20) { Value = master.COUNTRY },
+                  new SqlParameter("@STATE", SqlDbType.VarChar,255) { Value = master.STATE },
+                  new SqlParameter("@CITY", SqlDbType.VarChar,255) { Value = master.CITY },
+                  new SqlParameter("@PINCODE", SqlDbType.VarChar,50) { Value = master.PINCODE },
+                  new SqlParameter("@PAN", SqlDbType.VarChar,50) { Value = master.PAN },
+                  new SqlParameter("@CONTACT_PERSON_NAME", SqlDbType.VarChar,255) { Value = master.CONTACT_PERSON_NAME },
+                  new SqlParameter("@CONTACT_PERSON_NO", SqlDbType.VarChar,50) { Value = master.CONTACT_PERSON_NO },
+                  new SqlParameter("@IS_GROUP_COMPANIES", SqlDbType.Bit) { Value = master.IS_GROUP_COMPANIES },
+                  new SqlParameter("@SALES_NAME", SqlDbType.VarChar,255) { Value = master.SALES_NAME },
+                  new SqlParameter("@SALES_CODE", SqlDbType.VarChar,50) { Value = master.SALES_CODE },
+                  new SqlParameter("@SALES_LOC", SqlDbType.VarChar,255) { Value = master.SALES_LOC },
+                  new SqlParameter("@SALES_EFFECTIVE_DATE", SqlDbType.DateTime) { Value = String.IsNullOrEmpty(master.SALES_EFFECTIVE_DATE) ? null : Convert.ToDateTime(master.SALES_EFFECTIVE_DATE)  },
+                  new SqlParameter("@BANK_NAME", SqlDbType.VarChar,255) { Value = master.BANK_NAME },
+                  new SqlParameter("@BANK_ACC_NO", SqlDbType.VarChar,50) { Value = master.BANK_ACC_NO },
+                  new SqlParameter("@BANK_IFSC", SqlDbType.VarChar,50) { Value = master.BANK_IFSC },
+                  new SqlParameter("@BANK_TAX_NO", SqlDbType.VarChar,100) { Value = master.BANK_TAX_NO },
+                  new SqlParameter("@BANK_TAX_TYPE", SqlDbType.VarChar,50) { Value = master.BANK_TAX_TYPE },
+                  new SqlParameter("@BANK_REMARKS", SqlDbType.VarChar,255) { Value = master.BANK_REMARKS },
                 };
 
                 SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_MASTER", parameters);
@@ -2324,6 +2406,16 @@ namespace PrimeMaritime_API.Repository
             }
         }
         #endregion
+
+        public static T GetSingleDataFromDataSet<T>(DataTable dataTable) where T : new()
+        {
+            return SqlHelper.CreateItemFromRow<T>(dataTable.Rows[0]);
+        }
+
+        public static List<T> GetListFromDataSet<T>(DataTable dataTable) where T : new()
+        {
+            return SqlHelper.CreateListFromTable<T>(dataTable);
+        }
     }
 
 }
