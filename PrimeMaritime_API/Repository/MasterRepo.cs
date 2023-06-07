@@ -2406,16 +2406,6 @@ namespace PrimeMaritime_API.Repository
             }
         }
         #endregion
-
-        public static T GetSingleDataFromDataSet<T>(DataTable dataTable) where T : new()
-        {
-            return SqlHelper.CreateItemFromRow<T>(dataTable.Rows[0]);
-        }
-
-        public static List<T> GetListFromDataSet<T>(DataTable dataTable) where T : new()
-        {
-            return SqlHelper.CreateListFromTable<T>(dataTable);
-        }
     }
 
 }

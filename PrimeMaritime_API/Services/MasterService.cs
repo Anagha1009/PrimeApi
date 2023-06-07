@@ -1979,5 +1979,111 @@ namespace PrimeMaritime_API.Services
             return response;
         }
         #endregion
+
+
+        #region "Charges MASTER"
+        public Response<CommonResponse> InsertChargeMaster(CHARGES_MASTER request)
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            DbClientFactory<MasterRepo>.Instance.InsertChargeMaster(dbConn, request);
+
+            Response<CommonResponse> response = new Response<CommonResponse>();
+            response.Succeeded = true;
+            response.ResponseMessage = "Charge Master saved Successfully.";
+            response.ResponseCode = 200;
+
+            return response;
+        }
+
+        public Response<List<CHARGES_MASTER>> GetChargeMaster()
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            Response<List<CHARGES_MASTER>> response = new Response<List<CHARGES_MASTER>>();
+            var data = DbClientFactory<MasterRepo>.Instance.GetChargeMaster(dbConn);
+
+            if (data != null)
+            {
+                response.Succeeded = true;
+                response.ResponseCode = 200;
+                response.ResponseMessage = "Success";
+                response.Data = data;
+            }
+            else
+            {
+                response.Succeeded = false;
+                response.ResponseCode = 500;
+                response.ResponseMessage = "No Data";
+            }
+
+            return response;
+        }
+
+
+        public Response<List<CHARGES_MASTER>> GetChargeMastersDetails(int ID)
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            Response<List<CHARGES_MASTER>> response = new Response<List<CHARGES_MASTER>>();
+            var data = DbClientFactory<MasterRepo>.Instance.GetChargeMastersDetails(dbConn, ID);
+
+            if (data != null)
+            {
+                response.Succeeded = true;
+                response.ResponseCode = 200;
+                response.ResponseMessage = "Success";
+                response.Data = data;
+            }
+            else
+            {
+                response.Succeeded = false;
+                response.ResponseCode = 500;
+                response.ResponseMessage = "No Data";
+            }
+
+            return response;
+        }
+
+
+        public Response<CommonResponse> UpdateChargesMaster(CHARGES_MASTER request)
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            Response<CommonResponse> response = new Response<CommonResponse>();
+            DbClientFactory<MasterRepo>.Instance.UpdateChargesMaster(dbConn, request);
+
+            response.Succeeded = true;
+            response.ResponseMessage = "Charge Master updated Successfully.";
+            response.ResponseCode = 200;
+
+            return response;
+        }
+
+        public Response<CommonResponse> DeleteChargesMaster(int ID)
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            Response<CommonResponse> response = new Response<CommonResponse>();
+
+            if (ID == 0)
+            {
+                response.ResponseCode = 500;
+                response.ResponseMessage = "Please provide ID ";
+                return response;
+            }
+
+            DbClientFactory<MasterRepo>.Instance.DeleteChargesMaster(dbConn, ID);
+
+            response.Succeeded = true;
+            response.ResponseMessage = "Charge Master deleted Successfully.";
+            response.ResponseCode = 200;
+
+            return response;
+        }
+        #endregion
     }
+
+
+
 }
