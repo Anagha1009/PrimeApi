@@ -207,7 +207,7 @@ namespace PrimeMaritime_API.Repository
             }
         }
 
-        public List<EMPTY_REPO> GetERList(string connstring, string AGENT_CODE,string DEPO_CODE)
+        public List<EMPTY_REPO> GetERList(string connstring, string AGENT_CODE,string DEPO_CODE, string ORG_CODE, string PORT)
         {
             try
             {
@@ -215,7 +215,9 @@ namespace PrimeMaritime_API.Repository
                 {
                   new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "GET_EMPTY_REPO_LIST" },
                   new SqlParameter("@AGENT_CODE", SqlDbType.VarChar, 50) { Value = AGENT_CODE },
-                  new SqlParameter("@DEPO_CODE", SqlDbType.VarChar, 50) { Value = DEPO_CODE }
+                  new SqlParameter("@DEPO_CODE", SqlDbType.VarChar, 50) { Value = DEPO_CODE },
+                  new SqlParameter("@ORG_CODE", SqlDbType.VarChar, 20) { Value = ORG_CODE },
+                  new SqlParameter("@PORT", SqlDbType.VarChar, 100) { Value = PORT }
                 };
 
                 DataTable dataTable = SqlHelper.ExtecuteProcedureReturnDataTable(connstring, "SP_CRUD_EMPTY_REPO", parameters);
@@ -229,7 +231,7 @@ namespace PrimeMaritime_API.Repository
             }
         }
 
-        public EMPTY_REPO GetERDetails(string connstring, string REPO_NO, string AGENT_CODE, string DEPO_CODE)
+        public EMPTY_REPO GetERDetails(string connstring, string REPO_NO, string ORG_CODE, string PORT)
         {
             try
             {
@@ -237,8 +239,8 @@ namespace PrimeMaritime_API.Repository
             {
                 new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "GET_EMPTY_REPO_DETAILS" },
                 new SqlParameter("@REPO_NO", SqlDbType.VarChar, 100) { Value = REPO_NO },
-                new SqlParameter("@AGENT_CODE", SqlDbType.VarChar, 50) { Value = AGENT_CODE },
-                new SqlParameter("@DEPO_CODE", SqlDbType.VarChar, 50) { Value = DEPO_CODE }
+                new SqlParameter("@ORG_CODE", SqlDbType.VarChar, 20) { Value = ORG_CODE },
+                new SqlParameter("@PORT", SqlDbType.VarChar, 100) { Value = PORT }
             };
 
                 return SqlHelper.ExtecuteProcedureReturnData<EMPTY_REPO>(connstring, "SP_CRUD_EMPTY_REPO", r => r.TranslateER(), parameters);

@@ -120,8 +120,6 @@ namespace PrimeMaritime_API.Services
 
             return response;
         }
-
-
         public Response<List<INVOICELIST>> GetInvoiceList(string INVOICE_NO, string FROM_DATE, string TO_DATE, string AGENT_CODE)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");

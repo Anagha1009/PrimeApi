@@ -35,12 +35,12 @@ namespace PrimeMaritime_API.Services
             return response;
         }
 
-        public Response<List<EMPTY_REPO>> GetERList(string AGENT_CODE, string DEPO_CODE)
+        public Response<List<EMPTY_REPO>> GetERList(string AGENT_CODE, string DEPO_CODE, string ORG_CODE, string PORT)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
 
             Response<List<EMPTY_REPO>> response = new Response<List<EMPTY_REPO>>();
-            var data = DbClientFactory<ERRepo>.Instance.GetERList(dbConn, AGENT_CODE, DEPO_CODE);
+            var data = DbClientFactory<ERRepo>.Instance.GetERList(dbConn, AGENT_CODE, DEPO_CODE,ORG_CODE,PORT);
 
             if (data.Count > 0)
             {
@@ -59,7 +59,7 @@ namespace PrimeMaritime_API.Services
             return response;
         }
 
-        public Response<EMPTY_REPO> GetERDetails(string REPO_NO, string AGENT_CODE, string DEPO_CODE)
+        public Response<EMPTY_REPO> GetERDetails(string REPO_NO, string ORG_CODE, string PORT)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
 
@@ -73,7 +73,7 @@ namespace PrimeMaritime_API.Services
             }
 
 
-            var data = DbClientFactory<ERRepo>.Instance.GetERDetails(dbConn, REPO_NO, AGENT_CODE, DEPO_CODE);
+            var data = DbClientFactory<ERRepo>.Instance.GetERDetails(dbConn, REPO_NO, ORG_CODE, PORT);
 
             if ((data != null))
             {

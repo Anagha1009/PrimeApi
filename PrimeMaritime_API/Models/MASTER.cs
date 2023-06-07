@@ -15,10 +15,41 @@ namespace PrimeMaritime_API.Models
         public string CUST_TYPE { get; set; }
         public string GSTIN { get; set; }
         public string VAT_NO { get; set; }
-        public Boolean STATUS { get; set; }
+        public bool STATUS { get; set; }
         public string REMARKS { get; set; }
         public string AGENT_CODE { get; set; }
         public string CREATED_BY { get; set; }
+        public string COUNTRY { get; set; }
+        public string STATE { get; set; }
+        public string CITY { get; set; }
+        public string PINCODE { get; set; }
+        public string PAN { get; set; }
+        public string CONTACT_PERSON_NAME { get; set; }
+        public string CONTACT_PERSON_NO { get; set; }
+        public bool IS_GROUP_COMPANIES { get; set; }
+        public string SALES_NAME { get; set; }
+        public string SALES_CODE { get; set; }
+        public string SALES_LOC { get; set; }
+        public string SALES_EFFECTIVE_DATE { get; set; }
+        public string BANK_NAME { get; set; }
+        public string BANK_ACC_NO { get; set; }
+        public string BANK_IFSC { get; set; }
+        public string BANK_TAX_NO { get; set; }
+        public string BANK_TAX_TYPE { get; set; }
+        public string BANK_REMARKS { get; set; }
+        public List<CUSTOMER_BRANCH> BRANCH_LIST { get; set; } = new List<CUSTOMER_BRANCH>();
+    }
+    public class CUSTOMER_BRANCH
+    {
+        public string BRANCH_NAME { get; set; }
+        public string COUNTRY { get; set; }
+        public string STATE { get; set; }
+        public string CITY { get; set; }
+        public string TAN { get; set; }
+        public string PIC_NAME { get; set; }
+        public string PIC_CONTACT { get; set; }
+        public string PIC_EMAIL { get; set; }
+        public string ADDRESS { get; set; }
     }
     public class CONTAINER_MASTER
     {

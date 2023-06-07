@@ -63,6 +63,7 @@ namespace PrimeMaritime_API.Services
             string dbConn = _config.GetConnectionString("ConnectionString");
 
             Response<PARTY_MASTER> response = new Response<PARTY_MASTER>();
+ 
             var data = DbClientFactory<MasterRepo>.Instance.GetPartyMasterDetails(dbConn, Agent_code, CUSTOMER_ID);
 
             if (data != null)
@@ -70,7 +71,12 @@ namespace PrimeMaritime_API.Services
                 response.Succeeded = true;
                 response.ResponseCode = 200;
                 response.ResponseMessage = "Success";
-                response.Data = data;
+                response.Data = MasterRepo.GetSingleDataFromDataSet<PARTY_MASTER>(data.Tables[0]);
+
+                if (data.Tables.Contains("Table1"))
+                {
+                    response.Data.BRANCH_LIST = MasterRepo.GetListFromDataSet<CUSTOMER_BRANCH>(data.Tables[1]);
+                }
             }
             else
             {
@@ -100,11 +106,11 @@ namespace PrimeMaritime_API.Services
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
 
-            DbClientFactory<MasterRepo>.Instance.InsertPartyMaster(dbConn, request);
+            var ID = DbClientFactory<MasterRepo>.Instance.InsertPartyMaster(dbConn, request);
 
             Response<CommonResponse> response = new Response<CommonResponse>();
             response.Succeeded = true;
-            response.ResponseMessage = "Master saved Successfully.";
+            response.ResponseMessage = ID;
             response.ResponseCode = 200;
 
             return response;

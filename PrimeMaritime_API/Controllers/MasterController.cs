@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PrimeMaritime_API.Helpers;
@@ -7,6 +9,7 @@ using PrimeMaritime_API.Models;
 using PrimeMaritime_API.Response;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,9 +21,11 @@ namespace PrimeMaritime_API.Controllers
     public class MasterController : ControllerBase
     {
         private IMasterService _masterService;
-        public MasterController(IMasterService masterService)
+        private readonly IWebHostEnvironment _environment;
+        public MasterController(IMasterService masterService, IWebHostEnvironment environment)
         {
             _masterService = masterService;
+            _environment = environment;
         }
 
         #region "PARTY MASTER"
@@ -28,6 +33,32 @@ namespace PrimeMaritime_API.Controllers
         public ActionResult<Response<CommonResponse>> InsertPartyMaster(PARTY_MASTER request)
         {
             return Ok(_masterService.InsertPartyMaster(request));
+        }
+
+
+        [HttpPost("UploadCustomerFiles")]
+        public IActionResult UploadCustomerFiles(string CUSTID)
+        {
+            var formFile = Request.Form.Files;
+
+            string path = Path.Combine(_environment.ContentRootPath, "Uploads", "CustomerFiles");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            List<string> uploadedFiles = new List<string>();
+            foreach (IFormFile postedFile in formFile)
+            {
+                string fileName = Path.GetFileName(CUSTID + "_" + postedFile.FileName);
+                using (FileStream stream = new FileStream(Path.Combine(_environment.ContentRootPath, path, fileName), FileMode.Create))
+                {
+                    postedFile.CopyTo(stream);
+                    uploadedFiles.Add(fileName);
+                }
+            }
+
+            return Ok();
         }
 
         [HttpGet("GetPartyMasterList")]
