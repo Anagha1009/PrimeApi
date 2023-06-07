@@ -229,5 +229,18 @@ namespace PrimeMaritime_API.IServices
         Response<CommonResponse> UpdateSlotMasterList(SLOT_MASTER request);
         Response<CommonResponse> DeleteSlotMasterList(int ID);
         #endregion
+
+
+        #region "CHARGES MASTER"
+        Response<CommonResponse> InsertChargeMaster(CHARGES_MASTER request);
+
+        Response<List<CHARGES_MASTER>> GetChargeMaster();
+
+        Response<List<CHARGES_MASTER>> GetChargeMastersDetails(int ID);
+
+        Response<CommonResponse> UpdateChargesMaster(CHARGES_MASTER request);
+
+        Response<CommonResponse> DeleteChargesMaster(int ID);
+        #endregion
     }
 }

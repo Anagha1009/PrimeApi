@@ -205,7 +205,7 @@ namespace PrimeMaritime_API.Translators
             if (reader.IsColumnExists("STATUS"))
                 item.STATUS = SqlHelper.GetBoolean(reader, "STATUS");
 
-           
+
 
             if (reader.IsColumnExists("CREATED_BY"))
                 item.CREATED_BY = SqlHelper.GetNullableString(reader, "CREATED_BY");
@@ -261,7 +261,7 @@ namespace PrimeMaritime_API.Translators
             if (reader.IsColumnExists("CREATED_BY"))
                 item.CREATED_BY = SqlHelper.GetNullableString(reader, "CREATED_BY");
 
-          
+
             return item;
         }
         public static LINER TranslateAsLiner(this SqlDataReader reader, bool isList = false)
@@ -287,7 +287,7 @@ namespace PrimeMaritime_API.Translators
             if (reader.IsColumnExists("DESCRIPTION"))
                 item.DESCRIPTION = SqlHelper.GetNullableString(reader, "DESCRIPTION");
 
-           
+
             if (reader.IsColumnExists("STATUS"))
                 item.STATUS = SqlHelper.GetBoolean(reader, "STATUS");
 
