@@ -665,5 +665,39 @@ namespace PrimeMaritime_API.Controllers
             return Ok(JsonConvert.SerializeObject(_masterService.DeleteSlotMasterList(ID)));
         }
         #endregion
+
+        #region "Charges MASTER"
+        [HttpPost("InsertChargesMaster")]
+        public ActionResult<Response<CommonResponse>> InsertChargeMaster(CHARGES_MASTER request)
+        {
+            return Ok(_masterService.InsertChargeMaster(request));
+        }
+
+        [HttpGet("GetChargeMaster")]
+        public ActionResult<Response<List<CHARGES_MASTER>>> GetChargeMaster()
+        {
+            return Ok(JsonConvert.SerializeObject(_masterService.GetChargeMaster()));
+        }
+
+        [HttpGet("GetChargeMastersDetails")]
+        public ActionResult<Response<CHARGES_MASTER>> GetChargeMastersDetails(int ID)
+        {
+            return Ok(JsonConvert.SerializeObject(_masterService.GetChargeMastersDetails(ID)));
+        }
+
+
+        [HttpPost("UpdateChargesMaster")]
+        public ActionResult<Response<CommonResponse>> UpdateChargesMaster(CHARGES_MASTER request)
+        {
+            return Ok(_masterService.UpdateChargesMaster(request));
+        }
+
+        [HttpDelete("DeleteChargesMaster")]
+        public ActionResult<Response<CommonResponse>> DeleteChargesMaster(int ID)
+        {
+            return Ok(JsonConvert.SerializeObject(_masterService.DeleteChargesMaster(ID)));
+        }
+
+        #endregion
     }
 }

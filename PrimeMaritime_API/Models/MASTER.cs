@@ -304,4 +304,27 @@ namespace PrimeMaritime_API.Models
 
         public string SLOT_CODE { get; set; }
     }
+
+    public class CHARGES_MASTER
+    {
+        public int ID { get; set; }
+
+        public string CHARGE_NAME { get; set; }
+
+        public string CHARGE_HEADER { get; set; }
+
+        public string APPLICABLE_FOR { get; set; }
+
+        public int GST_PERCENTAGE { get; set; }
+
+        public string CURRENCY { get; set; }
+
+        public string HSN_CODE { get; set; }
+
+        public int CHARGE_AMOUNT { get; set; }
+
+        public string CHARGE_TYPE { get; set; }
+
+        public bool IS_GST { get; set; }
+    }
 }
