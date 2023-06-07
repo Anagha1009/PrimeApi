@@ -2406,6 +2406,131 @@ namespace PrimeMaritime_API.Repository
             }
         }
         #endregion
+
+        #region "CHARGES MASTER"
+        public void InsertChargeMaster(string connstring, CHARGES_MASTER master)
+        {
+            try
+            {
+                SqlParameter[] parameters =
+                {
+                  new SqlParameter("@OPERATION", SqlDbType.VarChar,50) { Value = "INSERT_CHARGE_MASTER" },
+                  new SqlParameter("@CHARGE_NAME", SqlDbType.VarChar,100) { Value = master.CHARGE_NAME},
+                  new SqlParameter("@CHARGE_HEADER", SqlDbType.VarChar, 100) { Value = master.CHARGE_HEADER },
+                  new SqlParameter("@APPLICABLE_FOR", SqlDbType.VarChar, 50) { Value = master.APPLICABLE_FOR },
+                  new SqlParameter("@GST_PERCENTAGE", SqlDbType.Int) { Value = master.GST_PERCENTAGE },
+                  new SqlParameter("@CURRENCY", SqlDbType.NVarChar, 50) { Value = master.CURRENCY },
+                  new SqlParameter("@HSN_CODE", SqlDbType.VarChar, 50) { Value = master.HSN_CODE },
+                  new SqlParameter("@CHARGE_AMOUNT", SqlDbType.Int) { Value = master.CHARGE_AMOUNT },
+                  new SqlParameter("@CHARGE_TYPE", SqlDbType.VarChar, 50) { Value = master.CHARGE_TYPE},
+                  new SqlParameter("@IS_GST", SqlDbType.Bit) { Value = master.IS_GST},
+
+
+                };
+
+                SqlHelper.ExecuteProcedureReturnString(connstring, "CHARGE_MASTER", parameters);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public List<CHARGES_MASTER> GetChargeMaster(string dbConn)
+        {
+            try
+            {
+                SqlParameter[] parameters =
+                {
+                  new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "GET_CHARGE_MASTER_LIST" }
+                };
+
+                DataTable dataTable = SqlHelper.ExtecuteProcedureReturnDataTable(dbConn, "CHARGE_MASTER", parameters);
+                List<CHARGES_MASTER> master = SqlHelper.CreateListFromTable<CHARGES_MASTER>(dataTable);
+
+                return master;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public List<CHARGES_MASTER> GetChargeMastersDetails(string connstring, int ID)
+        {
+            try
+            {
+                SqlParameter[] parameters =
+                {
+
+                   new SqlParameter("@ID", SqlDbType.Int) { Value = ID },
+                   new SqlParameter("@OPERATION", SqlDbType.VarChar, 255) { Value = "GET_CHARGES_MASTER_DETAILS" }
+                };
+
+                DataTable dataTable = SqlHelper.ExtecuteProcedureReturnDataTable(connstring, "CHARGE_MASTER", parameters);
+                List<CHARGES_MASTER> master = SqlHelper.CreateListFromTable<CHARGES_MASTER>(dataTable);
+
+                return master;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
+
+        public void UpdateChargesMaster(string connstring, CHARGES_MASTER master)
+        {
+            try
+            {
+                SqlParameter[] parameters =
+               {
+                  new SqlParameter("@OPERATION", SqlDbType.VarChar,255) { Value = "UPDATE_CHARGES_MASTER" },
+                  new SqlParameter("@ID", SqlDbType.Int) { Value = master.ID},
+                   new SqlParameter("@CHARGE_NAME", SqlDbType.VarChar,100) { Value = master.CHARGE_NAME},
+                  new SqlParameter("@CHARGE_HEADER", SqlDbType.VarChar, 100) { Value = master.CHARGE_HEADER },
+                  new SqlParameter("@APPLICABLE_FOR", SqlDbType.VarChar, 50) { Value = master.APPLICABLE_FOR },
+                  new SqlParameter("@GST_PERCENTAGE", SqlDbType.Int) { Value = master.GST_PERCENTAGE },
+                  new SqlParameter("@CURRENCY", SqlDbType.NVarChar, 50) { Value = master.CURRENCY },
+                  new SqlParameter("@HSN_CODE", SqlDbType.VarChar, 50) { Value = master.HSN_CODE },
+                  new SqlParameter("@CHARGE_AMOUNT", SqlDbType.Int) { Value = master.CHARGE_AMOUNT },
+                  new SqlParameter("@CHARGE_TYPE", SqlDbType.VarChar, 50) { Value = master.CHARGE_TYPE},
+                  new SqlParameter("@IS_GST", SqlDbType.Bit) { Value = master.IS_GST},
+                };
+
+                SqlHelper.ExecuteProcedureReturnString(connstring, "CHARGE_MASTER", parameters);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public void DeleteChargesMaster(string connstring, int ID)
+        {
+            SqlParameter[] parameters =
+            {
+              new SqlParameter("@ID", SqlDbType.Int) { Value = ID },
+               new SqlParameter("@OPERATION", SqlDbType.VarChar, 255) { Value = "DELETE_CHARGES_MASTER" }
+            };
+
+            SqlHelper.ExecuteProcedureReturnString(connstring, "CHARGE_MASTER", parameters);
+        }
+        #endregion
+
+        public static T GetSingleDataFromDataSet<T>(DataTable dataTable) where T : new()
+        {
+            return SqlHelper.CreateItemFromRow<T>(dataTable.Rows[0]);
+        }
+
+        public static List<T> GetListFromDataSet<T>(DataTable dataTable) where T : new()
+        {
+            return SqlHelper.CreateListFromTable<T>(dataTable);
+        }
     }
 
 }
