@@ -33,19 +33,21 @@ namespace PrimeMaritime_API.Models
         public string SALES_EFFECTIVE_DATE { get; set; }
         public string BANK_NAME { get; set; }
         public string BANK_ACC_NO { get; set; }
-        public string BANK_IFSC { get; set; }
-        public string BANK_TAX_NO { get; set; }
-        public string BANK_TAX_TYPE { get; set; }
+        public string BANK_IFSC { get; set; }        
         public string BANK_REMARKS { get; set; }
         public List<CUSTOMER_BRANCH> BRANCH_LIST { get; set; } = new List<CUSTOMER_BRANCH>();
     }
     public class CUSTOMER_BRANCH
     {
+        public int ID { get; set; }
+        public int CUST_ID { get; set; }
         public string BRANCH_NAME { get; set; }
         public string COUNTRY { get; set; }
         public string STATE { get; set; }
         public string CITY { get; set; }
         public string TAN { get; set; }
+        public string TAX_NO { get; set; }
+        public string TAX_TYPE { get; set; }
         public string PIC_NAME { get; set; }
         public string PIC_CONTACT { get; set; }
         public string PIC_EMAIL { get; set; }

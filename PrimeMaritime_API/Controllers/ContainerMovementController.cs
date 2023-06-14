@@ -81,6 +81,12 @@ namespace PrimeMaritime_API.Controllers
             return Ok(_cmService.ValidContainer(CONTAINER_NO));
         }
 
+        [HttpPost("RollBackContainer")] //ANAGHA
+        public ActionResult<Response<CommonResponse>> RollBackContainer(string CONTAINER_NO)
+        {
+            return Ok(_cmService.RollBackContainer(CONTAINER_NO));
+        }
+
         [HttpGet("ValidCROForContainer")] //ANAGHA
         public ActionResult<Response<string>> ValidCROForContainer(string CONTAINER_NO)
         {
@@ -91,7 +97,7 @@ namespace PrimeMaritime_API.Controllers
         public ActionResult<Response<List<NEXT_ACTIVITY>>> GetNextActivityList(string CONTAINER_NO)
         {
             return Ok(JsonConvert.SerializeObject(_cmService.GetNextActivityList(CONTAINER_NO)));
-        }
+        }     
 
         [HttpGet("GetContainerMovementBooking")]
         public ActionResult<Response<List<CM>>> GetContainerMovementBooking(string BOOKING_NO, string CRO_NO)

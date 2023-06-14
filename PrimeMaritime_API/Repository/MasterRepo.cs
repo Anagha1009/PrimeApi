@@ -48,8 +48,6 @@ namespace PrimeMaritime_API.Repository
                   new SqlParameter("@BANK_NAME", SqlDbType.VarChar,255) { Value = master.BANK_NAME },
                   new SqlParameter("@BANK_ACC_NO", SqlDbType.VarChar,50) { Value = master.BANK_ACC_NO },
                   new SqlParameter("@BANK_IFSC", SqlDbType.VarChar,50) { Value = master.BANK_IFSC },
-                  new SqlParameter("@BANK_TAX_NO", SqlDbType.VarChar,100) { Value = master.BANK_TAX_NO },
-                  new SqlParameter("@BANK_TAX_TYPE", SqlDbType.VarChar,50) { Value = master.BANK_TAX_TYPE },
                   new SqlParameter("@BANK_REMARKS", SqlDbType.VarChar,255) { Value = master.BANK_REMARKS },
                 };
 
@@ -62,6 +60,8 @@ namespace PrimeMaritime_API.Repository
                 tbl.Columns.Add(new DataColumn("STATE", typeof(string)));
                 tbl.Columns.Add(new DataColumn("CITY", typeof(string)));
                 tbl.Columns.Add(new DataColumn("TAN", typeof(string)));
+                tbl.Columns.Add(new DataColumn("TAX_NO", typeof(string)));
+                tbl.Columns.Add(new DataColumn("TAX_TYPE", typeof(string)));
                 tbl.Columns.Add(new DataColumn("PIC_NAME", typeof(string)));
                 tbl.Columns.Add(new DataColumn("PIC_CONTACT", typeof(string)));
                 tbl.Columns.Add(new DataColumn("PIC_EMAIL", typeof(string)));
@@ -81,11 +81,13 @@ namespace PrimeMaritime_API.Repository
                     dr["PIC_CONTACT"] = i.PIC_CONTACT;
                     dr["PIC_EMAIL"] = i.PIC_EMAIL;
                     dr["ADDRESS"] = i.ADDRESS;
+                    dr["TAX_NO"] = i.TAX_NO;
+                    dr["TAX_TYPE"] = i.TAX_TYPE;
 
                     tbl.Rows.Add(dr);
                 }
 
-                string[] columns = new string[10];
+                string[] columns = new string[12];
                 columns[0] = "CUST_ID";
                 columns[1] = "BRANCH_NAME";
                 columns[2] = "COUNTRY";
@@ -96,6 +98,8 @@ namespace PrimeMaritime_API.Repository
                 columns[7] = "PIC_CONTACT";
                 columns[8] = "PIC_EMAIL";
                 columns[9] = "ADDRESS";
+                columns[10] = "TAX_NO";
+                columns[11] = "TAX_TYPE";
 
                 SqlHelper.ExecuteProcedureBulkInsert(connstring, tbl, "MST_CUSTOMER_BRANCH", columns);
 
@@ -206,12 +210,27 @@ namespace PrimeMaritime_API.Repository
                   new SqlParameter("@BANK_NAME", SqlDbType.VarChar,255) { Value = master.BANK_NAME },
                   new SqlParameter("@BANK_ACC_NO", SqlDbType.VarChar,50) { Value = master.BANK_ACC_NO },
                   new SqlParameter("@BANK_IFSC", SqlDbType.VarChar,50) { Value = master.BANK_IFSC },
-                  new SqlParameter("@BANK_TAX_NO", SqlDbType.VarChar,100) { Value = master.BANK_TAX_NO },
-                  new SqlParameter("@BANK_TAX_TYPE", SqlDbType.VarChar,50) { Value = master.BANK_TAX_TYPE },
                   new SqlParameter("@BANK_REMARKS", SqlDbType.VarChar,255) { Value = master.BANK_REMARKS },
                 };
 
                 SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_MASTER", parameters);
+
+                string[] columns = new string[13];
+                columns[0] = "CUST_ID";
+                columns[1] = "BRANCH_NAME";
+                columns[2] = "COUNTRY";
+                columns[3] = "STATE";
+                columns[4] = "CITY";
+                columns[5] = "TAN";
+                columns[6] = "PIC_NAME";
+                columns[7] = "PIC_CONTACT";
+                columns[8] = "PIC_EMAIL";
+                columns[9] = "ADDRESS";
+                columns[10] = "TAX_NO";
+                columns[11] = "TAX_TYPE";
+                columns[12] = "ID";
+
+                SqlHelper.UpdateCustomerBranch<CUSTOMER_BRANCH>(master.BRANCH_LIST, "MST_CUSTOMER_BRANCH", connstring, columns);
             }
             catch (Exception)
             {
