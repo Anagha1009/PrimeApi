@@ -242,5 +242,11 @@ namespace PrimeMaritime_API.IServices
 
         Response<CommonResponse> DeleteChargesMaster(int ID);
         #endregion
+
+        #region "INVOICE"
+        Response<CommonResponse> InsertInvoice(INVOICE_MASTER request);
+
+        Response<List<INVOICE_MASTER>> GetBLLIST();
+        #endregion
     }
 }

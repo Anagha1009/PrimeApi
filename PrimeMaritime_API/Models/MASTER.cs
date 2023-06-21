@@ -35,6 +35,8 @@ namespace PrimeMaritime_API.Models
         public string BANK_ACC_NO { get; set; }
         public string BANK_IFSC { get; set; }        
         public string BANK_REMARKS { get; set; }
+
+        public bool IS_VENDOR { get; set; }
         public List<CUSTOMER_BRANCH> BRANCH_LIST { get; set; } = new List<CUSTOMER_BRANCH>();
     }
     public class CUSTOMER_BRANCH
@@ -52,6 +54,9 @@ namespace PrimeMaritime_API.Models
         public string PIC_CONTACT { get; set; }
         public string PIC_EMAIL { get; set; }
         public string ADDRESS { get; set; }
+       
+
+
     }
     public class CONTAINER_MASTER
     {
@@ -359,5 +364,58 @@ namespace PrimeMaritime_API.Models
         public string CHARGE_TYPE { get; set; }
 
         public bool IS_GST { get; set; }
+    }
+
+
+
+    public class INVOICE_MASTER
+    {
+        public int ID { get; set; }
+
+        public string INVOICE_NO { get; set; }
+
+        public string INVOICE_TYPE { get; set; }
+
+        public string BILL_TO { get; set; }
+
+        public string BILL_FROM { get; set; }
+
+        public string SHIPPER_NAME { get; set; }
+
+        public string PAYMENT_TERM { get; set; }
+
+        public string BL_NO { get; set; }
+
+        public string AGENT_NAME { get; set; }
+
+        public string AGENT_CODE { get; set; }
+
+        public string CREATED_BY { get; set; }
+
+        public string UPDATED_BY { get; set; }
+
+        public bool STATUS { get; set; }
+
+        public List<INVOICE_CHARGES> BL_LIST { get; set; } = new List<INVOICE_CHARGES>();
+    }
+
+
+    public class INVOICE_CHARGES
+    {
+        public int ID { get; set; }
+        public string INVOICE_NO { get; set; }
+        public string CHARGE_NAME { get; set; }
+        public int EXCHANGE_RATE { get; set; }
+        public int QUANTITY { get; set; }
+        public int AMOUNT { get; set; }
+        public string HSN_CODE { get; set; }
+        public int REQUESTED_AMOUNT { get; set; }
+        public string CURRENCY { get; set; }
+        public string EXEMPT_FLAG { get; set; }
+
+        public bool IS_SRRCHARGE { get; set; }
+
+
+
     }
 }

@@ -373,5 +373,27 @@ namespace PrimeMaritime_API.Repository
                 throw;
             }
         }
+
+        #region "Invoice"
+        //public List<INVOICE_MASTER>GetBL(string dbConn)
+        //{
+        //    try
+        //    {
+        //        SqlParameter[] parameters =
+        //        {
+        //          new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "GET_BL_LIST" }
+        //        };
+
+        //        DataTable dataTable = SqlHelper.ExtecuteProcedureReturnDataTable(dbConn, "SP_INOVICE2", parameters);
+        //        List<INVOICE_MASTER> master = SqlHelper.CreateListFromTable<INVOICE_MASTER>(dataTable);
+
+        //        return master;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //}
+        #endregion
     }
 }
