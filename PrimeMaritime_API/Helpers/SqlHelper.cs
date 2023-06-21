@@ -587,7 +587,7 @@ namespace PrimeMaritime_API.Helpers
                         conn.Open();
 
                         //Creating temp table on database
-                        command.CommandText = "CREATE TABLE #TmpTable(ID int,CUST_ID int,ADDRESS varchar(255), BRANCH_NAME varchar(255), COUNTRY varchar(50), STATE varchar(255),CITY varchar(255), TAN varchar(50), TAX_NO varchar(50),TAX_TYPE varchar(20), PIC_NAME varchar(255), PIC_CONTACT varchar(50), PIC_EMAIL varchar(255))";
+                        command.CommandText = "CREATE TABLE #TmpTable(ID int,CUST_ID int,ADDRESS varchar(255), BRANCH_NAME varchar(255), COUNTRY varchar(50), STATE varchar(255),CITY varchar(255), TAN varchar(50), TAX_NO varchar(50),TAX_TYPE varchar(20), PIC_NAME varchar(255), PIC_CONTACT varchar(50), PIC_EMAIL varchar(255), IS_SEZ bit, IS_TAX_APPLICABLE bit)";
                         command.ExecuteNonQuery();
 
                         //Bulk insert into temp table
@@ -605,7 +605,54 @@ namespace PrimeMaritime_API.Helpers
 
                         // Updating destination table, and dropping temp table
                         command.CommandTimeout = 300;
-                        command.CommandText = "UPDATE T SET BRANCH_NAME = Temp.BRANCH_NAME  , COUNTRY = Temp.COUNTRY, STATE = Temp.STATE,CITY = Temp.CITY, TAN = Temp.TAN,TAX_NO=Temp.TAX_NO,TAX_TYPE = Temp.TAX_TYPE,PIC_NAME = Temp.PIC_NAME,PIC_CONTACT = Temp.PIC_CONTACT,PIC_EMAIL = Temp.PIC_EMAIL,ADDRESS = Temp.ADDRESS FROM " + TableName + " T INNER JOIN #TmpTable Temp ON T.ID = Temp.ID; DROP TABLE #TmpTable;";
+                        command.CommandText = "UPDATE T SET BRANCH_NAME = Temp.BRANCH_NAME  , COUNTRY = Temp.COUNTRY, STATE = Temp.STATE,CITY = Temp.CITY, TAN = Temp.TAN,TAX_NO=Temp.TAX_NO,TAX_TYPE = Temp.TAX_TYPE,PIC_NAME = Temp.PIC_NAME,PIC_CONTACT = Temp.PIC_CONTACT,PIC_EMAIL = Temp.PIC_EMAIL,ADDRESS = Temp.ADDRESS, IS_SEZ = Temp.IS_SEZ, IS_TAX_APPLICABLE = Temp.IS_TAX_APPLICABLE FROM " + TableName + " T INNER JOIN #TmpTable Temp ON T.ID = Temp.ID; DROP TABLE #TmpTable;";
+                        command.ExecuteNonQuery();
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                    finally
+                    {
+                        conn.Close();
+                    }
+                }
+            }
+        }
+
+        public static void UpdateCustomerBank<T>(List<T> list, string TableName, string connString, string[] columns)
+        {
+            DataTable dt = new DataTable("MST_CUSTOMER_BANK");
+            dt = ConvertToDataTable(list);
+
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                using (SqlCommand command = new SqlCommand("", conn))
+                {
+                    try
+                    {
+                        conn.Open();
+
+                        //Creating temp table on database
+                        command.CommandText = "CREATE TABLE #TmpTable(ID int,CUST_ID int,BANK_NAME varchar(255), BANK_ACC_NO varchar(50), BANK_IFSC varchar(50), BANK_SWIFT varchar(50), BANK_REMARKS varchar(255))";
+                        command.ExecuteNonQuery();
+
+                        //Bulk insert into temp table
+                        using (SqlBulkCopy bulkcopy = new SqlBulkCopy(conn))
+                        {
+                            bulkcopy.BulkCopyTimeout = 660;
+                            bulkcopy.DestinationTableName = "#TmpTable";
+                            foreach (var i in columns)
+                            {
+                                bulkcopy.ColumnMappings.Add(i, i);
+                            }
+                            bulkcopy.WriteToServer(dt);
+                            bulkcopy.Close();
+                        }
+
+                        // Updating destination table, and dropping temp table
+                        command.CommandTimeout = 300;
+                        command.CommandText = "UPDATE T SET BANK_NAME = Temp.BANK_NAME  , BANK_ACC_NO = Temp.BANK_ACC_NO, BANK_IFSC = Temp.BANK_IFSC, BANK_SWIFT = Temp.BANK_SWIFT, BANK_REMARKS = Temp.BANK_REMARKS FROM " + TableName + " T INNER JOIN #TmpTable Temp ON T.ID = Temp.ID; DROP TABLE #TmpTable;";
                         command.ExecuteNonQuery();
                     }
                     catch (Exception)
