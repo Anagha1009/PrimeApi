@@ -29,11 +29,11 @@ namespace PrimeMaritime_API.Controllers
         }
 
         #region "PARTY MASTER"
-        [HttpPost("InsertPartyMaster")]
-        public ActionResult<Response<CommonResponse>> InsertPartyMaster(PARTY_MASTER request)
-        {
-            return Ok(_masterService.InsertPartyMaster(request));
-        }
+        //[HttpPost("InsertPartyMaster")]
+        //public ActionResult<Response<CommonResponse>> InsertPartyMaster(PARTY_MASTER request)
+        //{
+        //    return Ok(_masterService.InsertPartyMaster(request));
+        //}
 
 
         [HttpPost("UploadCustomerFiles")]
@@ -729,6 +729,21 @@ namespace PrimeMaritime_API.Controllers
             return Ok(JsonConvert.SerializeObject(_masterService.DeleteChargesMaster(ID)));
         }
 
+        #endregion
+
+
+        #region "invoice"
+        [HttpPost("InsertInvoice")]
+        public ActionResult<Response<CommonResponse>> InsertInvoice(INVOICE_MASTER request)
+        {
+            return Ok(_masterService.InsertInvoice(request));
+        }
+
+        [HttpGet("GetBLLIST")]
+        public ActionResult<Response<List<INVOICE_MASTER>>> GetBLLIST()
+        {
+            return Ok(JsonConvert.SerializeObject(_masterService.GetBLLIST()));
+        }
         #endregion
     }
 }

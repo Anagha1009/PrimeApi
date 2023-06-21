@@ -228,7 +228,31 @@ namespace PrimeMaritime_API.Services
 
         //    return response;
         //}
+        #region "Invoice"
+        //public Response<INVOICE_MASTER> GetBL()
+        //{
+        //    string dbConn = _config.GetConnectionString("ConnectionString");
 
+        //    Response<INVOICE_MASTER> response = new Response<INVOICE_MASTER>();
+        //    var data = DbClientFactory<BookingRepo>.Instance.GetBL(dbConn);
+
+        //    if (data != null)
+        //    {
+        //        response.Succeeded = true;
+        //        response.ResponseCode = 200;
+        //        response.ResponseMessage = "Success";
+        //        response.Data = data;
+        //    }
+        //    else
+        //    {
+        //        response.Succeeded = false;
+        //        response.ResponseCode = 500;
+        //        response.ResponseMessage = "No Data";
+        //    }
+
+        //    return response;
+        //}
+        #endregion
     }
 }
 
