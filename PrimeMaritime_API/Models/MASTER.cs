@@ -30,18 +30,17 @@ namespace PrimeMaritime_API.Models
         public string SALES_NAME { get; set; }
         public string SALES_CODE { get; set; }
         public string SALES_LOC { get; set; }
-        public string SALES_EFFECTIVE_DATE { get; set; }
-        public string BANK_NAME { get; set; }
-        public string BANK_ACC_NO { get; set; }
-        public string BANK_IFSC { get; set; }        
-        public string BANK_REMARKS { get; set; }
+        public string SALES_EFFECTIVE_DATE { get; set; }       
+        public bool IS_VENDOR { get; set; }
         public List<CUSTOMER_BRANCH> BRANCH_LIST { get; set; } = new List<CUSTOMER_BRANCH>();
+        public List<CUSTOMER_BANK> BANK_LIST { get; set; } = new List<CUSTOMER_BANK>();
     }
     public class CUSTOMER_BRANCH
     {
         public int ID { get; set; }
         public int CUST_ID { get; set; }
         public string BRANCH_NAME { get; set; }
+        public string BRANCH_CODE { get; set; }
         public string COUNTRY { get; set; }
         public string STATE { get; set; }
         public string CITY { get; set; }
@@ -52,7 +51,21 @@ namespace PrimeMaritime_API.Models
         public string PIC_CONTACT { get; set; }
         public string PIC_EMAIL { get; set; }
         public string ADDRESS { get; set; }
+        public bool IS_SEZ { get; set; }
+        public bool IS_TAX_APPLICABLE { get; set; }
     }
+    public class CUSTOMER_BANK
+    {
+        public int ID { get; set; }
+        public int CUST_ID { get; set; }
+        public string BRANCH_CODE { get; set; }
+        public string BANK_NAME { get; set; }
+        public string BANK_ACC_NO { get; set; }
+        public string BANK_IFSC { get; set; }
+        public string BANK_SWIFT { get; set; }
+        public string BANK_REMARKS { get; set; }
+    }
+
     public class CONTAINER_MASTER
     {
         public int ID { get; set; }

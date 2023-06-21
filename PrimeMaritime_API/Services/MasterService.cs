@@ -34,12 +34,12 @@ namespace PrimeMaritime_API.Services
             return response;
         }
 
-        public Response<List<PARTY_MASTER>> GetPartyMasterList(string Agent_code, string CustName, string CustType, bool Status, string FROM_DATE, string TO_DATE)
+        public Response<List<PARTY_MASTER>> GetPartyMasterList(string Agent_code, string CustName, string CustType, bool Status, string FROM_DATE, string TO_DATE, bool IS_VENDOR)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
 
             Response<List<PARTY_MASTER>> response = new Response<List<PARTY_MASTER>>();
-            var data = DbClientFactory<MasterRepo>.Instance.GetPartyMasterList(dbConn, Agent_code, CustName, CustType, Status, FROM_DATE, TO_DATE);
+            var data = DbClientFactory<MasterRepo>.Instance.GetPartyMasterList(dbConn, Agent_code, CustName, CustType, Status, FROM_DATE, TO_DATE,IS_VENDOR);
 
             if (data != null)
             {
@@ -76,6 +76,11 @@ namespace PrimeMaritime_API.Services
                 if (data.Tables.Contains("Table1"))
                 {
                     response.Data.BRANCH_LIST = MasterRepo.GetListFromDataSet<CUSTOMER_BRANCH>(data.Tables[1]);
+                }
+
+                if (data.Tables.Contains("Table2"))
+                {
+                    response.Data.BANK_LIST = MasterRepo.GetListFromDataSet<CUSTOMER_BANK>(data.Tables[2]);
                 }
             }
             else
