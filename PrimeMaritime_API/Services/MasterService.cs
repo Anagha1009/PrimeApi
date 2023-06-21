@@ -2082,6 +2082,48 @@ namespace PrimeMaritime_API.Services
             return response;
         }
         #endregion
+
+
+        #region "INVOICE"
+        public Response<CommonResponse> InsertInvoice(INVOICE_MASTER request)
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            DbClientFactory<MasterRepo>.Instance.InsertInvoice(dbConn, request);
+
+            Response<CommonResponse> response = new Response<CommonResponse>();
+            response.Succeeded = true;
+            response.ResponseMessage = "Invoice saved Successfully.";
+            response.ResponseCode = 200;
+
+            return response;
+        }
+
+
+        public Response<List<INVOICE_MASTER>> GetBLLIST()
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            Response<List<INVOICE_MASTER>> response = new Response<List<INVOICE_MASTER>>();
+            var data = DbClientFactory<MasterRepo>.Instance.GetBLLIST(dbConn);
+
+            if (data != null)
+            {
+                response.Succeeded = true;
+                response.ResponseCode = 200;
+                response.ResponseMessage = "Success";
+                response.Data = data;
+            }
+            else
+            {
+                response.Succeeded = false;
+                response.ResponseCode = 500;
+                response.ResponseMessage = "No Data";
+            }
+
+            return response;
+        }
+        #endregion
     }
 
 

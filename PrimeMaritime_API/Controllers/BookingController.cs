@@ -74,6 +74,13 @@ namespace PrimeMaritime_API.Controllers
 
         }
 
-        
+
+        #region "Invoice"
+        //[HttpGet("GetBL")]
+        //public ActionResult<Response<BookingList>> GetBL()
+        //{
+        //    return Ok(JsonConvert.SerializeObject(_bookingService.GetBL()));
+        //}
+        #endregion
     }
 }

@@ -23,5 +23,9 @@ namespace PrimeMaritime_API.IServices
         Response<Organisation> GetOrgDetails(string ORG_CODE, string ORG_LOC_CODE);
         void InsertSurrender(string BL_NO);
         void InsertUploadedSurrender(string BL_NO);
+
+        #region "Invoice"
+        //Response<INVOICE_MASTER> GetBL();
+        #endregion
     }
 }
