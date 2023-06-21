@@ -12,6 +12,7 @@ namespace PrimeMaritime_API.IServices
     {
         Response<CommonResponse> InsertContainerMovement(CONTAINER_MOVEMENT request,bool fromXL);
         Response<CommonResponse> ValidContainer(string ContainerNo);
+        Response<CommonResponse> RollBackContainer(string ContainerNo);
         Response<string> ValidCROForContainer(string ContainerNo);
         Response<List<NEXT_ACTIVITY>> GetNextActivityList(string CONTAINER_NO);
         Response<CM> GetSingleContainerMovement(string CONTAINER_NO);

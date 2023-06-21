@@ -573,6 +573,53 @@ namespace PrimeMaritime_API.Helpers
             }
         }
 
+        public static void UpdateCustomerBranch<T>(List<T> list, string TableName, string connString, string[] columns)
+        {
+            DataTable dt = new DataTable("MST_CUSTOMER_BRANCH");
+            dt = ConvertToDataTable(list);
+
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                using (SqlCommand command = new SqlCommand("", conn))
+                {
+                    try
+                    {
+                        conn.Open();
+
+                        //Creating temp table on database
+                        command.CommandText = "CREATE TABLE #TmpTable(ID int,CUST_ID int,ADDRESS varchar(255), BRANCH_NAME varchar(255), COUNTRY varchar(50), STATE varchar(255),CITY varchar(255), TAN varchar(50), TAX_NO varchar(50),TAX_TYPE varchar(20), PIC_NAME varchar(255), PIC_CONTACT varchar(50), PIC_EMAIL varchar(255))";
+                        command.ExecuteNonQuery();
+
+                        //Bulk insert into temp table
+                        using (SqlBulkCopy bulkcopy = new SqlBulkCopy(conn))
+                        {
+                            bulkcopy.BulkCopyTimeout = 660;
+                            bulkcopy.DestinationTableName = "#TmpTable";
+                            foreach (var i in columns)
+                            {
+                                bulkcopy.ColumnMappings.Add(i, i);
+                            }
+                            bulkcopy.WriteToServer(dt);
+                            bulkcopy.Close();
+                        }
+
+                        // Updating destination table, and dropping temp table
+                        command.CommandTimeout = 300;
+                        command.CommandText = "UPDATE T SET BRANCH_NAME = Temp.BRANCH_NAME  , COUNTRY = Temp.COUNTRY, STATE = Temp.STATE,CITY = Temp.CITY, TAN = Temp.TAN,TAX_NO=Temp.TAX_NO,TAX_TYPE = Temp.TAX_TYPE,PIC_NAME = Temp.PIC_NAME,PIC_CONTACT = Temp.PIC_CONTACT,PIC_EMAIL = Temp.PIC_EMAIL,ADDRESS = Temp.ADDRESS FROM " + TableName + " T INNER JOIN #TmpTable Temp ON T.ID = Temp.ID; DROP TABLE #TmpTable;";
+                        command.ExecuteNonQuery();
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                    finally
+                    {
+                        conn.Close();
+                    }
+                }
+            }
+        }
+
         public static TData ExtecuteProcedureReturnData<TData>(string connString, string procName,
             Func<SqlDataReader, TData> translator,
             params SqlParameter[] parameters)

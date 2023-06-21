@@ -154,6 +154,33 @@ namespace PrimeMaritime_API.Services
                 return response;
             }
         }
+
+        public Response<CommonResponse> RollBackContainer(string ContainerNo)
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            var data = DbClientFactory<ContainerMovementRepo>.Instance.RollBackContainer(dbConn, ContainerNo);
+
+            if (data != "")
+            {
+                Response<CommonResponse> response = new Response<CommonResponse>();
+                response.Succeeded = true;
+                response.ResponseMessage = data;
+                response.ResponseCode = 200;
+
+                return response;
+            }
+            else
+            {
+                Response<CommonResponse> response = new Response<CommonResponse>();
+                response.Succeeded = true;
+                response.ResponseMessage = "Failed to RollBack !";
+                response.ResponseCode = 500;
+
+                return response;
+            }
+        }
+
         public Response<string> ValidCROForContainer(string ContainerNo)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");

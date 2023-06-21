@@ -386,6 +386,24 @@ namespace PrimeMaritime_API.Repository
                 throw;
             }
         }
+
+        public string RollBackContainer(string connstring, string CONTAINER_NO)
+        {
+            try
+            {
+                SqlParameter[] parameters =
+                {
+                    new SqlParameter("@CONTAINER_NO", SqlDbType.VarChar, 20) { Value = CONTAINER_NO },
+                };
+
+                return SqlHelper.ExecuteProcedureReturnString(connstring, "SP_ROLLBACK", parameters);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public string ValidCROForContainer(string connstring, string CONTAINER_NO)
         {
             try

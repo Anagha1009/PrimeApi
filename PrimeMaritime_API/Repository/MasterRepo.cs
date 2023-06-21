@@ -48,10 +48,7 @@ namespace PrimeMaritime_API.Repository
                   new SqlParameter("@BANK_NAME", SqlDbType.VarChar,255) { Value = master.BANK_NAME },
                   new SqlParameter("@BANK_ACC_NO", SqlDbType.VarChar,50) { Value = master.BANK_ACC_NO },
                   new SqlParameter("@BANK_IFSC", SqlDbType.VarChar,50) { Value = master.BANK_IFSC },
-                  //new SqlParameter("@BANK_TAX_NO", SqlDbType.VarChar,100) { Value = master.BANK_TAX_NO },
-                  //new SqlParameter("@BANK_TAX_TYPE", SqlDbType.VarChar,50) { Value = master.BANK_TAX_TYPE },
                   new SqlParameter("@BANK_REMARKS", SqlDbType.VarChar,255) { Value = master.BANK_REMARKS },
-                  new SqlParameter("@IS_VENDOR", SqlDbType.Bit) { Value = master.IS_VENDOR},
                 };
 
                 var ID = SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_MASTER", parameters);
@@ -63,14 +60,12 @@ namespace PrimeMaritime_API.Repository
                 tbl.Columns.Add(new DataColumn("STATE", typeof(string)));
                 tbl.Columns.Add(new DataColumn("CITY", typeof(string)));
                 tbl.Columns.Add(new DataColumn("TAN", typeof(string)));
+                tbl.Columns.Add(new DataColumn("TAX_NO", typeof(string)));
+                tbl.Columns.Add(new DataColumn("TAX_TYPE", typeof(string)));
                 tbl.Columns.Add(new DataColumn("PIC_NAME", typeof(string)));
                 tbl.Columns.Add(new DataColumn("PIC_CONTACT", typeof(string)));
                 tbl.Columns.Add(new DataColumn("PIC_EMAIL", typeof(string)));
                 tbl.Columns.Add(new DataColumn("ADDRESS", typeof(string)));
-               
-
-
-
 
                 foreach (var i in master.BRANCH_LIST)
                 {
@@ -86,18 +81,13 @@ namespace PrimeMaritime_API.Repository
                     dr["PIC_CONTACT"] = i.PIC_CONTACT;
                     dr["PIC_EMAIL"] = i.PIC_EMAIL;
                     dr["ADDRESS"] = i.ADDRESS;
-                 
-
-
-
-
-
-
+                    dr["TAX_NO"] = i.TAX_NO;
+                    dr["TAX_TYPE"] = i.TAX_TYPE;
 
                     tbl.Rows.Add(dr);
                 }
 
-                string[] columns = new string[10];
+                string[] columns = new string[12];
                 columns[0] = "CUST_ID";
                 columns[1] = "BRANCH_NAME";
                 columns[2] = "COUNTRY";
@@ -108,12 +98,8 @@ namespace PrimeMaritime_API.Repository
                 columns[7] = "PIC_CONTACT";
                 columns[8] = "PIC_EMAIL";
                 columns[9] = "ADDRESS";
-             
-
-
-
-
-
+                columns[10] = "TAX_NO";
+                columns[11] = "TAX_TYPE";
 
                 SqlHelper.ExecuteProcedureBulkInsert(connstring, tbl, "MST_CUSTOMER_BRANCH", columns);
 
@@ -224,12 +210,27 @@ namespace PrimeMaritime_API.Repository
                   new SqlParameter("@BANK_NAME", SqlDbType.VarChar,255) { Value = master.BANK_NAME },
                   new SqlParameter("@BANK_ACC_NO", SqlDbType.VarChar,50) { Value = master.BANK_ACC_NO },
                   new SqlParameter("@BANK_IFSC", SqlDbType.VarChar,50) { Value = master.BANK_IFSC },
-                  new SqlParameter("@BANK_TAX_NO", SqlDbType.VarChar,100) { Value = master.BANK_TAX_NO },
-                  new SqlParameter("@BANK_TAX_TYPE", SqlDbType.VarChar,50) { Value = master.BANK_TAX_TYPE },
                   new SqlParameter("@BANK_REMARKS", SqlDbType.VarChar,255) { Value = master.BANK_REMARKS },
                 };
 
                 SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_MASTER", parameters);
+
+                string[] columns = new string[13];
+                columns[0] = "CUST_ID";
+                columns[1] = "BRANCH_NAME";
+                columns[2] = "COUNTRY";
+                columns[3] = "STATE";
+                columns[4] = "CITY";
+                columns[5] = "TAN";
+                columns[6] = "PIC_NAME";
+                columns[7] = "PIC_CONTACT";
+                columns[8] = "PIC_EMAIL";
+                columns[9] = "ADDRESS";
+                columns[10] = "TAX_NO";
+                columns[11] = "TAX_TYPE";
+                columns[12] = "ID";
+
+                SqlHelper.UpdateCustomerBranch<CUSTOMER_BRANCH>(master.BRANCH_LIST, "MST_CUSTOMER_BRANCH", connstring, columns);
             }
             catch (Exception)
             {
@@ -2549,112 +2550,6 @@ namespace PrimeMaritime_API.Repository
         {
             return SqlHelper.CreateListFromTable<T>(dataTable);
         }
-
-        #region "INVOICE"
-        public void InsertInvoice(string connstring, INVOICE_MASTER master)
-        {
-            try
-            {
-                SqlParameter[] parameters =
-                {
-                  new SqlParameter("@OPERATION",    SqlDbType.VarChar,50) { Value = "INSERT_INVOICES" },
-                  new SqlParameter("@INVOICE_NO",   SqlDbType.VarChar,100) { Value = master.INVOICE_NO},
-                  new SqlParameter("@INVOICE_TYPE", SqlDbType.VarChar, 100) { Value = master.INVOICE_TYPE },
-                  new SqlParameter("@BILL_TO",      SqlDbType.VarChar, 50) { Value = master.BILL_TO },
-                  new SqlParameter("@BILL_FROM",    SqlDbType.VarChar, 50) { Value = master.BILL_FROM },
-                  new SqlParameter("@SHIPPER_NAME", SqlDbType.NVarChar, 50) { Value = master.SHIPPER_NAME },
-                  new SqlParameter("@PAYMENT_TERM", SqlDbType.VarChar, 50) { Value = master.PAYMENT_TERM },
-                  new SqlParameter("@BL_NO",        SqlDbType.VarChar, 50) { Value = master.BL_NO },
-                  new SqlParameter("@AGENT_NAME",   SqlDbType.VarChar, 50) { Value = master.AGENT_NAME},
-                  new SqlParameter("@AGENT_CODE",   SqlDbType.VarChar, 50) { Value = master.AGENT_CODE},
-                  new SqlParameter("@CREATED_BY",   SqlDbType.VarChar, 50) { Value = master.CREATED_BY},
-                  new SqlParameter("@UPDATED_BY",   SqlDbType.VarChar, 50) { Value = master.UPDATED_BY},
-                  new SqlParameter("@STATUS",        SqlDbType.Bit) { Value = master.STATUS},
-
-
-                };
-
-                var ID = SqlHelper.ExecuteProcedureReturnString(connstring, "SP_INOVICE2", parameters);
-
-                DataTable tbl = new DataTable();
-         
-                tbl.Columns.Add(new DataColumn("INVOICE_NO", typeof(string)));
-                tbl.Columns.Add(new DataColumn("CHARGE_NAME", typeof(string)));
-                tbl.Columns.Add(new DataColumn("EXCHANGE_RATE", typeof(int)));
-                tbl.Columns.Add(new DataColumn("QUANTITY", typeof(int)));
-                tbl.Columns.Add(new DataColumn("AMOUNT", typeof(int)));
-                tbl.Columns.Add(new DataColumn("HSN_CODE", typeof(string)));
-                tbl.Columns.Add(new DataColumn("REQUESTED_AMOUNT", typeof(int)));
-                tbl.Columns.Add(new DataColumn("CURRENCY", typeof(string)));
-                tbl.Columns.Add(new DataColumn("EXEMPT_FLAG", typeof(string)));
-                tbl.Columns.Add(new DataColumn("IS_SRRCHARGE", typeof(string)));
-
-
-                foreach (var i in master.BL_LIST)
-                {
-                    DataRow dr = tbl.NewRow();
-
-                    dr["INVOICE_NO"] = master.INVOICE_NO;
-                    dr["CHARGE_NAME"] = i.CHARGE_NAME;
-                    dr["EXCHANGE_RATE"] = i.EXCHANGE_RATE;
-                    dr["QUANTITY"] = i.QUANTITY;
-                    dr["AMOUNT"] = i.AMOUNT;
-                    dr["HSN_CODE"] = i.HSN_CODE;
-                    dr["REQUESTED_AMOUNT"] = i.REQUESTED_AMOUNT;
-                    dr["CURRENCY"] = i.CURRENCY;
-                    dr["EXEMPT_FLAG"] = i.EXEMPT_FLAG;
-                    dr["IS_SRRCHARGE"] = i.IS_SRRCHARGE;
-
-
-
-                    tbl.Rows.Add(dr);
-                }
-
-                string[] columns = new string[10];
-                columns[0] = "INVOICE_NO";
-                columns[1] = "CHARGE_NAME";
-                columns[2] = "EXCHANGE_RATE";
-                columns[3] = "QUANTITY";
-                columns[4] = "AMOUNT";
-                columns[5] = "HSN_CODE";
-                columns[6] = "REQUESTED_AMOUNT";
-                columns[7] = "CURRENCY";
-                columns[8] = "EXEMPT_FLAG";
-                columns[9] = "IS_SRRCHARGE";
-
-
-               SqlHelper.ExecuteProcedureBulkInsert(connstring, tbl, "INVOICE_CHARGES", columns);
-
-        
-
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-
-        public List<INVOICE_MASTER> GetBLLIST(string dbConn)
-        {
-            try
-            {
-                SqlParameter[] parameters =
-                {
-                  new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "GET_BL_LIST" }
-                };
-
-                DataTable dataTable = SqlHelper.ExtecuteProcedureReturnDataTable(dbConn, "SP_INOVICE2", parameters);
-                List<INVOICE_MASTER> master = SqlHelper.CreateListFromTable<INVOICE_MASTER>(dataTable);
-
-                return master;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-        #endregion
     }
 
 }
