@@ -731,19 +731,25 @@ namespace PrimeMaritime_API.Controllers
 
         #endregion
 
-
-        #region "invoice"
-        [HttpPost("InsertInvoice")]
-        public ActionResult<Response<CommonResponse>> InsertInvoice(INVOICE_MASTER request)
+        #region "HSN-CODE"
+        [HttpPost("InsertHsnCode")]
+        public ActionResult<Response<CommonResponse>> InsertHsnCode(HSN_MASTER request)
         {
-            return Ok(_masterService.InsertInvoice(request));
+            return Ok(_masterService.InsertHsnCode(request));
         }
 
-        [HttpGet("GetBLLIST")]
-        public ActionResult<Response<List<INVOICE_MASTER>>> GetBLLIST()
+        [HttpGet("GetHsnMaster")]
+        public ActionResult<Response<List<HSN_MASTER>>> GetHsnMaster()
         {
-            return Ok(JsonConvert.SerializeObject(_masterService.GetBLLIST()));
+            return Ok(JsonConvert.SerializeObject(_masterService.GetHsnMaster()));
+        }
+
+        [HttpDelete("DeleteHsnMaster")]
+        public ActionResult<Response<CommonResponse>> DeleteHsnMaster(int ID)
+        {
+            return Ok(JsonConvert.SerializeObject(_masterService.DeleteHsnMaster(ID)));
         }
         #endregion
+
     }
 }
