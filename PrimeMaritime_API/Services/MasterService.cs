@@ -2089,28 +2089,27 @@ namespace PrimeMaritime_API.Services
         #endregion
 
 
-        #region "INVOICE"
-        public Response<CommonResponse> InsertInvoice(INVOICE_MASTER request)
+        #region "HSN-CODE"
+        public Response<CommonResponse> InsertHsnCode(HSN_MASTER request)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
 
-            DbClientFactory<MasterRepo>.Instance.InsertInvoice(dbConn, request);
+            DbClientFactory<MasterRepo>.Instance.InsertHsnCode(dbConn, request);
 
             Response<CommonResponse> response = new Response<CommonResponse>();
             response.Succeeded = true;
-            response.ResponseMessage = "Invoice saved Successfully.";
+            response.ResponseMessage = "HSN Code saved Successfully.";
             response.ResponseCode = 200;
 
             return response;
         }
 
-
-        public Response<List<INVOICE_MASTER>> GetBLLIST()
+        public Response<List<HSN_MASTER>> GetHsnMaster()
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
 
-            Response<List<INVOICE_MASTER>> response = new Response<List<INVOICE_MASTER>>();
-            var data = DbClientFactory<MasterRepo>.Instance.GetBLLIST(dbConn);
+            Response<List<HSN_MASTER>> response = new Response<List<HSN_MASTER>>();
+            var data = DbClientFactory<MasterRepo>.Instance.GetHsnMaster(dbConn);
 
             if (data != null)
             {
@@ -2128,7 +2127,31 @@ namespace PrimeMaritime_API.Services
 
             return response;
         }
+
+        public Response<CommonResponse> DeleteHsnMaster(int ID)
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            Response<CommonResponse> response = new Response<CommonResponse>();
+
+            if (ID == 0)
+            {
+                response.ResponseCode = 500;
+                response.ResponseMessage = "Please provide ID ";
+                return response;
+            }
+
+            DbClientFactory<MasterRepo>.Instance.DeleteHsnMaster(dbConn, ID);
+
+            response.Succeeded = true;
+            response.ResponseMessage = "Hsn Master deleted Successfully.";
+            response.ResponseCode = 200;
+
+            return response;
+        }
+
         #endregion
+
     }
 
 

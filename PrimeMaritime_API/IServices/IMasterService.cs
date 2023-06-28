@@ -243,10 +243,14 @@ namespace PrimeMaritime_API.IServices
         Response<CommonResponse> DeleteChargesMaster(int ID);
         #endregion
 
-        #region "INVOICE"
-        Response<CommonResponse> InsertInvoice(INVOICE_MASTER request);
 
-        Response<List<INVOICE_MASTER>> GetBLLIST();
+        #region "HSN-CODE"
+
+        Response<CommonResponse> InsertHsnCode(HSN_MASTER request);
+
+        Response<List<HSN_MASTER>> GetHsnMaster();
+
+        Response<CommonResponse> DeleteHsnMaster(int ID);
         #endregion
     }
 }
