@@ -2616,82 +2616,65 @@ namespace PrimeMaritime_API.Repository
             return SqlHelper.CreateListFromTable<T>(dataTable);
         }
 
-        #region "INVOICE"
-        public void InsertInvoice(string connstring, INVOICE_MASTER master)
+        #region "HSN-CODE"
+
+        public void InsertHsnCode(string connstring, HSN_MASTER master)
         {
             try
             {
                 SqlParameter[] parameters =
                 {
-                  new SqlParameter("@OPERATION",    SqlDbType.VarChar,50) { Value = "INSERT_INVOICES" },
-                  new SqlParameter("@INVOICE_NO",   SqlDbType.VarChar,100) { Value = master.INVOICE_NO},
-                  new SqlParameter("@INVOICE_TYPE", SqlDbType.VarChar, 100) { Value = master.INVOICE_TYPE },
-                  new SqlParameter("@BILL_TO",      SqlDbType.VarChar, 50) { Value = master.BILL_TO },
-                  new SqlParameter("@BILL_FROM",    SqlDbType.VarChar, 50) { Value = master.BILL_FROM },
-                  new SqlParameter("@SHIPPER_NAME", SqlDbType.NVarChar, 50) { Value = master.SHIPPER_NAME },
-                  new SqlParameter("@PAYMENT_TERM", SqlDbType.VarChar, 50) { Value = master.PAYMENT_TERM },
-                  new SqlParameter("@BL_NO",        SqlDbType.VarChar, 50) { Value = master.BL_NO },
-                  new SqlParameter("@AGENT_NAME",   SqlDbType.VarChar, 50) { Value = master.AGENT_NAME},
-                  new SqlParameter("@AGENT_CODE",   SqlDbType.VarChar, 50) { Value = master.AGENT_CODE},
-                  new SqlParameter("@CREATED_BY",   SqlDbType.VarChar, 50) { Value = master.CREATED_BY},
-                  new SqlParameter("@UPDATED_BY",   SqlDbType.VarChar, 50) { Value = master.UPDATED_BY},
-                  new SqlParameter("@STATUS",        SqlDbType.Bit) { Value = master.STATUS},
+                  new SqlParameter("@OPERATION", SqlDbType.VarChar,50) { Value = "INSERT_HSN_MASTER" },
+                  new SqlParameter("@HSN_CODE", SqlDbType.VarChar,100) { Value = master.HSN_CODE},
+                  new SqlParameter("@HSN_DESC", SqlDbType.VarChar, 100) { Value = master.HSN_DESC },
+                  new SqlParameter("@CREATED_BY", SqlDbType.VarChar, 100) { Value = master.CREATED_BY},
+                  new SqlParameter("@CREATED_DATE", SqlDbType.DateTime) { Value = master.CREATED_DATE},
+
+
 
 
                 };
 
-                var ID = SqlHelper.ExecuteProcedureReturnString(connstring, "SP_INOVICE2", parameters);
+                var ID = SqlHelper.ExecuteProcedureReturnString(connstring, "SP_HSN_MASTER", parameters);
 
                 DataTable tbl = new DataTable();
 
-                tbl.Columns.Add(new DataColumn("INVOICE_NO", typeof(string)));
-                tbl.Columns.Add(new DataColumn("CHARGE_NAME", typeof(string)));
-                tbl.Columns.Add(new DataColumn("EXCHANGE_RATE", typeof(int)));
-                tbl.Columns.Add(new DataColumn("QUANTITY", typeof(int)));
-                tbl.Columns.Add(new DataColumn("AMOUNT", typeof(int)));
-                tbl.Columns.Add(new DataColumn("HSN_CODE", typeof(string)));
-                tbl.Columns.Add(new DataColumn("REQUESTED_AMOUNT", typeof(int)));
-                tbl.Columns.Add(new DataColumn("CURRENCY", typeof(string)));
-                tbl.Columns.Add(new DataColumn("EXEMPT_FLAG", typeof(string)));
-                tbl.Columns.Add(new DataColumn("IS_SRRCHARGE", typeof(string)));
+                tbl.Columns.Add(new DataColumn("ID", typeof(int)));
+                tbl.Columns.Add(new DataColumn("EFFECTIVE_FROM", typeof(DateTime)));
+                tbl.Columns.Add(new DataColumn("EFFECTIVE_TO", typeof(DateTime)));
+                tbl.Columns.Add(new DataColumn("CGST", typeof(decimal)));
+                tbl.Columns.Add(new DataColumn("IGST", typeof(decimal)));
+                tbl.Columns.Add(new DataColumn("SGST", typeof(decimal)));
+                tbl.Columns.Add(new DataColumn("RATE", typeof(decimal)));
 
 
-                foreach (var i in master.BL_LIST)
+                foreach (var i in master.CODE_LIST)
                 {
                     DataRow dr = tbl.NewRow();
 
-                    dr["INVOICE_NO"] = master.INVOICE_NO;
-                    dr["CHARGE_NAME"] = i.CHARGE_NAME;
-                    dr["EXCHANGE_RATE"] = i.EXCHANGE_RATE;
-                    dr["QUANTITY"] = i.QUANTITY;
-                    dr["AMOUNT"] = i.AMOUNT;
-                    dr["HSN_CODE"] = i.HSN_CODE;
-                    dr["REQUESTED_AMOUNT"] = i.REQUESTED_AMOUNT;
-                    dr["CURRENCY"] = i.CURRENCY;
-                    dr["EXEMPT_FLAG"] = i.EXEMPT_FLAG;
-                    dr["IS_SRRCHARGE"] = i.IS_SRRCHARGE;
-
+                    dr["ID"]    = master.ID;
+                    dr["EFFECTIVE_FROM"] = i.EFFECTIVE_FROM;
+                    dr["EFFECTIVE_TO"] = i.EFFECTIVE_TO;
+                    dr["CGST"] = i.CGST;
+                    dr["IGST"] = i.IGST;
+                    dr["SGST"] = i.SGST;
+                    dr["RATE"] = i.RATE;
 
 
                     tbl.Rows.Add(dr);
                 }
 
-                string[] columns = new string[10];
-                columns[0] = "INVOICE_NO";
-                columns[1] = "CHARGE_NAME";
-                columns[2] = "EXCHANGE_RATE";
-                columns[3] = "QUANTITY";
-                columns[4] = "AMOUNT";
-                columns[5] = "HSN_CODE";
-                columns[6] = "REQUESTED_AMOUNT";
-                columns[7] = "CURRENCY";
-                columns[8] = "EXEMPT_FLAG";
-                columns[9] = "IS_SRRCHARGE";
+                string[] columns = new string[7];
+                columns[0] = "ID";
+                columns[1] = "EFFECTIVE_FROM";
+                columns[2] = "EFFECTIVE_TO";
+                columns[3] = "CGST";
+                columns[4] = "IGST";
+                columns[5] = "SGST";
+                columns[6] = "RATE";
 
 
-                SqlHelper.ExecuteProcedureBulkInsert(connstring, tbl, "INVOICE_CHARGES", columns);
-
-
+                SqlHelper.ExecuteProcedureBulkInsert(connstring, tbl, "TB_HSN_LIST", columns);
 
             }
             catch (Exception)
@@ -2701,17 +2684,17 @@ namespace PrimeMaritime_API.Repository
         }
 
 
-        public List<INVOICE_MASTER> GetBLLIST(string dbConn)
+        public List<HSN_MASTER> GetHsnMaster(string dbConn)
         {
             try
             {
                 SqlParameter[] parameters =
                 {
-                  new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "GET_BL_LIST" }
+                  new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "GET_HSN_MASTER_LIST" }
                 };
 
-                DataTable dataTable = SqlHelper.ExtecuteProcedureReturnDataTable(dbConn, "SP_INOVICE2", parameters);
-                List<INVOICE_MASTER> master = SqlHelper.CreateListFromTable<INVOICE_MASTER>(dataTable);
+                DataTable dataTable = SqlHelper.ExtecuteProcedureReturnDataTable(dbConn, "SP_HSN_MASTER", parameters);
+                List<HSN_MASTER> master = SqlHelper.CreateListFromTable<HSN_MASTER>(dataTable);
 
                 return master;
             }
@@ -2719,6 +2702,17 @@ namespace PrimeMaritime_API.Repository
             {
                 throw;
             }
+        }
+
+        public void DeleteHsnMaster(string connstring, int ID)
+        {
+            SqlParameter[] parameters =
+            {
+              new SqlParameter("@ID", SqlDbType.Int) { Value = ID },
+               new SqlParameter("@OPERATION", SqlDbType.VarChar, 255) { Value = "DELETE_HSN_MASTER" }
+            };
+
+            SqlHelper.ExecuteProcedureReturnString(connstring, "SP_HSN_MASTER", parameters);
         }
         #endregion
     }
