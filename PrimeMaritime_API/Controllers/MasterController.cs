@@ -29,11 +29,11 @@ namespace PrimeMaritime_API.Controllers
         }
 
         #region "PARTY MASTER"
-        //[HttpPost("InsertPartyMaster")]
-        //public ActionResult<Response<CommonResponse>> InsertPartyMaster(PARTY_MASTER request)
-        //{
-        //    return Ok(_masterService.InsertPartyMaster(request));
-        //}
+        [HttpPost("InsertPartyMaster")]
+        public ActionResult<Response<CommonResponse>> InsertPartyMaster(PARTY_MASTER request)
+        {
+            return Ok(_masterService.InsertPartyMaster(request));
+        }
 
 
         [HttpPost("UploadCustomerFiles")]
