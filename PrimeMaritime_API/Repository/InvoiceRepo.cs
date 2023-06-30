@@ -47,12 +47,16 @@ namespace PrimeMaritime_API.Repository
                   new SqlParameter("@BILL_FROM",    SqlDbType.VarChar, 50) { Value = master.BILL_FROM },
                   new SqlParameter("@SHIPPER_NAME", SqlDbType.NVarChar, 50) { Value = master.SHIPPER_NAME },
                   new SqlParameter("@PAYMENT_TERM", SqlDbType.VarChar, 50) { Value = master.PAYMENT_TERM },
+                  new SqlParameter("@ADDRESS", SqlDbType.VarChar, 50) { Value = master.ADDRESS },
+                  new SqlParameter("@BRANCH_ID",     SqlDbType.Int ) { Value = master.BRANCH_ID },
+                  new SqlParameter("@INVOICE_DATE",     SqlDbType.DateTime ) { Value = master.INVOICE_DATE },
+
                   new SqlParameter("@BL_NO",        SqlDbType.VarChar, 50) { Value = master.BL_NO },
                   new SqlParameter("@AGENT_NAME",   SqlDbType.VarChar, 50) { Value = master.AGENT_NAME},
                   new SqlParameter("@AGENT_CODE",   SqlDbType.VarChar, 50) { Value = master.AGENT_CODE},
                   new SqlParameter("@CREATED_BY",   SqlDbType.VarChar, 50) { Value = master.CREATED_BY},
                   new SqlParameter("@UPDATED_BY",   SqlDbType.VarChar, 50) { Value = master.UPDATED_BY},
-                  new SqlParameter("@STATUS",        SqlDbType.Bit) { Value = master.STATUS},
+                  new SqlParameter("@STATUS",        SqlDbType.VarChar, 50) { Value = master.STATUS},
 
 
                 };
