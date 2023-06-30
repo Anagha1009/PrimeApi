@@ -62,9 +62,10 @@ namespace PrimeMaritime_API.Models
         public string VESSEL_NAME { get; set; }
         public string VOYAGE_NO { get; set; }
         public string CONTAINERS { get; set; }
-        public string CONTAINER_LIST { get; set; }
+        public string CONTAINER_NOS { get; set; }
         public int BRANCH_ID { get; set; }
         public List<INVOICE_CHARGES> BL_LIST { get; set; } = new List<INVOICE_CHARGES>();
+        public List<INVOICE_BL_CONTAINER> CONTAINER_LIST { get; set; } = new List<INVOICE_BL_CONTAINER>();
     }
 
     public class INVOICE_CHARGES
