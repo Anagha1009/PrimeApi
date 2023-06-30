@@ -377,41 +377,15 @@ namespace PrimeMaritime_API.Models
     public class HSN_MASTER
     {
         public int ID { get; set; }
-
-
         public string HSN_CODE { get; set; }
-
         public string HSN_DESC { get; set; }
-
         public string CREATED_BY { get; set; }
-
-        public DateTime CREATED_DATE { get; set; }
-
-        public List<HSN_LIST> CODE_LIST { get; set; } = new List<HSN_LIST>();
-
-    }
-
-    public class HSN_LIST
-
-    {
-
-        public int ID { get; set; }
-
         public decimal RATE { get; set; }
-
         public decimal IGST { get; set; }
-
         public decimal CGST { get; set; }
-
         public decimal SGST { get; set; }
-
-        public DateTime EFFECTIVE_FROM { get; set; }
-
-        public DateTime EFFECTIVE_TO { get; set; }
-
-     
-
-
+        public string EFFECTIVE_FROM { get; set; }
+        public string EFFECTIVE_TO { get; set; }
     }
 
 }

@@ -2628,53 +2628,15 @@ namespace PrimeMaritime_API.Repository
                   new SqlParameter("@HSN_CODE", SqlDbType.VarChar,100) { Value = master.HSN_CODE},
                   new SqlParameter("@HSN_DESC", SqlDbType.VarChar, 100) { Value = master.HSN_DESC },
                   new SqlParameter("@CREATED_BY", SqlDbType.VarChar, 100) { Value = master.CREATED_BY},
-                  new SqlParameter("@CREATED_DATE", SqlDbType.DateTime) { Value = master.CREATED_DATE},
-
-
-
-
+                  new SqlParameter("@EFFECTIVE_FROM", SqlDbType.DateTime) { Value = String.IsNullOrEmpty(master.EFFECTIVE_FROM) ? null : Convert.ToDateTime(master.EFFECTIVE_FROM)},
+                  new SqlParameter("@EFFECTIVE_TO", SqlDbType.DateTime) { Value = String.IsNullOrEmpty(master.EFFECTIVE_TO) ? null : Convert.ToDateTime(master.EFFECTIVE_TO)},
+                  new SqlParameter("@CGST", SqlDbType.Decimal) { Value = master.CGST},
+                  new SqlParameter("@IGST", SqlDbType.Decimal) { Value = master.IGST},
+                  new SqlParameter("@SGST", SqlDbType.Decimal) { Value = master.SGST},
+                  new SqlParameter("@RATE", SqlDbType.Decimal) { Value = master.RATE},
                 };
 
-                var ID = SqlHelper.ExecuteProcedureReturnString(connstring, "SP_HSN_MASTER", parameters);
-
-                DataTable tbl = new DataTable();
-
-                tbl.Columns.Add(new DataColumn("ID", typeof(int)));
-                tbl.Columns.Add(new DataColumn("EFFECTIVE_FROM", typeof(DateTime)));
-                tbl.Columns.Add(new DataColumn("EFFECTIVE_TO", typeof(DateTime)));
-                tbl.Columns.Add(new DataColumn("CGST", typeof(decimal)));
-                tbl.Columns.Add(new DataColumn("IGST", typeof(decimal)));
-                tbl.Columns.Add(new DataColumn("SGST", typeof(decimal)));
-                tbl.Columns.Add(new DataColumn("RATE", typeof(decimal)));
-
-
-                foreach (var i in master.CODE_LIST)
-                {
-                    DataRow dr = tbl.NewRow();
-
-                    dr["ID"]    = master.ID;
-                    dr["EFFECTIVE_FROM"] = i.EFFECTIVE_FROM;
-                    dr["EFFECTIVE_TO"] = i.EFFECTIVE_TO;
-                    dr["CGST"] = i.CGST;
-                    dr["IGST"] = i.IGST;
-                    dr["SGST"] = i.SGST;
-                    dr["RATE"] = i.RATE;
-
-
-                    tbl.Rows.Add(dr);
-                }
-
-                string[] columns = new string[7];
-                columns[0] = "ID";
-                columns[1] = "EFFECTIVE_FROM";
-                columns[2] = "EFFECTIVE_TO";
-                columns[3] = "CGST";
-                columns[4] = "IGST";
-                columns[5] = "SGST";
-                columns[6] = "RATE";
-
-
-                SqlHelper.ExecuteProcedureBulkInsert(connstring, tbl, "TB_HSN_LIST", columns);
+                SqlHelper.ExecuteProcedureReturnString(connstring, "SP_HSN_MASTER", parameters);
 
             }
             catch (Exception)
