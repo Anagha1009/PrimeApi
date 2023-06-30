@@ -79,7 +79,6 @@ namespace PrimeMaritime_API.Services
 
             return response;
         }
-
         public Response<CommonResponse> InsertInvoice(INVOICE_MASTER request)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
@@ -93,7 +92,6 @@ namespace PrimeMaritime_API.Services
 
             return response;
         }
-
         public Response<INVOICE_MASTER> GetInvoiceDetails(string INVOICE_NO, string PORT, string ORG_CODE)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
@@ -118,6 +116,11 @@ namespace PrimeMaritime_API.Services
 
                 invoice = InvoiceRepo.GetSingleDataFromDataSet<INVOICE_MASTER>(data.Tables[0]);
 
+                if (data.Tables.Contains("Table1"))
+                {
+                    invoice.BL_LIST = InvoiceRepo.GetListFromDataSet<INVOICE_CHARGES>(data.Tables[1]);
+                }
+
                 response.Data = invoice;
             }
             else
@@ -129,12 +132,12 @@ namespace PrimeMaritime_API.Services
 
             return response;
         }
-        public Response<List<INVOICE_MASTER>> GetInvoiceList(string FROM_DATE, string TO_DATE, string PORT, string ORG_CODE)
+        public Response<List<INVOICE_MASTER>> GetInvoiceList(string FROM_DATE, string TO_DATE, string PORT, string ORG_CODE, string BL_NO)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
 
             Response<List<INVOICE_MASTER>> response = new Response<List<INVOICE_MASTER>>();
-            var data = DbClientFactory<InvoiceRepo>.Instance.GetInvoiceList(dbConn, FROM_DATE, TO_DATE, ORG_CODE, PORT);
+            var data = DbClientFactory<InvoiceRepo>.Instance.GetInvoiceList(dbConn, FROM_DATE, TO_DATE, ORG_CODE, PORT, BL_NO);
 
             if (data.Count > 0)
             {
