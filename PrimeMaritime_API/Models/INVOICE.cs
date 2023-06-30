@@ -29,6 +29,13 @@ namespace PrimeMaritime_API.Models
         public decimal STANDARD_RATE { get; set; }
         public decimal RATE_REQUESTED { get; set; }
         public decimal APPROVED_RATE { get; set; }
+        public string HSN_CODE { get; set; }
+
+        public decimal RATE { get; set; }
+        public decimal IGST { get; set; }
+        public decimal CGST { get; set; }
+        public decimal SGST { get; set; }
+        public string CHARGE_TYPE { get; set; }
     }
 
     public class INVOICE_MASTER
@@ -57,7 +64,11 @@ namespace PrimeMaritime_API.Models
 
         public string UPDATED_BY { get; set; }
 
-        public bool STATUS { get; set; }
+        public string STATUS { get; set; }
+
+        public string ADDRESS { get; set; }
+        public int BRANCH_ID { get; set; }
+        public DateTime INVOICE_DATE { get; set; }
 
         public List<INVOICE_CHARGES> BL_LIST { get; set; } = new List<INVOICE_CHARGES>();
     }
@@ -67,14 +78,17 @@ namespace PrimeMaritime_API.Models
         public int ID { get; set; }
         public string INVOICE_NO { get; set; }
         public string CHARGE_NAME { get; set; }
-        public int EXCHANGE_RATE { get; set; }
+        public decimal EXCHANGE_RATE { get; set; }
         public int QUANTITY { get; set; }
-        public int AMOUNT { get; set; }
+        public decimal AMOUNT { get; set; }
         public string HSN_CODE { get; set; }
-        public int REQUESTED_AMOUNT { get; set; }
+        public decimal REQUESTED_AMOUNT { get; set; }
         public string CURRENCY { get; set; }
         public string EXEMPT_FLAG { get; set; }
         public bool IS_SRRCHARGE { get; set; }
+      
+
+
     }
 
     public class INVOICE_BL_CONTAINER
@@ -86,7 +100,7 @@ namespace PrimeMaritime_API.Models
 
     public class INVOICE_BL_BRANCH
     {
-        public int ID { get; set; }
+        public int BRANCH_ID { get; set; }
 
         public string CUST_NAME { get; set; }
 
