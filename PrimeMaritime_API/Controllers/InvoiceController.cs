@@ -38,6 +38,12 @@ namespace PrimeMaritime_API.Controllers
             return Ok(_invoiceService.InsertInvoice(request));
         }
 
+        [HttpPost("FinalizeInvoice")]
+        public ActionResult<Response<CommonResponse>> FinalizeInvoice(INVOICE_FINALIZE request)
+        {
+            return Ok(_invoiceService.FinalizeInvoice(request));
+        }
+
         [HttpGet("GetInvoiceList")]
         public ActionResult<Response<List<INVOICE_MASTER>>> GetInvoiceList(string FROM_DATE, string TO_DATE, string PORT, string ORG_CODE,string BL_NO)
         {
@@ -45,9 +51,9 @@ namespace PrimeMaritime_API.Controllers
         }
 
         [HttpGet("GetInvoiceDetails")]
-        public ActionResult<Response<INVOICE_MASTER>> GetInvoiceDetails(string INVOICE_NO, string PORT, string ORG_CODE)
+        public ActionResult<Response<INVOICE_MASTER>> GetInvoiceDetails(int INVOICE_ID,string INVOICE_NO, string PORT, string ORG_CODE)
         {
-            return Ok(JsonConvert.SerializeObject(_invoiceService.GetInvoiceDetails(INVOICE_NO, PORT, ORG_CODE)));
+            return Ok(JsonConvert.SerializeObject(_invoiceService.GetInvoiceDetails(INVOICE_ID,INVOICE_NO, PORT, ORG_CODE)));
         }
 
     }

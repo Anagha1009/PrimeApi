@@ -92,20 +92,35 @@ namespace PrimeMaritime_API.Services
 
             return response;
         }
-        public Response<INVOICE_MASTER> GetInvoiceDetails(string INVOICE_NO, string PORT, string ORG_CODE)
+
+        public Response<CommonResponse> FinalizeInvoice(INVOICE_FINALIZE request)
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            DbClientFactory<InvoiceRepo>.Instance.FinalizeInvoice(dbConn, request);
+
+            Response<CommonResponse> response = new Response<CommonResponse>();
+            response.Succeeded = true;
+            response.ResponseMessage = "Invoice finalized Successfully.";
+            response.ResponseCode = 200;
+
+            return response;
+        }
+
+        public Response<INVOICE_MASTER> GetInvoiceDetails(int INVOICE_ID,string INVOICE_NO, string PORT, string ORG_CODE)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
 
             Response<INVOICE_MASTER> response = new Response<INVOICE_MASTER>();
 
-            if ((INVOICE_NO == "") || (INVOICE_NO == null))
+            if (INVOICE_ID == 0)
             {
                 response.ResponseCode = 500;
-                response.ResponseMessage = "Please provide Invoice No";
+                response.ResponseMessage = "Please provide Invoice ID";
                 return response;
             }
 
-            var data = DbClientFactory<InvoiceRepo>.Instance.GetInvoiceDetails(dbConn, INVOICE_NO, PORT, ORG_CODE);
+            var data = DbClientFactory<InvoiceRepo>.Instance.GetInvoiceDetails(dbConn, INVOICE_ID,INVOICE_NO, PORT, ORG_CODE);
 
             if ((data != null) && (data.Tables[0].Rows.Count > 0))
             {
@@ -120,6 +135,17 @@ namespace PrimeMaritime_API.Services
                 {
                     invoice.BL_LIST = InvoiceRepo.GetListFromDataSet<INVOICE_CHARGES>(data.Tables[1]);
                 }
+
+                if (data.Tables.Contains("Table2"))
+                {
+                    invoice.CONTAINER_LIST = InvoiceRepo.GetListFromDataSet<INVOICE_BL_CONTAINER>(data.Tables[2]);
+                }
+
+                if (data.Tables.Contains("Table3"))
+                {
+                    invoice.BL_CONTAINER_LIST = InvoiceRepo.GetListFromDataSet<INVOICE_BL_CONTAINER>(data.Tables[3]);
+                }
+
 
                 response.Data = invoice;
             }

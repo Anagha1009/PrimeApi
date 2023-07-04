@@ -667,6 +667,53 @@ namespace PrimeMaritime_API.Helpers
             }
         }
 
+        public static void UpdateInvoiceCharges<T>(List<T> list, string TableName, string connString, string[] columns)
+        {
+            DataTable dt = new DataTable("INVOICE_CHARGES");
+            dt = ConvertToDataTable(list);
+
+            using (SqlConnection conn = new SqlConnection(connString))
+            {
+                using (SqlCommand command = new SqlCommand("", conn))
+                {
+                    try
+                    {
+                        conn.Open();
+
+                        //Creating temp table on database
+                        command.CommandText = "CREATE TABLE #TmpTable(ID int,INVOICE_ID int,INVOICE_NO varchar(50), CHARGE_NAME varchar(100), EXCHANGE_RATE numeric, QUANTITY int, AMOUNT numeric, HSN_CODE varchar(50), REQUESTED_AMOUNT numeric, CURRENCY varchar(50))";
+                        command.ExecuteNonQuery();
+
+                        //Bulk insert into temp table
+                        using (SqlBulkCopy bulkcopy = new SqlBulkCopy(conn))
+                        {
+                            bulkcopy.BulkCopyTimeout = 660;
+                            bulkcopy.DestinationTableName = "#TmpTable";
+                            foreach (var i in columns)
+                            {
+                                bulkcopy.ColumnMappings.Add(i, i);
+                            }
+                            bulkcopy.WriteToServer(dt);
+                            bulkcopy.Close();
+                        }
+
+                        // Updating destination table, and dropping temp table
+                        command.CommandTimeout = 300;
+                        command.CommandText = "UPDATE T SET CHARGE_NAME = Temp.CHARGE_NAME  , EXCHANGE_RATE = Temp.EXCHANGE_RATE, QUANTITY = Temp.QUANTITY, HSN_CODE = Temp.HSN_CODE, REQUESTED_AMOUNT = Temp.REQUESTED_AMOUNT, CURRENCY = Temp.CURRENCY FROM " + TableName + " T INNER JOIN #TmpTable Temp ON T.ID = Temp.ID; DROP TABLE #TmpTable;";
+                        command.ExecuteNonQuery();
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                    finally
+                    {
+                        conn.Close();
+                    }
+                }
+            }
+        }
+
         public static TData ExtecuteProcedureReturnData<TData>(string connString, string procName,
             Func<SqlDataReader, TData> translator,
             params SqlParameter[] parameters)

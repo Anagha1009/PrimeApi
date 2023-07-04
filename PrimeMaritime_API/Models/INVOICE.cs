@@ -37,6 +37,7 @@ namespace PrimeMaritime_API.Models
     public class INVOICE_MASTER
     {
         public int ID { get; set; }
+        public int INVOICE_ID { get; set; }
         public string INVOICE_NO { get; set; }
         public string INVOICE_TYPE { get; set; }
         public string BILL_TO { get; set; }
@@ -64,8 +65,12 @@ namespace PrimeMaritime_API.Models
         public string CONTAINERS { get; set; }
         public string CONTAINER_NOS { get; set; }
         public int BRANCH_ID { get; set; }
+        public string SHIPPER_REF { get; set; }
+        public string FINAL_DESTINATION { get; set; }
+        public string REMARKS { get; set; }
         public List<INVOICE_CHARGES> BL_LIST { get; set; } = new List<INVOICE_CHARGES>();
         public List<INVOICE_BL_CONTAINER> CONTAINER_LIST { get; set; } = new List<INVOICE_BL_CONTAINER>();
+        public List<INVOICE_BL_CONTAINER> BL_CONTAINER_LIST { get; set; } = new List<INVOICE_BL_CONTAINER>();
     }
 
     public class INVOICE_CHARGES
@@ -105,5 +110,11 @@ namespace PrimeMaritime_API.Models
         public string ADDRESS { get; set; }
         public bool IS_SEZ { get; set; }
         public bool IS_TAX_APPLICABLE { get; set; }
+    }
+
+     public class INVOICE_FINALIZE
+    {
+        public int INVOICE_ID { get; set; }
+        public string INVOICE_NO { get; set; }
     }
 }
