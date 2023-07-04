@@ -193,40 +193,7 @@ namespace PrimeMaritime_API.Repository
 
             }
         }
-        //public List<CMList> GetContainerMovementList(string connstring, string AGENT_CODE, string DEPO_CODE,string BOOKING_NO, string CRO_NO, string CONTAINER_NO)
-        //{
-        //    SqlParameter[] parameters =
-        //    {
-        //        new SqlParameter("@OPERATION", SqlDbType.VarChar,50) { Value = "GET_CONTAINER_MOVEMENT" },
-        //        new SqlParameter("@AGENT_CODE", SqlDbType.VarChar,20) { Value = AGENT_CODE },
-        //        new SqlParameter("@DEPO_CODE", SqlDbType.VarChar,20) { Value = DEPO_CODE },
-        //        new SqlParameter("@BOOKING_NO", SqlDbType.VarChar,100) { Value = BOOKING_NO },
-        //        new SqlParameter("@CRO_NO", SqlDbType.VarChar,100) { Value = CRO_NO },
-        //        new SqlParameter("@CONTAINER_NO", SqlDbType.VarChar,100) { Value = CONTAINER_NO }
-
-        //     };
-        //    DataTable dataTable = SqlHelper.ExtecuteProcedureReturnDataTable(connstring, "SP_CRUD_CONTAINER_MOVEMENT", parameters);
-        //    List<CMList> containerList = SqlHelper.CreateListFromTable<CMList>(dataTable);
-
-        //    var uniqueCMList = containerList.GroupBy(x => x.CONTAINER_NO);
-
-        //    List<CMList> cmList = new List<CMList>();
-        //    foreach(var cont in uniqueCMList)
-        //    {
-        //        CMList cm = new CMList();
-        //        cm = cont.FirstOrDefault();
-
-        //        var nextActList = cont
-        //        .Where(x => x.CONTAINER_NO == cm.CONTAINER_NO)
-        //        .Select(n => n.Column1).ToList();
-
-        //        cm.NEXT_ACTIVITY_LIST = nextActList;
-        //        cmList.Add(cm);
-        //    }
-
-        //    return cmList;
-        //}
-
+       
         public List<CMList> GetContainerMovementList(string connstring, string BOOKING_NO, string CRO_NO)
         {
             try
