@@ -146,6 +146,11 @@ namespace PrimeMaritime_API.Services
                     invoice.BL_CONTAINER_LIST = InvoiceRepo.GetListFromDataSet<INVOICE_BL_CONTAINER>(data.Tables[3]);
                 }
 
+                if (data.Tables.Contains("Table4"))
+                {
+                    invoice.BRANCH = InvoiceRepo.GetListFromDataSet<INVOICE_BL_BRANCH>(data.Tables[4]);
+                }
+
 
                 response.Data = invoice;
             }

@@ -71,6 +71,7 @@ namespace PrimeMaritime_API.Models
         public List<INVOICE_CHARGES> BL_LIST { get; set; } = new List<INVOICE_CHARGES>();
         public List<INVOICE_BL_CONTAINER> CONTAINER_LIST { get; set; } = new List<INVOICE_BL_CONTAINER>();
         public List<INVOICE_BL_CONTAINER> BL_CONTAINER_LIST { get; set; } = new List<INVOICE_BL_CONTAINER>();
+        public List<INVOICE_BL_BRANCH> BRANCH { get; set; } = new List<INVOICE_BL_BRANCH>();
     }
 
     public class INVOICE_CHARGES
@@ -82,14 +83,17 @@ namespace PrimeMaritime_API.Models
         public int QUANTITY { get; set; }
         public decimal AMOUNT { get; set; }
         public string HSN_CODE { get; set; }
-        public decimal REQUESTED_AMOUNT { get; set; }
         public string CURRENCY { get; set; }
         public string EXEMPT_FLAG { get; set; }
         public bool IS_SRRCHARGE { get; set; }
-        public decimal RATE { get; set; }
+        public decimal RATE_PER { get; set; }
         public decimal IGST { get; set; }
         public decimal SGST { get; set; }
         public decimal CGST { get; set; }
+        public decimal APPROVED_RATE { get; set; }
+        public decimal TAXABLE_AMOUNT { get; set; }
+        public decimal TAX_AMOUNT { get; set; }
+        public decimal TOTAL_AMOUNT { get; set; }
     }
 
     public class INVOICE_BL_CONTAINER
