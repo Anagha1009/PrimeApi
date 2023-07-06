@@ -64,19 +64,25 @@ namespace PrimeMaritime_API.Repository
 
                 var ID = SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_INVOICE", parameters);
 
-                string[] columns = new string[12];
+                string[] columns = new string[18];
                 columns[0] = "INVOICE_NO";
                 columns[1] = "CHARGE_NAME";
                 columns[2] = "EXCHANGE_RATE";
                 columns[3] = "QUANTITY";
                 columns[4] = "AMOUNT";
                 columns[5] = "HSN_CODE";
-                columns[6] = "REQUESTED_AMOUNT";
+                columns[6] = "APPROVED_RATE";
                 columns[7] = "CURRENCY";
-                columns[8] = "EXEMPT_FLAG";
-                columns[9] = "IS_SRRCHARGE";
-                columns[10] = "INVOICE_ID";
-                columns[11] = "ID";
+                columns[8] = "IS_SRRCHARGE";
+                columns[9] = "INVOICE_ID";
+                columns[10] = "ID";
+                columns[11] = "TAXABLE_AMOUNT";
+                columns[12] = "RATE_PER";
+                columns[13] = "SGST";
+                columns[14] = "CGST";
+                columns[15] = "IGST";
+                columns[16] = "TAX_AMOUNT";
+                columns[17] = "TOTAL_AMOUNT";
 
                 if (ID != "NULL")
                 {
@@ -84,16 +90,22 @@ namespace PrimeMaritime_API.Repository
 
                     tbl.Columns.Add(new DataColumn("INVOICE_NO", typeof(string)));
                     tbl.Columns.Add(new DataColumn("CHARGE_NAME", typeof(string)));
-                    tbl.Columns.Add(new DataColumn("EXCHANGE_RATE", typeof(int)));
                     tbl.Columns.Add(new DataColumn("QUANTITY", typeof(int)));
-                    tbl.Columns.Add(new DataColumn("AMOUNT", typeof(int)));
                     tbl.Columns.Add(new DataColumn("HSN_CODE", typeof(string)));
-                    tbl.Columns.Add(new DataColumn("REQUESTED_AMOUNT", typeof(int)));
                     tbl.Columns.Add(new DataColumn("CURRENCY", typeof(string)));
-                    tbl.Columns.Add(new DataColumn("EXEMPT_FLAG", typeof(string)));
                     tbl.Columns.Add(new DataColumn("IS_SRRCHARGE", typeof(string)));
                     tbl.Columns.Add(new DataColumn("INVOICE_ID", typeof(int)));
                     tbl.Columns.Add(new DataColumn("ID", typeof(int)));
+                    tbl.Columns.Add(new DataColumn("APPROVED_RATE", typeof(decimal)));
+                    tbl.Columns.Add(new DataColumn("AMOUNT", typeof(decimal)));
+                    tbl.Columns.Add(new DataColumn("EXCHANGE_RATE", typeof(decimal)));
+                    tbl.Columns.Add(new DataColumn("TAXABLE_AMOUNT", typeof(decimal)));
+                    tbl.Columns.Add(new DataColumn("RATE_PER", typeof(decimal)));
+                    tbl.Columns.Add(new DataColumn("SGST", typeof(decimal)));
+                    tbl.Columns.Add(new DataColumn("CGST", typeof(decimal)));
+                    tbl.Columns.Add(new DataColumn("IGST", typeof(decimal)));
+                    tbl.Columns.Add(new DataColumn("TAX_AMOUNT", typeof(decimal)));
+                    tbl.Columns.Add(new DataColumn("TOTAL_AMOUNT", typeof(decimal)));
 
 
                     foreach (var i in master.BL_LIST)
@@ -103,15 +115,21 @@ namespace PrimeMaritime_API.Repository
                         dr["INVOICE_NO"] = master.INVOICE_NO;
                         dr["INVOICE_ID"] = Convert.ToInt32(ID);
                         dr["CHARGE_NAME"] = i.CHARGE_NAME;
-                        dr["EXCHANGE_RATE"] = i.EXCHANGE_RATE;
                         dr["QUANTITY"] = i.QUANTITY;
-                        dr["AMOUNT"] = i.AMOUNT;
                         dr["HSN_CODE"] = i.HSN_CODE;
-                        dr["REQUESTED_AMOUNT"] = i.REQUESTED_AMOUNT;
                         dr["CURRENCY"] = i.CURRENCY;
-                        dr["EXEMPT_FLAG"] = i.EXEMPT_FLAG;
                         dr["IS_SRRCHARGE"] = i.IS_SRRCHARGE;
                         dr["ID"] = i.ID;
+                        dr["APPROVED_RATE"] = i.APPROVED_RATE;
+                        dr["AMOUNT"] = i.AMOUNT;
+                        dr["EXCHANGE_RATE"] = i.EXCHANGE_RATE;
+                        dr["TAXABLE_AMOUNT"] = i.TAXABLE_AMOUNT;
+                        dr["RATE_PER"] = i.RATE_PER;
+                        dr["SGST"] = i.SGST;
+                        dr["CGST"] = i.CGST;
+                        dr["IGST"] = i.IGST;
+                        dr["TAX_AMOUNT"] = i.TAX_AMOUNT;
+                        dr["TOTAL_AMOUNT"] = i.TOTAL_AMOUNT;
 
                         tbl.Rows.Add(dr);
                     }                    
