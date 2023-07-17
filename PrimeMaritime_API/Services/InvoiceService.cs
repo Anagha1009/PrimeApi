@@ -79,6 +79,46 @@ namespace PrimeMaritime_API.Services
 
             return response;
         }
+        public Response<CREDIT_NOTE_DETAILS> GetCreditNoteDetails(string CREDIT_NO, string PORT, string ORG_CODE)
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            Response<CREDIT_NOTE_DETAILS> response = new Response<CREDIT_NOTE_DETAILS>();
+
+            if ((CREDIT_NO == "") || (CREDIT_NO == null))
+            {
+                response.ResponseCode = 500;
+                response.ResponseMessage = "Please provide Credit No";
+                return response;
+            }
+
+            var data = DbClientFactory<InvoiceRepo>.Instance.GetCreditNoteDetails(dbConn, CREDIT_NO, PORT, ORG_CODE);
+
+            if ((data != null) && (data.Tables[0].Rows.Count > 0))
+            {
+                response.Succeeded = true;
+                response.ResponseCode = 200;
+                response.ResponseMessage = "Success";
+                CREDIT_NOTE_DETAILS creditNote = new CREDIT_NOTE_DETAILS();
+
+                creditNote = InvoiceRepo.GetSingleDataFromDataSet<CREDIT_NOTE_DETAILS>(data.Tables[0]);
+
+                if (data.Tables.Contains("Table1"))
+                {
+                    creditNote.CHARGE_LIST = InvoiceRepo.GetListFromDataSet<CREDIT_NOTE_CHARGE_DETAILS>(data.Tables[1]);
+                }
+
+                response.Data = creditNote;
+            }
+            else
+            {
+                response.Succeeded = false;
+                response.ResponseCode = 500;
+                response.ResponseMessage = "No Data";
+            }
+
+            return response;
+        }
         public Response<CommonResponse> InsertInvoice(INVOICE_MASTER request)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
@@ -88,6 +128,20 @@ namespace PrimeMaritime_API.Services
             Response<CommonResponse> response = new Response<CommonResponse>();
             response.Succeeded = true;
             response.ResponseMessage = "Invoice saved Successfully.";
+            response.ResponseCode = 200;
+
+            return response;
+        }
+
+        public Response<CommonResponse> InsertCreditNote(List<CREDIT_NOTE> request)
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            DbClientFactory<InvoiceRepo>.Instance.InsertCreditNote(dbConn, request);
+
+            Response<CommonResponse> response = new Response<CommonResponse>();
+            response.Succeeded = true;
+            response.ResponseMessage = "Credit Note saved Successfully.";
             response.ResponseCode = 200;
 
             return response;
@@ -151,6 +205,50 @@ namespace PrimeMaritime_API.Services
                     invoice.BRANCH = InvoiceRepo.GetListFromDataSet<INVOICE_BL_BRANCH>(data.Tables[4]);
                 }
 
+                response.Data = invoice;
+            }
+            else
+            {
+                response.Succeeded = false;
+                response.ResponseCode = 500;
+                response.ResponseMessage = "No Data";
+            }
+
+            return response;
+        }
+        public Response<INVOICE_DETAILS_FOR_RECEIPT> GetInvoiceDetailsForReceipt(string INVOICE_NO, string PORT, string ORG_CODE)
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            Response<INVOICE_DETAILS_FOR_RECEIPT> response = new Response<INVOICE_DETAILS_FOR_RECEIPT>();
+
+            if (String.IsNullOrEmpty(INVOICE_NO))
+            {
+                response.ResponseCode = 500;
+                response.ResponseMessage = "Please provide Invoice No";
+                return response;
+            }
+
+            var data = DbClientFactory<InvoiceRepo>.Instance.GetInvoiceDetailsForReceipt(dbConn, INVOICE_NO, PORT, ORG_CODE);
+
+            if ((data != null) && (data.Tables[0].Rows.Count > 0))
+            {
+                response.Succeeded = true;
+                response.ResponseCode = 200;
+                response.ResponseMessage = "Success";
+                INVOICE_DETAILS_FOR_RECEIPT invoice = new INVOICE_DETAILS_FOR_RECEIPT();
+
+                invoice = InvoiceRepo.GetSingleDataFromDataSet<INVOICE_DETAILS_FOR_RECEIPT>(data.Tables[0]);
+
+                if (data.Tables.Contains("Table1"))
+                {
+                    invoice.BANK_LIST = InvoiceRepo.GetListFromDataSet<CUSTOMER_BANK>(data.Tables[1]);
+                }
+
+                if (data.Tables.Contains("Table2"))
+                {
+                    invoice.CHARGE_LIST = InvoiceRepo.GetListFromDataSet<INVOICE_DETAILS_FOR_RECEIPT_CHARGES>(data.Tables[2]);
+                }
 
                 response.Data = invoice;
             }
@@ -169,6 +267,30 @@ namespace PrimeMaritime_API.Services
 
             Response<List<INVOICE_MASTER>> response = new Response<List<INVOICE_MASTER>>();
             var data = DbClientFactory<InvoiceRepo>.Instance.GetInvoiceList(dbConn, FROM_DATE, TO_DATE, ORG_CODE, PORT, BL_NO);
+
+            if (data.Count > 0)
+            {
+                response.Succeeded = true;
+                response.ResponseCode = 200;
+                response.ResponseMessage = "Success";
+                response.Data = data;
+            }
+            else
+            {
+                response.Succeeded = false;
+                response.ResponseCode = 500;
+                response.ResponseMessage = "No Data";
+            }
+
+            return response;
+        }
+
+        public Response<List<CREDIT_NOTE>> GetCreditList(string FROM_DATE, string TO_DATE, string PORT, string ORG_CODE, string CREDIT_NO)
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            Response<List<CREDIT_NOTE>> response = new Response<List<CREDIT_NOTE>>();
+            var data = DbClientFactory<InvoiceRepo>.Instance.GetCreditList(dbConn, FROM_DATE, TO_DATE, ORG_CODE, PORT, CREDIT_NO);
 
             if (data.Count > 0)
             {
