@@ -99,6 +99,23 @@ namespace PrimeMaritime_API.Models
         public decimal TAX_AMOUNT { get; set; }
         public decimal TOTAL_AMOUNT { get; set; }
         public string CHARGE_TYPE { get; set; }
+        public decimal REMAINING_AMOUNT { get; set; }
+        public decimal REMAINING { get; set; }
+        public decimal CREDIT_AMOUNT { get; set; }
+        public string CREDIT_NO { get; set; }
+        public string AGENT_CODE { get; set; }
+        public string AGENT_NAME { get; set; }
+    }
+    public class CREDIT_NOTE
+    {
+        public string CREDIT_NO { get; set; }
+        public string INVOICE_NO { get; set; }
+        public string CHARGE_NAME { get; set; }
+        public decimal REMAINING_AMOUNT { get; set; }
+        public decimal CREDIT_AMOUNT { get; set; }
+        public string AGENT_CODE { get; set; }
+        public string AGENT_NAME { get; set; }
+        public DateTime? CREATED_DATE { get; set; }
     }
 
     public class INVOICE_BL_CONTAINER
@@ -136,5 +153,71 @@ namespace PrimeMaritime_API.Models
         public string BANK_IFSC { get; set; }
         public string BANK_SWIFT { get; set; }
         public string BANK_REMARKS { get; set; }
+    }
+    public class CREDIT_NOTE_DETAILS
+    {
+        public string INVOICE_NO { get; set; }
+        public string CREDIT_NO { get; set; }
+        public string ORG_NAME { get; set; }
+        public string ORG_ADDRESS1 { get; set; }
+        public string SHIPPER_NAME { get; set; }
+        public string ADDRESS { get; set; }
+        public DateTime CREATED_DATE { get; set; }
+        public string TAX_NO { get; set; }
+        public string BL_NO { get; set; }
+        public string PLACE_OF_RECEIPT { get; set; }
+        public string VESSEL_NAME { get; set; }
+        public string VOYAGE_NO { get; set; }
+        public string PORT_OF_LOADING { get; set; }
+        public string PORT_OF_DISCHARGE { get; set; }
+        public string PLACE_OF_DELIVERY { get; set; }
+        public string CONTAINERS { get; set; }
+        public List<CREDIT_NOTE_CHARGE_DETAILS> CHARGE_LIST { get; set; } = new List<CREDIT_NOTE_CHARGE_DETAILS>();
+    }
+
+    public class CREDIT_NOTE_CHARGE_DETAILS
+    {
+        public string CREDIT_NO { get; set; }
+        public string INVOICE_NO { get; set; }
+        public string CHARGE_NAME { get; set; }
+        public decimal REMAINING_AMOUNT { get; set; }
+        public decimal CREDIT_AMOUNT { get; set; }
+        public string HSN_CODE { get; set; }
+        public int QUANTITY { get; set; }
+        public string CURRENCY { get; set; }
+        public decimal EXCHANGE_RATE { get; set; }
+        public decimal APPROVED_RATE { get; set; }
+        public decimal TAXABLE_AMOUNT { get; set; }
+        public decimal RATE_PER { get; set; }
+        public decimal SGST { get; set; }
+        public decimal CGST { get; set; }
+        public decimal TOTAL_AMOUNT { get; set; }
+    }
+
+    public class INVOICE_DETAILS_FOR_RECEIPT
+    {
+        public int INVOICE_ID { get; set; }
+        public string INVOICE_NO { get; set; }
+        public string INVOICE_TYPE { get; set; }
+        public string BILL_TO { get; set; }
+        public string BILL_FROM { get; set; }
+        public string BL_NO { get; set; }
+        public string VESSEL_NAME { get; set; }
+        public string VOYAGE_NO { get; set; }
+        public string SHIPPER { get; set; }
+        public string CONSIGNEE { get; set; }
+        public string TAN_NO { get; set; }
+        public decimal TOTAL_AMOUNT { get; set; }
+        public List<CUSTOMER_BANK> BANK_LIST { get; set; } = new List<CUSTOMER_BANK>();
+        public List<INVOICE_DETAILS_FOR_RECEIPT_CHARGES> CHARGE_LIST { get; set; } = new List<INVOICE_DETAILS_FOR_RECEIPT_CHARGES>();
+    }
+
+    public class INVOICE_DETAILS_FOR_RECEIPT_CHARGES
+    {
+        public string CHARGE_NAME { get; set; }
+        public decimal TOTAL_AMOUNT { get; set; }
+        public decimal RECEIPT_COLLECTED { get; set; }
+        public decimal OUSTANDING_AMOUNT { get; set; }
+        public decimal RECEIPT_AMOUNT { get; set; }
     }
 }
