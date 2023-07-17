@@ -23,6 +23,18 @@ namespace PrimeMaritime_API.Repository
 
             return SqlHelper.ExtecuteProcedureReturnDataSet(connstring, "SP_CRUD_INVOICE", parameters);
         }
+        public DataSet GetCreditNoteDetails(string connstring, string CREDIT_NO, string PORT, string ORG_CODE)
+        {
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "GET_CREDIT_DETAILS" },
+                new SqlParameter("@CREDIT_NO", SqlDbType.VarChar, 100) { Value = CREDIT_NO },
+                new SqlParameter("@PORT", SqlDbType.VarChar, 100) { Value = PORT },
+                new SqlParameter("@ORG_CODE", SqlDbType.VarChar, 50) { Value = ORG_CODE },
+            };
+
+            return SqlHelper.ExtecuteProcedureReturnDataSet(connstring, "SP_CRUD_INVOICE", parameters);
+        }
 
         public static T GetSingleDataFromDataSet<T>(DataTable dataTable) where T : new()
         {
@@ -148,6 +160,53 @@ namespace PrimeMaritime_API.Repository
             }
         }
 
+        public void InsertCreditNote(string connstring, List<CREDIT_NOTE> master)
+        {
+            try
+            {
+                string[] columns = new string[7];
+                columns[0] = "INVOICE_NO";
+                columns[1] = "CHARGE_NAME";
+                columns[2] = "REMAINING_AMOUNT";
+                columns[3] = "CREDIT_AMOUNT";
+                columns[4] = "CREDIT_NO";
+                columns[5] = "AGENT_CODE";
+                columns[6] = "AGENT_NAME";
+
+                DataTable tbl = new DataTable();
+
+                tbl.Columns.Add(new DataColumn("INVOICE_NO", typeof(string)));
+                tbl.Columns.Add(new DataColumn("CHARGE_NAME", typeof(string)));
+                tbl.Columns.Add(new DataColumn("REMAINING_AMOUNT", typeof(decimal)));
+                tbl.Columns.Add(new DataColumn("CREDIT_AMOUNT", typeof(decimal)));
+                tbl.Columns.Add(new DataColumn("CREDIT_NO", typeof(string)));
+                tbl.Columns.Add(new DataColumn("AGENT_CODE", typeof(string)));
+                tbl.Columns.Add(new DataColumn("AGENT_NAME", typeof(string)));
+
+                foreach (var i in master)
+                {
+                    DataRow dr = tbl.NewRow();
+
+                    dr["INVOICE_NO"] = i.INVOICE_NO;
+                    dr["CHARGE_NAME"] = i.CHARGE_NAME;
+                    dr["REMAINING_AMOUNT"] = i.REMAINING_AMOUNT;
+                    dr["CREDIT_AMOUNT"] = i.CREDIT_AMOUNT;
+                    dr["CREDIT_NO"] = i.CREDIT_NO;
+                    dr["AGENT_CODE"] = i.AGENT_CODE;
+                    dr["AGENT_NAME"] = i.AGENT_NAME;
+
+                    tbl.Rows.Add(dr);
+                }
+
+                SqlHelper.ExecuteProcedureBulkInsert(connstring, tbl, "TB_CREDIT_NOTE", columns);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public void FinalizeInvoice(string connstring, INVOICE_FINALIZE master)
         {
             try
@@ -179,6 +238,18 @@ namespace PrimeMaritime_API.Repository
 
             return SqlHelper.ExtecuteProcedureReturnDataSet(connstring, "SP_CRUD_INVOICE", parameters);
         }
+        public DataSet GetInvoiceDetailsForReceipt(string connstring, string INVOICE_NO, string PORT, string ORG_CODE)
+        {
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "GET_INVOICE_DETAILS_FOR_RECEIPT" },
+                new SqlParameter("@INVOICE_NO", SqlDbType.VarChar, 100) { Value = INVOICE_NO },
+                new SqlParameter("@PORT", SqlDbType.VarChar, 100) { Value = PORT },
+                new SqlParameter("@ORG_CODE", SqlDbType.VarChar, 50) { Value = ORG_CODE },
+            };
+
+            return SqlHelper.ExtecuteProcedureReturnDataSet(connstring, "SP_CRUD_INVOICE", parameters);
+        }
 
         public List<INVOICE_MASTER> GetInvoiceList(string connstring, string FROM_DATE, string TO_DATE, string ORG_CODE, string PORT, string BL_NO)
         {
@@ -205,7 +276,30 @@ namespace PrimeMaritime_API.Repository
             }
         }
 
+        public List<CREDIT_NOTE> GetCreditList(string connstring, string FROM_DATE, string TO_DATE, string ORG_CODE, string PORT, string CREDIT_NO)
+        {
+            try
+            {
+                SqlParameter[] parameters =
+                {
+                  new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "GET_CREDIT_LIST" },
+                  new SqlParameter("@FROMDATE", SqlDbType.DateTime) { Value = String.IsNullOrEmpty(FROM_DATE) ? null : Convert.ToDateTime(FROM_DATE) },
+                  new SqlParameter("@TODATE", SqlDbType.DateTime) { Value = String.IsNullOrEmpty(TO_DATE) ? null : Convert.ToDateTime(TO_DATE) },
+                  new SqlParameter("@ORG_CODE", SqlDbType.VarChar, 50) { Value = ORG_CODE },
+                  new SqlParameter("@PORT", SqlDbType.VarChar, 100) { Value = PORT },
+                  new SqlParameter("@CREDIT_NO", SqlDbType.VarChar, 100) { Value = CREDIT_NO },
+                };
 
+                DataTable dataTable = SqlHelper.ExtecuteProcedureReturnDataTable(connstring, "SP_CRUD_INVOICE", parameters);
+                List<CREDIT_NOTE> invoiceList = SqlHelper.CreateListFromTable<CREDIT_NOTE>(dataTable);
+
+                return invoiceList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
     }
 }
