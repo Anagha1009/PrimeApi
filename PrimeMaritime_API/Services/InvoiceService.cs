@@ -66,6 +66,10 @@ namespace PrimeMaritime_API.Services
                 {
                     invoiceBL.BRANCH = InvoiceRepo.GetListFromDataSet<INVOICE_BL_BRANCH>(data.Tables[5]);
                 }
+                if (data.Tables.Contains("Table6"))
+                {
+                    invoiceBL.BANK = InvoiceRepo.GetListFromDataSet<INVOICE_BL_BANK>(data.Tables[6]);
+                }
 
 
                 response.Data = invoiceBL;
@@ -150,8 +154,7 @@ namespace PrimeMaritime_API.Services
                 {
                     invoice.BRANCH = InvoiceRepo.GetListFromDataSet<INVOICE_BL_BRANCH>(data.Tables[4]);
                 }
-
-
+              
                 response.Data = invoice;
             }
             else
