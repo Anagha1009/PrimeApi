@@ -681,7 +681,7 @@ namespace PrimeMaritime_API.Helpers
                         conn.Open();
 
                         //Creating temp table on database
-                        command.CommandText = "CREATE TABLE #TmpTable(ID int,INVOICE_ID int,INVOICE_NO varchar(50), CHARGE_NAME varchar(100), EXCHANGE_RATE numeric, QUANTITY int, AMOUNT numeric, HSN_CODE varchar(50), REQUESTED_AMOUNT numeric, CURRENCY varchar(50))";
+                        command.CommandText = "CREATE TABLE #TmpTable(ID int,INVOICE_ID int,INVOICE_NO varchar(50), CHARGE_NAME varchar(100), EXCHANGE_RATE numeric,QUANTITY int, AMOUNT numeric, RATE_PER numeric,HSN_CODE varchar(50), APPROVED_RATE numeric, TAXABLE_AMOUNT numeric,SGST numeric, CGST numeric,IGST numeric,TAX_AMOUNT numeric,TOTAL_AMOUNT numeric,CURRENCY varchar(50),IS_SRRCHARGE bit)";
                         command.ExecuteNonQuery();
 
                         //Bulk insert into temp table
@@ -699,7 +699,7 @@ namespace PrimeMaritime_API.Helpers
 
                         // Updating destination table, and dropping temp table
                         command.CommandTimeout = 300;
-                        command.CommandText = "UPDATE T SET CHARGE_NAME = Temp.CHARGE_NAME  , EXCHANGE_RATE = Temp.EXCHANGE_RATE, QUANTITY = Temp.QUANTITY, HSN_CODE = Temp.HSN_CODE, REQUESTED_AMOUNT = Temp.REQUESTED_AMOUNT, CURRENCY = Temp.CURRENCY FROM " + TableName + " T INNER JOIN #TmpTable Temp ON T.ID = Temp.ID; DROP TABLE #TmpTable;";
+                        command.CommandText = "UPDATE T SET CHARGE_NAME = Temp.CHARGE_NAME  , EXCHANGE_RATE = Temp.EXCHANGE_RATE, QUANTITY = Temp.QUANTITY, HSN_CODE = Temp.HSN_CODE, APPROVED_RATE = Temp.APPROVED_RATE, CURRENCY = Temp.CURRENCY, TAXABLE_AMOUNT = Temp.TAXABLE_AMOUNT, RATE_PER = Temp.RATE_PER, SGST = Temp.SGST, CGST = Temp.CGST, IGST = Temp.IGST, TAX_AMOUNT =Temp.TAX_AMOUNT, TOTAL_AMOUNT = Temp.TOTAL_AMOUNT, AMOUNT = Temp.AMOUNT, INVOICE_ID = Temp.INVOICE_ID, INVOICE_NO = Temp.INVOICE_NO, IS_SRRCHARGE = Temp.IS_SRRCHARGE FROM " + TableName + " T INNER JOIN #TmpTable Temp ON T.ID = Temp.ID; DROP TABLE #TmpTable;";
                         command.ExecuteNonQuery();
                     }
                     catch (Exception)

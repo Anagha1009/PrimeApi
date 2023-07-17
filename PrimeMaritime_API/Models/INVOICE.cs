@@ -16,6 +16,8 @@ namespace PrimeMaritime_API.Models
         public List<INVOICE_BL_CHARGE> POD { get; set; } = new List<INVOICE_BL_CHARGE>();
         public List<INVOICE_BL_CONTAINER> CONTAINERS { get; set; } = new List<INVOICE_BL_CONTAINER>();
         public List<INVOICE_BL_BRANCH> BRANCH { get; set; } = new List<INVOICE_BL_BRANCH>();
+        public List<INVOICE_BL_BANK> BANK { get; set; } = new List<INVOICE_BL_BANK>();
+
     }
 
     public class INVOICE_BL_CHARGE
@@ -72,11 +74,13 @@ namespace PrimeMaritime_API.Models
         public List<INVOICE_BL_CONTAINER> CONTAINER_LIST { get; set; } = new List<INVOICE_BL_CONTAINER>();
         public List<INVOICE_BL_CONTAINER> BL_CONTAINER_LIST { get; set; } = new List<INVOICE_BL_CONTAINER>();
         public List<INVOICE_BL_BRANCH> BRANCH { get; set; } = new List<INVOICE_BL_BRANCH>();
+
     }
 
     public class INVOICE_CHARGES
     {
         public int ID { get; set; }
+        public int INVOICE_ID { get; set; }
         public string INVOICE_NO { get; set; }
         public string CHARGE_NAME { get; set; }
         public decimal EXCHANGE_RATE { get; set; }
@@ -94,6 +98,7 @@ namespace PrimeMaritime_API.Models
         public decimal TAXABLE_AMOUNT { get; set; }
         public decimal TAX_AMOUNT { get; set; }
         public decimal TOTAL_AMOUNT { get; set; }
+        public string CHARGE_TYPE { get; set; }
     }
 
     public class INVOICE_BL_CONTAINER
@@ -120,5 +125,16 @@ namespace PrimeMaritime_API.Models
     {
         public int INVOICE_ID { get; set; }
         public string INVOICE_NO { get; set; }
+    }
+
+    public class INVOICE_BL_BANK
+    {
+        public int BANK_ID { get; set; }
+        public string BRANCH_CODE { get; set; }
+        public string BANK_NAME { get; set; }
+        public string BANK_ACC_NO { get; set; }
+        public string BANK_IFSC { get; set; }
+        public string BANK_SWIFT { get; set; }
+        public string BANK_REMARKS { get; set; }
     }
 }
