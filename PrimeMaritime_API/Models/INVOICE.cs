@@ -137,4 +137,9 @@ namespace PrimeMaritime_API.Models
         public string BANK_SWIFT { get; set; }
         public string BANK_REMARKS { get; set; }
     }
+    public class INVOICE_BL_CHECK
+    {
+        public string BL_NO { get; set; }
+        public string INVOICE_TYPE { get; set;}
+    }
 }

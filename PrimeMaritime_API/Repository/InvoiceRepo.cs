@@ -206,6 +206,29 @@ namespace PrimeMaritime_API.Repository
         }
 
 
+        public List<INVOICE_BL_CHECK> GetBLExists(string dbConn, string INVOICE_TYPE, string BL_NO)
+        {
+            try
+            {
+                SqlParameter[] parameters =
+                {
+                  new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "CHECK_BL_EXISTS" },
+                  new SqlParameter("@INVOICE_TYPE", SqlDbType.VarChar, 100) { Value = INVOICE_TYPE },
+                  new SqlParameter("@BL_NO", SqlDbType.VarChar, 100) { Value = BL_NO },
+                };
+
+                DataTable dataTable = SqlHelper.ExtecuteProcedureReturnDataTable(dbConn, "SP_CRUD_INVOICE", parameters);
+
+                List<INVOICE_BL_CHECK> master = SqlHelper.CreateListFromTable<INVOICE_BL_CHECK>(dataTable);
+
+                return master;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
 
     }
 }

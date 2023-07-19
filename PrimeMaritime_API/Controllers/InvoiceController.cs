@@ -56,5 +56,11 @@ namespace PrimeMaritime_API.Controllers
             return Ok(JsonConvert.SerializeObject(_invoiceService.GetInvoiceDetails(INVOICE_ID,INVOICE_NO, PORT, ORG_CODE)));
         }
 
+        [HttpPost("GetBLExists")]
+        public ActionResult<Response<INVOICE_BL_CHECK>> GetBLExists(string INVOICE_TYPE, string BL_NO)
+        {
+            return Ok(JsonConvert.SerializeObject(_invoiceService.GetBLExists(INVOICE_TYPE, BL_NO)));
+        }
+
     }
 }
