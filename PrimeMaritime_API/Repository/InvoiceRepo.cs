@@ -307,5 +307,18 @@ namespace PrimeMaritime_API.Repository
                 throw;
             }
         }
+
+        public DataSet GetInvoiceDetailsForReceipt(string connstring, string INVOICE_NO, string PORT, string ORG_CODE)
+        {
+            SqlParameter[] parameters =
+            {
+                new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "GET_INVOICE_DETAILS_FOR_RECEIPT" },
+                new SqlParameter("@INVOICE_NO", SqlDbType.VarChar, 100) { Value = INVOICE_NO },
+                new SqlParameter("@PORT", SqlDbType.VarChar, 100) { Value = PORT },
+                new SqlParameter("@ORG_CODE", SqlDbType.VarChar, 50) { Value = ORG_CODE },
+            };
+
+            return SqlHelper.ExtecuteProcedureReturnDataSet(connstring, "SP_CRUD_INVOICE", parameters);
+        }
     }
 }
