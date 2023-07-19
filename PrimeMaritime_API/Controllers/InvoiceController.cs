@@ -32,10 +32,22 @@ namespace PrimeMaritime_API.Controllers
             return Ok(JsonConvert.SerializeObject(_invoiceService.GetBLDetails(BL_NO, PORT, ORG_CODE)));
         }
 
+        [HttpGet("GetCreditNoteDetails")]
+        public ActionResult<Response<CREDIT_NOTE_DETAILS>> GetCreditNoteDetails(string CREDIT_NO, string PORT, string ORG_CODE)
+        {
+            return Ok(JsonConvert.SerializeObject(_invoiceService.GetCreditNoteDetails(CREDIT_NO, PORT, ORG_CODE)));
+        }
+
         [HttpPost("InsertInvoice")]
         public ActionResult<Response<CommonResponse>> InsertInvoice(INVOICE_MASTER request)
         {
             return Ok(_invoiceService.InsertInvoice(request));
+        }
+
+        [HttpPost("InsertCreditNote")]
+        public ActionResult<Response<CommonResponse>> InsertCreditNote(List<CREDIT_NOTE> request)
+        {
+            return Ok(_invoiceService.InsertCreditNote(request));
         }
 
         [HttpPost("FinalizeInvoice")]
@@ -50,10 +62,22 @@ namespace PrimeMaritime_API.Controllers
             return Ok(JsonConvert.SerializeObject(_invoiceService.GetInvoiceList(FROM_DATE, TO_DATE, PORT, ORG_CODE,BL_NO)));
         }
 
+        [HttpGet("GetCreditList")]
+        public ActionResult<Response<List<CREDIT_NOTE>>> GetCreditList(string FROM_DATE, string TO_DATE, string PORT, string ORG_CODE, string CREDIT_NO)
+        {
+            return Ok(JsonConvert.SerializeObject(_invoiceService.GetCreditList(FROM_DATE, TO_DATE, PORT, ORG_CODE, CREDIT_NO)));
+        }
+
         [HttpGet("GetInvoiceDetails")]
         public ActionResult<Response<INVOICE_MASTER>> GetInvoiceDetails(int INVOICE_ID,string INVOICE_NO, string PORT, string ORG_CODE)
         {
             return Ok(JsonConvert.SerializeObject(_invoiceService.GetInvoiceDetails(INVOICE_ID,INVOICE_NO, PORT, ORG_CODE)));
+        }
+
+        [HttpGet("GetInvoiceDetailsForReceipt")]
+        public ActionResult<Response<INVOICE_DETAILS_FOR_RECEIPT>> GetInvoiceDetailsForReceipt(string INVOICE_NO, string PORT, string ORG_CODE)
+        {
+            return Ok(JsonConvert.SerializeObject(_invoiceService.GetInvoiceDetailsForReceipt(INVOICE_NO, PORT, ORG_CODE)));
         }
 
         [HttpPost("GetBLExists")]
