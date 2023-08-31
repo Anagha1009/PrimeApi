@@ -149,7 +149,6 @@ namespace PrimeMaritime_API.Services
 
             return response;
         }
-
         public Response<CommonResponse> FinalizeInvoice(INVOICE_FINALIZE request)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
@@ -163,8 +162,7 @@ namespace PrimeMaritime_API.Services
 
             return response;
         }
-
-        public Response<INVOICE_MASTER> GetInvoiceDetails(int INVOICE_ID,string INVOICE_NO, string PORT, string ORG_CODE)
+        public Response<INVOICE_MASTER> GetInvoiceDetails(int INVOICE_ID, string INVOICE_NO, string PORT, string ORG_CODE)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
 
@@ -177,7 +175,7 @@ namespace PrimeMaritime_API.Services
                 return response;
             }
 
-            var data = DbClientFactory<InvoiceRepo>.Instance.GetInvoiceDetails(dbConn, INVOICE_ID,INVOICE_NO, PORT, ORG_CODE);
+            var data = DbClientFactory<InvoiceRepo>.Instance.GetInvoiceDetails(dbConn, INVOICE_ID, INVOICE_NO, PORT, ORG_CODE);
 
             if ((data != null) && (data.Tables[0].Rows.Count > 0))
             {
@@ -210,7 +208,18 @@ namespace PrimeMaritime_API.Services
 
                 if (data.Tables.Contains("Table5"))
                 {
-                    invoice.BANK = InvoiceRepo.GetSingleDataFromDataSet<INVOICE_BL_BANK>(data.Tables[5]);
+                    if (data.Tables[5].Rows.Count > 0)
+                    {
+                        invoice.BANK = InvoiceRepo.GetSingleDataFromDataSet<INVOICE_BL_BANK>(data.Tables[5]);
+                    }
+                }
+
+                if (data.Tables.Contains("Table6"))
+                {
+                    if (data.Tables[6].Rows.Count > 0)
+                    {
+                        invoice.SELECTED_BRANCH = InvoiceRepo.GetSingleDataFromDataSet<INVOICE_BL_BRANCH>(data.Tables[6]);
+                    }
                 }
 
                 response.Data = invoice;
@@ -246,7 +255,12 @@ namespace PrimeMaritime_API.Services
                 response.ResponseMessage = "Success";
                 INVOICE_DETAILS_FOR_RECEIPT invoice = new INVOICE_DETAILS_FOR_RECEIPT();
 
-                invoice = InvoiceRepo.GetSingleDataFromDataSet<INVOICE_DETAILS_FOR_RECEIPT>(data.Tables[0]);
+                //invoice = InvoiceRepo.GetSingleDataFromDataSet<INVOICE_DETAILS_FOR_RECEIPT>(data.Tables[0]);
+
+                if (data.Tables.Contains("Table"))
+                {
+                    invoice.INVOICE_LIST = InvoiceRepo.GetListFromDataSet<INVOICE_DETAILS_FOR_RECEIPT_INVOICES>(data.Tables[0]);
+                }
 
                 if (data.Tables.Contains("Table1"))
                 {
@@ -292,9 +306,6 @@ namespace PrimeMaritime_API.Services
 
             return response;
         }
-
-
-
         public Response<List<INVOICE_BL_CHECK>> GetBLExists(string INVOICE_TYPE, string BL_NO)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
@@ -344,6 +355,4 @@ namespace PrimeMaritime_API.Services
             return response;
         }
     }
-
-
 }

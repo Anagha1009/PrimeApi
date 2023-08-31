@@ -46,6 +46,9 @@ namespace PrimeMaritime_API.Translators
             if (reader.IsColumnExists("COUNTRYCODE"))
                 item.COUNTRYCODE = SqlHelper.GetNullableString(reader, "COUNTRYCODE");
 
+            if (reader.IsColumnExists("CURRENCY"))
+                item.CURRENCY = SqlHelper.GetNullableString(reader, "CURRENCY");
+
             if (reader.IsColumnExists("ORG_CODE"))
                 item.ORG_CODE = SqlHelper.GetNullableString(reader, "ORG_CODE");
 

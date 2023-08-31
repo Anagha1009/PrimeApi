@@ -52,6 +52,7 @@ namespace PrimeMaritime_API.Models
         public string CONTAINERS { get; set; }
         public string COMMODITY { get; set; }
         public string DESTINATION_AGENT_CODE { get; set; }
+        public bool ISGROSSCOMBINED { get; set; }
     }
 
     public class CONTAINERS

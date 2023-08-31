@@ -647,9 +647,9 @@ namespace PrimeMaritime_API.Controllers
         }
 
         [HttpGet("GetOrgMasterDetails")]
-        public ActionResult<Response<ORG_MASTER>> GetOrgMasterDetails(string ORG_CODE, string ORG_LOC_CODE)
+        public ActionResult<Response<ORG_MASTER>> GetOrgMasterDetails(string ORG_CODE)
         {
-            return Ok(JsonConvert.SerializeObject(_masterService.GetOrgMasterDetails(ORG_CODE, ORG_LOC_CODE)));
+            return Ok(JsonConvert.SerializeObject(_masterService.GetOrgMasterDetails(ORG_CODE)));
         }
 
         [HttpPost("UpdateOrgMasterList")]
@@ -659,9 +659,9 @@ namespace PrimeMaritime_API.Controllers
         }
 
         [HttpPost("DeleteOrgMasterList")]
-        public ActionResult<Response<CommonResponse>> DeleteOrgMasterList(string ORG_CODE, string ORG_LOC_CODE)
+        public ActionResult<Response<CommonResponse>> DeleteOrgMasterList(string ORG_CODE)
         {
-            return Ok(JsonConvert.SerializeObject(_masterService.DeleteOrgMasterList(ORG_CODE, ORG_LOC_CODE)));
+            return Ok(JsonConvert.SerializeObject(_masterService.DeleteOrgMasterList(ORG_CODE)));
         }
         #endregion
 
@@ -748,6 +748,72 @@ namespace PrimeMaritime_API.Controllers
         public ActionResult<Response<CommonResponse>> DeleteHsnMaster(int ID)
         {
             return Ok(JsonConvert.SerializeObject(_masterService.DeleteHsnMaster(ID)));
+        }
+        #endregion
+
+        #region "COUNTRY MASTER"
+        [HttpPost("InsertCountryMaster")]
+        public ActionResult<Response<CommonResponse>> InsertCountryMaster(COUNTRY_MASTER request)
+        {
+            return Ok(_masterService.InsertCountryMaster(request));
+        }
+
+        [HttpGet("GetCountryMasterList")]
+        public ActionResult<Response<List<COUNTRY_MASTER>>> GetCountryMasterList()
+        {
+            return Ok(JsonConvert.SerializeObject(_masterService.GetCountryMasterList()));
+        }
+
+        [HttpGet("GetCountryMasterDetails")]
+        public ActionResult<Response<COUNTRY_MASTER>> GetCountryMasterDetails(int ID)
+        {
+            return Ok(JsonConvert.SerializeObject(_masterService.GetCountryMasterDetails(ID)));
+        }
+
+
+        [HttpPost("UpdateCountryMasterList")]
+        public ActionResult<Response<CommonResponse>> UpdateCountryMasterList(COUNTRY_MASTER request)
+        {
+            return Ok(_masterService.UpdateCountryMasterList(request));
+        }
+
+        [HttpDelete("DeleteCountryMasterList")]
+        public ActionResult<Response<CommonResponse>> DeleteCountryMasterList(int ID)
+        {
+            return Ok(JsonConvert.SerializeObject(_masterService.DeleteCountryMasterList(ID)));
+        }
+        #endregion
+
+        #region "STATE MASTER"
+        [HttpPost("InsertStateMaster")]
+        public ActionResult<Response<CommonResponse>> InsertStateMaster(STATE_MASTER request)
+        {
+            return Ok(_masterService.InsertStateMaster(request));
+        }
+
+        [HttpGet("GetStateMasterList")]
+        public ActionResult<Response<List<STATE_MASTER>>> GetStateMasterList()
+        {
+            return Ok(JsonConvert.SerializeObject(_masterService.GetStateMasterList()));
+        }
+
+        [HttpGet("GetStateMasterDetails")]
+        public ActionResult<Response<STATE_MASTER>> GetStateMasterDetails(int ID)
+        {
+            return Ok(JsonConvert.SerializeObject(_masterService.GetStateMasterDetails(ID)));
+        }
+
+
+        [HttpPost("UpdateStateMasterList")]
+        public ActionResult<Response<CommonResponse>> UpdateStateMasterList(STATE_MASTER request)
+        {
+            return Ok(_masterService.UpdateStateMasterList(request));
+        }
+
+        [HttpDelete("DeleteStateMasterList")]
+        public ActionResult<Response<CommonResponse>> DeleteStateMasterList(int ID)
+        {
+            return Ok(JsonConvert.SerializeObject(_masterService.DeleteStateMasterList(ID)));
         }
         #endregion
 
