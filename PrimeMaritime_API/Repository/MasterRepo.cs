@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using PrimeMaritime_API.Helpers;
 using PrimeMaritime_API.Models;
 using PrimeMaritime_API.Translators;
@@ -152,7 +153,6 @@ namespace PrimeMaritime_API.Repository
                 throw;
             }
         }
-
         public List<PARTY_MASTER> GetPartyMasterList(string dbConn, string AgentCode, string CustName, string CustType, bool Status, string FROM_DATE, string TO_DATE, bool IS_VENDOR)
         {
             try
@@ -181,7 +181,6 @@ namespace PrimeMaritime_API.Repository
             }
 
         }
-
         public DataSet GetPartyMasterDetails(string connstring, string AGENT_CODE, int CUSTOMER_ID)
         {
             try
@@ -201,7 +200,6 @@ namespace PrimeMaritime_API.Repository
                 throw;
             }
         }
-
         public void DeletePartyMasterDetails(string connstring, int CUSTOMER_ID)
         {
             try
@@ -220,7 +218,6 @@ namespace PrimeMaritime_API.Repository
                 throw;
             }
         }
-
         public void UpdatePartyMasterDetails(string connstring, PARTY_MASTER master)
         {
             try
@@ -303,7 +300,6 @@ namespace PrimeMaritime_API.Repository
                 throw;
             }
         }
-
         #endregion
 
         #region "CONTAINER MASTER"
@@ -2257,22 +2253,117 @@ namespace PrimeMaritime_API.Repository
             try
             {
                 SqlParameter[] parameters =
-               {
+                {
                   new SqlParameter("@OPERATION", SqlDbType.VarChar,50) { Value = "INSERT_ORG" },
                   new SqlParameter("@ORG_NAME", SqlDbType.VarChar,255) { Value = master.ORG_NAME},
                   new SqlParameter("@ORG_CODE", SqlDbType.VarChar, 50) { Value = master.ORG_CODE },
-                  new SqlParameter("@ORG_LOCATION", SqlDbType.VarChar, 100) { Value = master.ORG_LOCATION },
-                  new SqlParameter("@ORG_LOC_CODE", SqlDbType.VarChar, 100) { Value = master.ORG_LOC_CODE },
-                  new SqlParameter("@ORG_ADDRESS1", SqlDbType.VarChar, 255) { Value = master.ORG_ADDRESS1 },
-                  new SqlParameter("@EMAIL", SqlDbType.VarChar, 255) { Value = master.EMAIL },
-                  new SqlParameter("@CONTACT", SqlDbType.VarChar, 50) { Value = master.CONTACT },
-                  new SqlParameter("@FAX", SqlDbType.VarChar, 50) { Value = master.FAX },
-                  new SqlParameter("@COUNTRY_CODE", SqlDbType.VarChar, 10) { Value = master.COUNTRY_CODE },
+                  new SqlParameter("@STATUS", SqlDbType.Bit) { Value = master.STATUS },
+                  new SqlParameter("@PAN", SqlDbType.VarChar, 50) { Value = master.PAN },
+                  new SqlParameter("@CONTACT_PERSON_NAME", SqlDbType.VarChar, 255) { Value = master.CONTACT_PERSON_NAME },
+                  new SqlParameter("@CONTACT_PERSON_NO", SqlDbType.VarChar, 50) { Value = master.CONTACT_PERSON_NO },
+                  new SqlParameter("@IS_GROUP_COMPANIES", SqlDbType.Bit) { Value = master.IS_GROUP_COMPANIES },
+                  new SqlParameter("@SALES_NAME", SqlDbType.VarChar, 255) { Value = master.SALES_NAME },
+                  new SqlParameter("@SALES_CODE", SqlDbType.VarChar, 50) { Value = master.SALES_CODE },
+                  new SqlParameter("@SALES_LOC", SqlDbType.VarChar,255) { Value = master.SALES_LOC },
+                  new SqlParameter("@SALES_EFFECTIVE_DATE", SqlDbType.DateTime) { Value = String.IsNullOrEmpty(master.SALES_EFFECTIVE_DATE) ? null : Convert.ToDateTime(master.SALES_EFFECTIVE_DATE)  },
                   new SqlParameter("@CREATED_BY", SqlDbType.VarChar,50) { Value = master.CREATED_BY },
                 };
 
                 SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_ORGANISATION", parameters);
 
+                DataTable tbl = new DataTable();
+                tbl.Columns.Add(new DataColumn("ORG_CODE", typeof(string)));
+                tbl.Columns.Add(new DataColumn("BRANCH_NAME", typeof(string)));
+                tbl.Columns.Add(new DataColumn("BRANCH_CODE", typeof(string)));
+                tbl.Columns.Add(new DataColumn("COUNTRY", typeof(string)));
+                tbl.Columns.Add(new DataColumn("STATE", typeof(string)));
+                tbl.Columns.Add(new DataColumn("CITY", typeof(string)));
+                tbl.Columns.Add(new DataColumn("TAN", typeof(string)));
+                tbl.Columns.Add(new DataColumn("TAX_NO", typeof(string)));
+                tbl.Columns.Add(new DataColumn("TAX_TYPE", typeof(string)));
+                tbl.Columns.Add(new DataColumn("PIC_NAME", typeof(string)));
+                tbl.Columns.Add(new DataColumn("PIC_CONTACT", typeof(string)));
+                tbl.Columns.Add(new DataColumn("PIC_EMAIL", typeof(string)));
+                tbl.Columns.Add(new DataColumn("ADDRESS", typeof(string)));
+                tbl.Columns.Add(new DataColumn("IS_SEZ", typeof(bool)));
+                tbl.Columns.Add(new DataColumn("IS_TAX_APPLICABLE", typeof(bool)));
+
+                foreach (var i in master.BRANCH_LIST)
+                {
+                    DataRow dr = tbl.NewRow();
+
+                    dr["ORG_CODE"] = master.ORG_CODE;
+                    dr["BRANCH_NAME"] = i.BRANCH_NAME;
+                    dr["BRANCH_CODE"] = i.BRANCH_CODE;
+                    dr["COUNTRY"] = i.COUNTRY;
+                    dr["STATE"] = i.STATE;
+                    dr["CITY"] = i.CITY;
+                    dr["TAN"] = i.TAN;
+                    dr["PIC_NAME"] = i.PIC_NAME;
+                    dr["PIC_CONTACT"] = i.PIC_CONTACT;
+                    dr["PIC_EMAIL"] = i.PIC_EMAIL;
+                    dr["ADDRESS"] = i.ADDRESS;
+                    dr["TAX_NO"] = i.TAX_NO;
+                    dr["TAX_TYPE"] = i.TAX_TYPE;
+                    dr["IS_SEZ"] = i.IS_SEZ;
+                    dr["IS_TAX_APPLICABLE"] = i.IS_TAX_APPLICABLE;
+
+                    tbl.Rows.Add(dr);
+                }
+
+                string[] columns = new string[15];
+                columns[0] = "ORG_CODE";
+                columns[1] = "BRANCH_NAME";
+                columns[2] = "COUNTRY";
+                columns[3] = "STATE";
+                columns[4] = "CITY";
+                columns[5] = "TAN";
+                columns[6] = "PIC_NAME";
+                columns[7] = "PIC_CONTACT";
+                columns[8] = "PIC_EMAIL";
+                columns[9] = "ADDRESS";
+                columns[10] = "TAX_NO";
+                columns[11] = "TAX_TYPE";
+                columns[12] = "IS_SEZ";
+                columns[13] = "IS_TAX_APPLICABLE";
+                columns[14] = "BRANCH_CODE";
+
+                SqlHelper.ExecuteProcedureBulkInsert(connstring, tbl, "MST_ORG_BRANCH", columns);
+
+                DataTable tbl1 = new DataTable();
+                tbl1.Columns.Add(new DataColumn("ORG_CODE", typeof(string)));
+                tbl1.Columns.Add(new DataColumn("BRANCH_CODE", typeof(string)));
+                tbl1.Columns.Add(new DataColumn("BANK_NAME", typeof(string)));
+                tbl1.Columns.Add(new DataColumn("BANK_ACC_NO", typeof(string)));
+                tbl1.Columns.Add(new DataColumn("BANK_IFSC", typeof(string)));
+                tbl1.Columns.Add(new DataColumn("BANK_SWIFT", typeof(string)));
+                tbl1.Columns.Add(new DataColumn("BANK_REMARKS", typeof(string)));
+
+                foreach (var i in master.BANK_LIST)
+                {
+                    DataRow dr = tbl1.NewRow();
+
+                    dr["ORG_CODE"] = master.ORG_CODE;
+                    dr["BRANCH_CODE"] = i.BRANCH_CODE;
+                    dr["BANK_NAME"] = i.BANK_NAME;
+                    dr["BANK_ACC_NO"] = i.BANK_ACC_NO;
+                    dr["BANK_IFSC"] = i.BANK_IFSC;
+                    dr["BANK_SWIFT"] = i.BANK_SWIFT;
+                    dr["BANK_REMARKS"] = i.BANK_REMARKS;
+
+                    tbl1.Rows.Add(dr);
+                }
+
+                string[] columns1 = new string[7];
+                columns1[0] = "ORG_CODE";
+                columns1[1] = "BANK_NAME";
+                columns1[2] = "BANK_ACC_NO";
+                columns1[3] = "BANK_IFSC";
+                columns1[4] = "BANK_SWIFT";
+                columns1[5] = "BANK_REMARKS";
+                columns1[6] = "BRANCH_CODE";
+
+                SqlHelper.ExecuteProcedureBulkInsert(connstring, tbl1, "MST_ORG_BANK", columns1);
             }
             catch (Exception)
             {
@@ -2316,18 +2407,17 @@ namespace PrimeMaritime_API.Repository
                 throw;
             }
         }
-        public ORG_MASTER GetOrgMasterDetails(string connstring, string ORG_CODE, string ORG_LOC_CODE)
+        public DataSet GetOrgMasterDetails(string connstring, string ORG_CODE)
         {
             try
             {
                 SqlParameter[] parameters =
                 {
                    new SqlParameter("@ORG_CODE", SqlDbType.VarChar, 20) { Value = ORG_CODE },
-                   new SqlParameter("@ORG_LOC_CODE", SqlDbType.VarChar, 100) { Value = ORG_LOC_CODE },
-                   new SqlParameter("@OPERATION", SqlDbType.VarChar, 20) { Value = "GET_ORG_DETAILS" }
+                   new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "GET_ORG_DETAILS" }
                 };
 
-                return SqlHelper.ExtecuteProcedureReturnData<ORG_MASTER>(connstring, "SP_CRUD_ORGANISATION", r => r.TranslateAsOrgMaster(), parameters);
+                return SqlHelper.ExtecuteProcedureReturnDataSet(connstring, "SP_CRUD_ORGANISATION", parameters);
             }
             catch (Exception)
             {
@@ -2341,33 +2431,79 @@ namespace PrimeMaritime_API.Repository
             {
                 SqlParameter[] parameters =
                 {
-                  new SqlParameter("@OPERATION", SqlDbType.VarChar,255) { Value = "UPDATE_ORG" },
+                  new SqlParameter("@OPERATION", SqlDbType.VarChar,50) { Value = "UPDATE_ORG" },
                   new SqlParameter("@ORG_NAME", SqlDbType.VarChar,255) { Value = master.ORG_NAME},
                   new SqlParameter("@ORG_CODE", SqlDbType.VarChar, 50) { Value = master.ORG_CODE },
-                  new SqlParameter("@ORG_LOCATION", SqlDbType.VarChar, 100) { Value = master.ORG_LOCATION },
-                  new SqlParameter("@ORG_LOC_CODE", SqlDbType.VarChar, 100) { Value = master.ORG_LOC_CODE },
-                  new SqlParameter("@ORG_ADDRESS1", SqlDbType.VarChar, 255) { Value = master.ORG_ADDRESS1 },
-                  new SqlParameter("@EMAIL", SqlDbType.VarChar, 255) { Value = master.EMAIL },
-                  new SqlParameter("@CONTACT", SqlDbType.VarChar, 50) { Value = master.CONTACT },
-                  new SqlParameter("@FAX", SqlDbType.VarChar, 50) { Value = master.FAX },
-                  new SqlParameter("@COUNTRY_CODE", SqlDbType.VarChar, 10) { Value = master.COUNTRY_CODE },
+                  new SqlParameter("@STATUS", SqlDbType.Bit) { Value = master.STATUS },
+                  new SqlParameter("@PAN", SqlDbType.VarChar, 50) { Value = master.PAN },
+                  new SqlParameter("@CONTACT_PERSON_NAME", SqlDbType.VarChar, 255) { Value = master.CONTACT_PERSON_NAME },
+                  new SqlParameter("@CONTACT_PERSON_NO", SqlDbType.VarChar, 50) { Value = master.CONTACT_PERSON_NO },
+                  new SqlParameter("@IS_GROUP_COMPANIES", SqlDbType.Bit) { Value = master.IS_GROUP_COMPANIES },
+                  new SqlParameter("@SALES_NAME", SqlDbType.VarChar, 255) { Value = master.SALES_NAME },
+                  new SqlParameter("@SALES_CODE", SqlDbType.VarChar, 50) { Value = master.SALES_CODE },
+                  new SqlParameter("@SALES_LOC", SqlDbType.VarChar,255) { Value = master.SALES_LOC },
+                  new SqlParameter("@SALES_EFFECTIVE_DATE", SqlDbType.DateTime) { Value = String.IsNullOrEmpty(master.SALES_EFFECTIVE_DATE) ? null : Convert.ToDateTime(master.SALES_EFFECTIVE_DATE)  },
+                  new SqlParameter("@CREATED_BY", SqlDbType.VarChar,50) { Value = master.CREATED_BY },
                 };
 
                 SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_ORGANISATION", parameters);
+
+                foreach (var items in master.BRANCH_LIST)
+                {
+                    SqlParameter[] parameters1 =
+                    {
+                      new SqlParameter("@OPERATION", SqlDbType.VarChar,50) { Value = "UPDATE_ORG_BRANCH" },
+                      new SqlParameter("@BRANCH_ID", SqlDbType.Int) { Value = items.ID},
+                      new SqlParameter("@ORG_CODE", SqlDbType.VarChar,50) { Value = master.ORG_CODE },
+                      new SqlParameter("@BRANCH_NAME", SqlDbType.VarChar, 255) { Value = items.BRANCH_NAME },
+                      new SqlParameter("@BRANCH_CODE", SqlDbType.VarChar, 20) { Value = items.BRANCH_CODE },
+                      new SqlParameter("@COUNTRY", SqlDbType.VarChar, 50) { Value = items.COUNTRY },
+                      new SqlParameter("@STATE", SqlDbType.VarChar,255) { Value = items.STATE },
+                      new SqlParameter("@CITY", SqlDbType.VarChar,255) { Value = items.CITY },
+                      new SqlParameter("@TAN", SqlDbType.VarChar,50) { Value = items.TAN },
+                      new SqlParameter("@TAX_NO", SqlDbType.VarChar,50) { Value = items.TAX_NO },
+                      new SqlParameter("@TAX_TYPE", SqlDbType.VarChar,20) { Value = items.TAX_TYPE },
+                      new SqlParameter("@PIC_NAME", SqlDbType.VarChar,255) { Value = items.PIC_NAME },
+                      new SqlParameter("@PIC_CONTACT", SqlDbType.VarChar,50) { Value = items.PIC_CONTACT },
+                      new SqlParameter("@PIC_EMAIL", SqlDbType.VarChar,255) { Value = items.PIC_EMAIL },
+                      new SqlParameter("@ADDRESS", SqlDbType.VarChar,255) { Value = items.ADDRESS },
+                      new SqlParameter("@IS_SEZ", SqlDbType.Bit) { Value = items.IS_SEZ },
+                      new SqlParameter("@IS_TAX_APPLICABLE", SqlDbType.Bit) { Value = items.IS_TAX_APPLICABLE },
+                    };
+
+                    SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_ORGANISATION", parameters1);
+                }
+
+                foreach (var items in master.BANK_LIST)
+                {
+                    SqlParameter[] parameters2 =
+                    {
+                      new SqlParameter("@OPERATION", SqlDbType.VarChar,50) { Value = "UPDATE_ORG_BANK" },
+                      new SqlParameter("@BANK_ID", SqlDbType.Int) { Value = items.ID},
+                      new SqlParameter("@ORG_CODE", SqlDbType.VarChar,50) { Value = master.ORG_CODE },
+                      new SqlParameter("@BANK_NAME", SqlDbType.VarChar, 255) { Value = items.BANK_NAME },
+                      new SqlParameter("@BRANCH_CODE", SqlDbType.VarChar, 20) { Value = items.BRANCH_CODE },
+                      new SqlParameter("@BANK_ACC_NO", SqlDbType.VarChar, 50) { Value = items.BANK_ACC_NO },
+                      new SqlParameter("@BANK_IFSC", SqlDbType.VarChar,50) { Value = items.BANK_IFSC },
+                      new SqlParameter("@BANK_SWIFT", SqlDbType.VarChar,50) { Value = items.BANK_SWIFT },
+                      new SqlParameter("@BANK_REMARKS", SqlDbType.VarChar,255) { Value = items.BANK_REMARKS },
+                    };
+
+                    SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_ORGANISATION", parameters2);
+                }
             }
             catch (Exception)
             {
                 throw;
             }
         }
-        public void DeleteOrgMaster(string connstring, string ORG_CODE, string ORG_LOC_CODE)
+        public void DeleteOrgMaster(string connstring, string ORG_CODE)
         {
             try
             {
                 SqlParameter[] parameters =
                 {
                   new SqlParameter("@ORG_CODE", SqlDbType.VarChar,20) { Value = ORG_CODE },
-                  new SqlParameter("@ORG_LOC_CODE", SqlDbType.VarChar,100) { Value = ORG_LOC_CODE },
                    new SqlParameter("@OPERATION", SqlDbType.VarChar, 20) { Value = "DELETE_ORG" }
                 };
 
@@ -2603,6 +2739,214 @@ namespace PrimeMaritime_API.Repository
             };
 
             SqlHelper.ExecuteProcedureReturnString(connstring, "CHARGE_MASTER", parameters);
+        }
+        #endregion
+
+        #region "COUNTRY MASTER"
+        public void InsertCountryMaster(string connstring, COUNTRY_MASTER master)
+        {
+            try
+            {
+                SqlParameter[] parameters =
+                {
+                  new SqlParameter("@OPERATION", SqlDbType.VarChar,50) { Value = "INSERT_COUNTRY" },
+                  new SqlParameter("@CODE", SqlDbType.Int) { Value = master.CODE },
+                  new SqlParameter("@NAME", SqlDbType.VarChar,255) { Value = master.NAME},
+                  new SqlParameter("@SHORT_NAME", SqlDbType.VarChar, 50) { Value = master.SHORT_NAME },
+                  new SqlParameter("@STATUS", SqlDbType.Bit) { Value = master.STATUS },
+                  new SqlParameter("@CREATED_BY", SqlDbType.VarChar,255) { Value = master.CREATED_BY },
+                };
+
+                SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_COUNTRY", parameters);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public List<COUNTRY_MASTER> GetCountryMasterList(string dbConn)
+        {
+            try
+            {
+                SqlParameter[] parameters =
+                {
+                  new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "GET_COUNTRYLIST" },
+                };
+
+                DataTable dataTable = SqlHelper.ExtecuteProcedureReturnDataTable(dbConn, "SP_CRUD_COUNTRY", parameters);
+                List<COUNTRY_MASTER> master = SqlHelper.CreateListFromTable<COUNTRY_MASTER>(dataTable);
+
+                return master;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public COUNTRY_MASTER GetCountryMasterDetails(string connstring, int ID)
+        {
+            try
+            {
+                SqlParameter[] parameters =
+                {
+                   new SqlParameter("@ID", SqlDbType.Int) { Value = ID },
+                   new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "GET_COUNTRYDETAILS" }
+                };
+
+                return SqlHelper.ExtecuteProcedureReturnData<COUNTRY_MASTER>(connstring, "SP_CRUD_COUNTRY", r => r.TranslateAsCountry(), parameters);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void UpdateCountryMasterList(string connstring, COUNTRY_MASTER master)
+        {
+            try
+            {
+                SqlParameter[] parameters =
+                {
+                  new SqlParameter("@OPERATION", SqlDbType.VarChar,50) { Value = "UPDATE_COUNTRY" },
+                  new SqlParameter("@ID", SqlDbType.Int) { Value = master.ID},
+                  new SqlParameter("@CODE", SqlDbType.Int) { Value = master.CODE },
+                  new SqlParameter("@NAME", SqlDbType.VarChar,255) { Value = master.NAME},
+                  new SqlParameter("@SHORT_NAME", SqlDbType.VarChar, 50) { Value = master.SHORT_NAME },
+                  new SqlParameter("@STATUS", SqlDbType.Bit) { Value = master.STATUS },
+                };
+
+                SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_COUNTRY", parameters);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void DeleteCountryMaster(string connstring, int ID)
+        {
+            try
+            {
+                SqlParameter[] parameters =
+                {
+                  new SqlParameter("@ID", SqlDbType.Int) { Value = ID },
+                   new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "DELETE_COUNTRY" }
+                };
+
+                SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_COUNTRY", parameters);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        #endregion
+
+        #region "STATE MASTER"
+        public void InsertStateMaster(string connstring, STATE_MASTER master)
+        {
+            try
+            {
+                SqlParameter[] parameters =
+                {
+                  new SqlParameter("@OPERATION", SqlDbType.VarChar,50) { Value = "INSERT_STATE" },
+                  new SqlParameter("@CODE", SqlDbType.Int) { Value = master.CODE },
+                  new SqlParameter("@NAME", SqlDbType.VarChar,255) { Value = master.NAME},
+                  new SqlParameter("@SHORT_NAME", SqlDbType.VarChar, 50) { Value = master.SHORT_NAME },
+                  new SqlParameter("@COUNTRY_ID", SqlDbType.Int) { Value = master.COUNTRY_ID },
+                  new SqlParameter("@IS_UT", SqlDbType.Bit) { Value = master.IS_UT },
+                  new SqlParameter("@STATUS", SqlDbType.Bit) { Value = master.STATUS },
+                  new SqlParameter("@CREATED_BY", SqlDbType.VarChar,255) { Value = master.CREATED_BY },
+                };
+
+                SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_STATE", parameters);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public List<STATE_MASTER> GetStateMasterList(string dbConn)
+        {
+            try
+            {
+                SqlParameter[] parameters =
+                {
+                  new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "GET_STATELIST" },
+                };
+
+                DataTable dataTable = SqlHelper.ExtecuteProcedureReturnDataTable(dbConn, "SP_CRUD_STATE", parameters);
+                List<STATE_MASTER> master = SqlHelper.CreateListFromTable<STATE_MASTER>(dataTable);
+
+                return master;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        public STATE_MASTER GetStateMasterDetails(string connstring, int ID)
+        {
+            try
+            {
+                SqlParameter[] parameters =
+                {
+                   new SqlParameter("@ID", SqlDbType.Int) { Value = ID },
+                   new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "GET_STATEDETAILS" }
+                };
+
+                return SqlHelper.ExtecuteProcedureReturnData<STATE_MASTER>(connstring, "SP_CRUD_STATE", r => r.TranslateAsSate(), parameters);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void UpdateStateMasterList(string connstring, STATE_MASTER master)
+        {
+            try
+            {
+                SqlParameter[] parameters =
+                {
+                  new SqlParameter("@OPERATION", SqlDbType.VarChar,50) { Value = "UPDATE_STATE" },
+                  new SqlParameter("@ID", SqlDbType.Int) { Value = master.ID},
+                  new SqlParameter("@CODE", SqlDbType.Int) { Value = master.CODE },
+                  new SqlParameter("@NAME", SqlDbType.VarChar,255) { Value = master.NAME},
+                  new SqlParameter("@SHORT_NAME", SqlDbType.VarChar, 50) { Value = master.SHORT_NAME },
+                  new SqlParameter("@COUNTRY_ID", SqlDbType.Int) { Value = master.COUNTRY_ID },
+                  new SqlParameter("@IS_UT", SqlDbType.Bit) { Value = master.IS_UT },
+                  new SqlParameter("@STATUS", SqlDbType.Bit) { Value = master.STATUS },
+                };
+
+                SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_STATE", parameters);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void DeleteStateMaster(string connstring, int ID)
+        {
+            try
+            {
+                SqlParameter[] parameters =
+                {
+                  new SqlParameter("@ID", SqlDbType.Int) { Value = ID },
+                   new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "DELETE_STATE" }
+                };
+
+                SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_STATE", parameters);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
         #endregion
 

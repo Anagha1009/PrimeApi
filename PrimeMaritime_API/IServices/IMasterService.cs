@@ -217,9 +217,9 @@ namespace PrimeMaritime_API.IServices
         Response<CommonResponse> InsertOrgMaster(ORG_MASTER request);
         Response<CommonResponse> ValidateOrgCode(string ORG_CODE);
         Response<List<ORG_MASTER>> GetOrgMasterList();
-        Response<ORG_MASTER> GetOrgMasterDetails(string ORG_CODE, string ORG_LOC_CODE);
+        Response<ORG_MASTER> GetOrgMasterDetails(string ORG_CODE);
         Response<CommonResponse> UpdateOrgMasterList(ORG_MASTER request);
-        Response<CommonResponse> DeleteOrgMasterList(string ORG_CODE,string ORG_LOC_CODE);
+        Response<CommonResponse> DeleteOrgMasterList(string ORG_CODE);
         #endregion
 
         #region "SLOT MASTER"
@@ -229,7 +229,6 @@ namespace PrimeMaritime_API.IServices
         Response<CommonResponse> UpdateSlotMasterList(SLOT_MASTER request);
         Response<CommonResponse> DeleteSlotMasterList(int ID);
         #endregion
-
 
         #region "CHARGES MASTER"
         Response<CommonResponse> InsertChargeMaster(CHARGES_MASTER request);
@@ -243,7 +242,6 @@ namespace PrimeMaritime_API.IServices
         Response<CommonResponse> DeleteChargesMaster(int ID);
         #endregion
 
-
         #region "HSN-CODE"
 
         Response<CommonResponse> InsertHsnCode(HSN_MASTER request);
@@ -251,6 +249,30 @@ namespace PrimeMaritime_API.IServices
         Response<List<HSN_MASTER>> GetHsnMaster();
 
         Response<CommonResponse> DeleteHsnMaster(int ID);
+        #endregion
+
+        #region "COUNTRY MASTER"
+        Response<CommonResponse> InsertCountryMaster(COUNTRY_MASTER request);
+
+        Response<List<COUNTRY_MASTER>> GetCountryMasterList();
+
+        Response<COUNTRY_MASTER> GetCountryMasterDetails(int ID);
+
+        Response<CommonResponse> UpdateCountryMasterList(COUNTRY_MASTER request);
+
+        Response<CommonResponse> DeleteCountryMasterList(int ID);
+        #endregion
+
+        #region "STATE MASTER"
+        Response<CommonResponse> InsertStateMaster(STATE_MASTER request);
+
+        Response<List<STATE_MASTER>> GetStateMasterList();
+
+        Response<STATE_MASTER> GetStateMasterDetails(int ID);
+
+        Response<CommonResponse> UpdateStateMasterList(STATE_MASTER request);
+
+        Response<CommonResponse> DeleteStateMasterList(int ID);
         #endregion
     }
 }

@@ -77,7 +77,7 @@ namespace PrimeMaritime_API.Controllers
         [HttpGet("GetInvoiceDetailsForReceipt")]
         public ActionResult<Response<INVOICE_DETAILS_FOR_RECEIPT>> GetInvoiceDetailsForReceipt(string INVOICE_NO, string PORT, string ORG_CODE)
         {
-            return Ok(JsonConvert.SerializeObject(_invoiceService.GetInvoiceDetailsForReceipt(INVOICE_NO, PORT, ORG_CODE)));
+            return Ok(JsonConvert.SerializeObject(_invoiceService.GetInvoiceDetailsForReceipt(INVOICE_NO,PORT, ORG_CODE)));
         }
 
         [HttpPost("GetBLExists")]
@@ -85,6 +85,5 @@ namespace PrimeMaritime_API.Controllers
         {
             return Ok(JsonConvert.SerializeObject(_invoiceService.GetBLExists(INVOICE_TYPE, BL_NO)));
         }
-
     }
 }

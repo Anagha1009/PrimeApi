@@ -43,8 +43,15 @@ namespace PrimeMaritime_API.Models
 		public string AGENT_CODE { get; set; }
 		public string DEPO_CODE { get; set; }
 		public string CREATED_BY { get; set; }
+		public string CONTAINER_TYPE { get; set; }
+		public DateTime? ONHIRE_DATE { get; set; }
+        public string LEASED_FROM { get; set; }
+        public string VESSEL_NAME { get; set; }
+        public string VOYAGE_NO { get; set; }
+        public string POD { get; set; }
+        public string FINAL_DESTINATION { get; set; }
 
-	}
+    }
 
 	//getcontainerlist class
 

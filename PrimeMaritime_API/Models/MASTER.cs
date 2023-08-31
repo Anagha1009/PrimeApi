@@ -53,6 +53,7 @@ namespace PrimeMaritime_API.Models
         public string ADDRESS { get; set; }
         public bool IS_SEZ { get; set; }
         public bool IS_TAX_APPLICABLE { get; set; }
+        public string ORG_CODE { get; set; }
     }
     public class CUSTOMER_BANK
     {
@@ -65,7 +66,6 @@ namespace PrimeMaritime_API.Models
         public string BANK_SWIFT { get; set; }
         public string BANK_REMARKS { get; set; }
     }
-
     public class CONTAINER_MASTER
     {
         public int ID { get; set; }
@@ -75,6 +75,28 @@ namespace PrimeMaritime_API.Models
         public string ONHIRE_LOCATION { get; set; }      
         public string LEASED_FROM { get; set; }      
         public bool STATUS { get; set; }
+    }
+    public class COUNTRY_MASTER
+    {
+        public int ID { get; set; }
+        public int CODE { get; set; }
+        public string NAME { get; set; }
+        public string SHORT_NAME { get; set; }
+        public bool STATUS { get; set; }
+        public string CREATED_BY { get; set; }
+    }
+    public class STATE_MASTER
+    {
+        public int ID { get; set; }
+        public int CODE { get; set; }
+        public string NAME { get; set; }
+        public string SHORT_NAME { get; set; }
+        public int COUNTRY_ID { get; set; }
+        public string COUNTRY_NAME { get; set; }
+        List<COUNTRY_MASTER> COUNTRIES { get; set; } = new List<COUNTRY_MASTER>();
+        public bool IS_UT { get; set; }
+        public bool STATUS { get; set; }
+        public string CREATED_BY { get; set; }
     }
     public class MASTER
     {
@@ -320,15 +342,20 @@ namespace PrimeMaritime_API.Models
         public int ID { get; set; }
         public string ORG_NAME { get; set; }
         public string ORG_CODE { get; set; }
-        public string ORG_LOCATION { get; set; }
-        public string ORG_LOC_CODE { get; set; }
-        public string ORG_ADDRESS1 { get; set; }
-        public string CONTACT { get; set; }
-        public string FAX { get; set; }
-        public string EMAIL { get; set; }
-        public string COUNTRY_CODE { get; set; }
+        public bool STATUS { get; set; }
+        public string PAN { get; set; }
+        public string CONTACT_PERSON_NAME { get; set; }
+        public string CONTACT_PERSON_NO { get; set; }
+        public bool IS_GROUP_COMPANIES { get; set; }
+        public string SALES_NAME { get; set; }
+        public string SALES_CODE { get; set; }
+        public string SALES_LOC { get; set; }
+        public string SALES_EFFECTIVE_DATE { get; set; }
         public string CREATED_BY { get; set; }
-        public DateTime CREATED_DATE { get; set; }
+        public string BRANCH { get; set; }
+        public string BANK { get; set; }
+        public List<CUSTOMER_BRANCH> BRANCH_LIST { get; set; } = new List<CUSTOMER_BRANCH>();
+        public List<CUSTOMER_BANK> BANK_LIST { get; set; } = new List<CUSTOMER_BANK>();
     }
     public class SLOT_MASTER
     {
@@ -350,7 +377,6 @@ namespace PrimeMaritime_API.Models
 
         public string SLOT_CODE { get; set; }
     }
-
     public class CHARGES_MASTER
     {
         public int ID { get; set; }
@@ -373,7 +399,6 @@ namespace PrimeMaritime_API.Models
 
         public bool IS_GST { get; set; }
     }
-
     public class HSN_MASTER
     {
         public int ID { get; set; }
@@ -387,5 +412,4 @@ namespace PrimeMaritime_API.Models
         public string EFFECTIVE_FROM { get; set; }
         public string EFFECTIVE_TO { get; set; }
     }
-
 }

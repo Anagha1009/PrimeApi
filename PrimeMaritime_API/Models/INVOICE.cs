@@ -45,6 +45,7 @@ namespace PrimeMaritime_API.Models
         public string BILL_TO { get; set; }
         public string BILL_FROM { get; set; }
         public string SHIPPER_NAME { get; set; }
+        public string CONSIGNEE_NAME { get; set; }
         public string PAYMENT_TERM { get; set; }
         public string BL_NO { get; set; }
         public string AGENT_NAME { get; set; }
@@ -76,7 +77,7 @@ namespace PrimeMaritime_API.Models
         public List<INVOICE_BL_CONTAINER> BL_CONTAINER_LIST { get; set; } = new List<INVOICE_BL_CONTAINER>();
         public List<INVOICE_BL_BRANCH> BRANCH { get; set; } = new List<INVOICE_BL_BRANCH>();
         public INVOICE_BL_BANK BANK { get; set; } = new INVOICE_BL_BANK();
-
+        public INVOICE_BL_BRANCH SELECTED_BRANCH { get; set; } = new INVOICE_BL_BRANCH();
     }
 
     public class INVOICE_CHARGES
@@ -128,10 +129,13 @@ namespace PrimeMaritime_API.Models
     public class INVOICE_BL_BRANCH
     {
         public int BRANCH_ID { get; set; }
+        public int CUST_ID { get; set; }
         public string CUST_NAME { get; set; }
         public string BRANCH_NAME { get; set; }
         public string BRANCH_CODE { get; set; }
         public string COUNTRY { get; set; }
+        public int STATECODE { get; set; }
+        public string STATE { get; set; }
         public string TAX_NO { get; set; }
         public string TAX_TYPE { get; set; }
         public string ADDRESS { get; set; }
@@ -203,6 +207,12 @@ namespace PrimeMaritime_API.Models
 
     public class INVOICE_DETAILS_FOR_RECEIPT
     {
+        public List<INVOICE_DETAILS_FOR_RECEIPT_INVOICES> INVOICE_LIST { get; set; } = new List<INVOICE_DETAILS_FOR_RECEIPT_INVOICES>();
+        public List<CUSTOMER_BANK> BANK_LIST { get; set; } = new List<CUSTOMER_BANK>();
+        public List<INVOICE_DETAILS_FOR_RECEIPT_CHARGES> CHARGE_LIST { get; set; } = new List<INVOICE_DETAILS_FOR_RECEIPT_CHARGES>();
+    }
+    public class INVOICE_DETAILS_FOR_RECEIPT_INVOICES
+    {
         public int INVOICE_ID { get; set; }
         public string INVOICE_NO { get; set; }
         public string INVOICE_TYPE { get; set; }
@@ -215,16 +225,22 @@ namespace PrimeMaritime_API.Models
         public string CONSIGNEE { get; set; }
         public string TAN_NO { get; set; }
         public decimal TOTAL_AMOUNT { get; set; }
-        public List<CUSTOMER_BANK> BANK_LIST { get; set; } = new List<CUSTOMER_BANK>();
-        public List<INVOICE_DETAILS_FOR_RECEIPT_CHARGES> CHARGE_LIST { get; set; } = new List<INVOICE_DETAILS_FOR_RECEIPT_CHARGES>();
+        public string RECEIVED_FROM { get; set; }
+        public string DEPOSIT_CASH_BANK { get; set; }
+        public string RECEIPT_REMARKS { get; set; }
+        public string RECEIPT_NO { get; set; }
+        public string AGENT_NAME { get; set; }
+        public string AGENT_CODE { get; set; }
     }
 
     public class INVOICE_DETAILS_FOR_RECEIPT_CHARGES
     {
+        public string INVOICE_NO { get; set; }
         public string CHARGE_NAME { get; set; }
         public decimal TOTAL_AMOUNT { get; set; }
         public decimal RECEIPT_COLLECTED { get; set; }
-        public decimal OUSTANDING_AMOUNT { get; set; }
+        public decimal OUTSTANDING_AMOUNT { get; set; }
         public decimal RECEIPT_AMOUNT { get; set; }
+        public string RECEIPT_NO { get; set; }
     }
 }

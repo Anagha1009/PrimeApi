@@ -94,6 +94,7 @@ namespace PrimeMaritime_API.Services
             response.Port = user.PORT;
             response.Depo = user.DEPO;
             response.countrycode = user.COUNTRYCODE;
+            response.currency = user.CURRENCY;
             response.orgcode = user.ORG_CODE;
 
             return response;

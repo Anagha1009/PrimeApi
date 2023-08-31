@@ -56,12 +56,14 @@ namespace PrimeMaritime_API.Repository
                   new SqlParameter("@INVOICE_NO",   SqlDbType.VarChar,100) { Value = master.INVOICE_NO},
                   new SqlParameter("@INVOICE_ID",   SqlDbType.Int) { Value = master.INVOICE_ID},
                   new SqlParameter("@INVOICE_TYPE", SqlDbType.VarChar, 100) { Value = master.INVOICE_TYPE },
-                  new SqlParameter("@BILL_TO",      SqlDbType.VarChar, 50) { Value = master.BILL_TO },
-                  new SqlParameter("@BILL_FROM",    SqlDbType.VarChar, 50) { Value = master.BILL_FROM },
-                  new SqlParameter("@SHIPPER_NAME", SqlDbType.NVarChar, 50) { Value = master.SHIPPER_NAME },
+                  new SqlParameter("@BILL_TO",      SqlDbType.VarChar, 255) { Value = master.BILL_TO },
+                  new SqlParameter("@BILL_FROM",    SqlDbType.VarChar, 255) { Value = master.BILL_FROM },
+                  new SqlParameter("@SHIPPER_NAME", SqlDbType.NVarChar, 255) { Value = master.SHIPPER_NAME },
+                  new SqlParameter("@CONSIGNEE_NAME", SqlDbType.NVarChar, 255) { Value = master.CONSIGNEE_NAME },
                   new SqlParameter("@PAYMENT_TERM", SqlDbType.VarChar, 50) { Value = master.PAYMENT_TERM },
-                  new SqlParameter("@ADDRESS", SqlDbType.VarChar, 50) { Value = master.ADDRESS },
+                  new SqlParameter("@ADDRESS",      SqlDbType.VarChar) { Value = master.ADDRESS },
                   new SqlParameter("@BRANCH_ID",     SqlDbType.Int ) { Value = master.BRANCH_ID },
+                  new SqlParameter("@BANK_ID",     SqlDbType.Int ) { Value = master.BANK_ID },
                   new SqlParameter("@INVOICE_DATE",  SqlDbType.DateTime ) { Value = master.INVOICE_DATE },
                   new SqlParameter("@BL_NO",        SqlDbType.VarChar, 50) { Value = master.BL_NO },
                   new SqlParameter("@AGENT_NAME",   SqlDbType.VarChar, 50) { Value = master.AGENT_NAME},
@@ -144,21 +146,20 @@ namespace PrimeMaritime_API.Repository
                         dr["TOTAL_AMOUNT"] = i.TOTAL_AMOUNT;
 
                         tbl.Rows.Add(dr);
-                    }                    
+                    }
 
                     SqlHelper.ExecuteProcedureBulkInsert(connstring, tbl, "INVOICE_CHARGES", columns);
                 }
                 else
                 {
                     SqlHelper.UpdateInvoiceCharges<INVOICE_CHARGES>(master.BL_LIST, "INVOICE_CHARGES", connstring, columns);
-                }                
+                }
             }
             catch (Exception)
             {
                 throw;
             }
         }
-
         public void InsertCreditNote(string connstring, List<CREDIT_NOTE> master)
         {
             try
@@ -205,7 +206,6 @@ namespace PrimeMaritime_API.Repository
                 throw;
             }
         }
-
         public void FinalizeInvoice(string connstring, INVOICE_FINALIZE master)
         {
             try
@@ -217,14 +217,14 @@ namespace PrimeMaritime_API.Repository
                   new SqlParameter("@INVOICE_ID", SqlDbType.Int) { Value = master.INVOICE_ID },
                 };
 
-                SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_INVOICE", parameters);               
+                SqlHelper.ExecuteProcedureReturnString(connstring, "SP_CRUD_INVOICE", parameters);
             }
             catch (Exception)
             {
                 throw;
             }
         }
-        public DataSet GetInvoiceDetails(string connstring, int INVOICE_ID,string INVOICE_NO, string PORT, string ORG_CODE)
+        public DataSet GetInvoiceDetails(string connstring, int INVOICE_ID, string INVOICE_NO, string PORT, string ORG_CODE)
         {
             SqlParameter[] parameters =
             {
@@ -307,18 +307,20 @@ namespace PrimeMaritime_API.Repository
                 throw;
             }
         }
-
         public DataSet GetInvoiceDetailsForReceipt(string connstring, string INVOICE_NO, string PORT, string ORG_CODE)
         {
-            SqlParameter[] parameters =
+            using (var table = new DataTable())
             {
-                new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "GET_INVOICE_DETAILS_FOR_RECEIPT" },
-                new SqlParameter("@INVOICE_NO", SqlDbType.VarChar, 100) { Value = INVOICE_NO },
-                new SqlParameter("@PORT", SqlDbType.VarChar, 100) { Value = PORT },
-                new SqlParameter("@ORG_CODE", SqlDbType.VarChar, 50) { Value = ORG_CODE },
-            };
+                SqlParameter[] parameters =
+                {
+                    new SqlParameter("@OPERATION", SqlDbType.VarChar, 50) { Value = "GET_INVOICE_DETAILS_FOR_RECEIPT" },
+                    new SqlParameter("@INVOICE_NOLIST", SqlDbType.VarChar,255) { Value = INVOICE_NO },
+                    new SqlParameter("@PORT", SqlDbType.VarChar, 100) { Value = PORT },
+                    new SqlParameter("@ORG_CODE", SqlDbType.VarChar, 50) { Value = ORG_CODE },
+                };
 
-            return SqlHelper.ExtecuteProcedureReturnDataSet(connstring, "SP_CRUD_INVOICE", parameters);
+                return SqlHelper.ExtecuteProcedureReturnDataSet(connstring, "SP_CRUD_INVOICE", parameters);
+            }
         }
     }
 }

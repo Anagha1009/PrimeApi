@@ -7,6 +7,7 @@ using PrimeMaritime_API.Response;
 using PrimeMaritime_API.Utility;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace PrimeMaritime_API.Services
 {
@@ -138,7 +139,6 @@ namespace PrimeMaritime_API.Services
 
             return response;
         }
-
         public Response<List<CONTAINER_MASTER>> GetContainerMasterList(string ContainerNo, string ContType, string ContSize, bool Status, string ONHIRE_DATE)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
@@ -162,11 +162,8 @@ namespace PrimeMaritime_API.Services
 
             return response;
         }
-
-
         public Response<CONTAINER_MASTER> GetContainerMasterDetails(int ID, string CONTAINER_NO)
         {
-
             string dbConn = _config.GetConnectionString("ConnectionString");
 
             Response<CONTAINER_MASTER> response = new Response<CONTAINER_MASTER>();
@@ -188,7 +185,6 @@ namespace PrimeMaritime_API.Services
 
             return response;
         }
-
         public Response<CommonResponse> UpdateContainerMasterList(CONTAINER_MASTER request)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
@@ -202,7 +198,6 @@ namespace PrimeMaritime_API.Services
 
             return response;
         }
-
         public Response<CommonResponse> DeleteContainerMasterList(int ID)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
@@ -1798,7 +1793,6 @@ namespace PrimeMaritime_API.Services
                 return response;
             }            
         }
-
         public Response<List<ORG_MASTER>> GetOrgMasterList()
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
@@ -1822,20 +1816,29 @@ namespace PrimeMaritime_API.Services
 
             return response;
         }
-
-        public Response<ORG_MASTER> GetOrgMasterDetails(string ORG_CODE, string ORG_LOC_CODE)
+        public Response<ORG_MASTER> GetOrgMasterDetails(string ORG_CODE) 
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
 
             Response<ORG_MASTER> response = new Response<ORG_MASTER>();
-            var data = DbClientFactory<MasterRepo>.Instance.GetOrgMasterDetails(dbConn, ORG_CODE, ORG_LOC_CODE);
+            var data = DbClientFactory<MasterRepo>.Instance.GetOrgMasterDetails(dbConn, ORG_CODE);
 
             if (data != null)
             {
                 response.Succeeded = true;
                 response.ResponseCode = 200;
                 response.ResponseMessage = "Success";
-                response.Data = data;
+                response.Data = MasterRepo.GetSingleDataFromDataSet<ORG_MASTER>(data.Tables[0]);
+
+                if (data.Tables.Contains("Table1"))
+                {
+                    response.Data.BRANCH_LIST = MasterRepo.GetListFromDataSet<CUSTOMER_BRANCH>(data.Tables[1]);
+                }
+
+                if (data.Tables.Contains("Table2"))
+                {
+                    response.Data.BANK_LIST = MasterRepo.GetListFromDataSet<CUSTOMER_BANK>(data.Tables[2]);
+                }
             }
             else
             {
@@ -1846,7 +1849,6 @@ namespace PrimeMaritime_API.Services
 
             return response;
         }
-
         public Response<CommonResponse> UpdateOrgMasterList(ORG_MASTER request)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
@@ -1860,8 +1862,7 @@ namespace PrimeMaritime_API.Services
 
             return response;
         }
-
-        public Response<CommonResponse> DeleteOrgMasterList(string ORG_CODE, string ORG_LOC_CODE)
+        public Response<CommonResponse> DeleteOrgMasterList(string ORG_CODE)
         {
             string dbConn = _config.GetConnectionString("ConnectionString");
 
@@ -1874,7 +1875,7 @@ namespace PrimeMaritime_API.Services
                 return response;
             }
 
-            DbClientFactory<MasterRepo>.Instance.DeleteOrgMaster(dbConn, ORG_CODE, ORG_LOC_CODE);
+            DbClientFactory<MasterRepo>.Instance.DeleteOrgMaster(dbConn, ORG_CODE);
 
             response.Succeeded = true;
             response.ResponseMessage = "Master deleted Successfully.";
@@ -1985,7 +1986,6 @@ namespace PrimeMaritime_API.Services
         }
         #endregion
 
-
         #region "Charges MASTER"
         public Response<CommonResponse> InsertChargeMaster(CHARGES_MASTER request)
         {
@@ -2088,7 +2088,6 @@ namespace PrimeMaritime_API.Services
         }
         #endregion
 
-
         #region "HSN-CODE"
         public Response<CommonResponse> InsertHsnCode(HSN_MASTER request)
         {
@@ -2152,8 +2151,196 @@ namespace PrimeMaritime_API.Services
 
         #endregion
 
+        #region "COUNTRY MASTER"
+        public Response<CommonResponse> InsertCountryMaster(COUNTRY_MASTER request)
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            DbClientFactory<MasterRepo>.Instance.InsertCountryMaster(dbConn, request);
+
+            Response<CommonResponse> response = new Response<CommonResponse>();
+            response.Succeeded = true;
+            response.ResponseMessage = "Master saved Successfully.";
+            response.ResponseCode = 200;
+
+            return response;
+        }
+        public Response<List<COUNTRY_MASTER>> GetCountryMasterList()
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            Response<List<COUNTRY_MASTER>> response = new Response<List<COUNTRY_MASTER>>();
+            var data = DbClientFactory<MasterRepo>.Instance.GetCountryMasterList(dbConn);
+
+            if (data != null)
+            {
+                response.Succeeded = true;
+                response.ResponseCode = 200;
+                response.ResponseMessage = "Success";
+                response.Data = data;
+            }
+            else
+            {
+                response.Succeeded = false;
+                response.ResponseCode = 500;
+                response.ResponseMessage = "No Data";
+            }
+
+            return response;
+        }
+        public Response<COUNTRY_MASTER> GetCountryMasterDetails(int ID)
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            Response<COUNTRY_MASTER> response = new Response<COUNTRY_MASTER>();
+            var data = DbClientFactory<MasterRepo>.Instance.GetCountryMasterDetails(dbConn, ID);
+
+            if (data != null)
+            {
+                response.Succeeded = true;
+                response.ResponseCode = 200;
+                response.ResponseMessage = "Success";
+                response.Data = data;
+            }
+            else
+            {
+                response.Succeeded = false;
+                response.ResponseCode = 500;
+                response.ResponseMessage = "No Data";
+            }
+
+            return response;
+        }
+        public Response<CommonResponse> UpdateCountryMasterList(COUNTRY_MASTER request)
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            Response<CommonResponse> response = new Response<CommonResponse>();
+            DbClientFactory<MasterRepo>.Instance.UpdateCountryMasterList(dbConn, request);
+
+            response.Succeeded = true;
+            response.ResponseMessage = "Master updated Successfully.";
+            response.ResponseCode = 200;
+
+            return response;
+        }
+        public Response<CommonResponse> DeleteCountryMasterList(int ID)
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            Response<CommonResponse> response = new Response<CommonResponse>();
+
+            if ((ID == 0) || (ID == 0))
+            {
+                response.ResponseCode = 500;
+                response.ResponseMessage = "Please provide ID ";
+                return response;
+            }
+
+            DbClientFactory<MasterRepo>.Instance.DeleteCountryMaster(dbConn, ID);
+
+            response.Succeeded = true;
+            response.ResponseMessage = "Master deleted Successfully.";
+            response.ResponseCode = 200;
+
+            return response;
+        }
+        #endregion
+
+        #region "STATE MASTER"
+        public Response<CommonResponse> InsertStateMaster(STATE_MASTER request)
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            DbClientFactory<MasterRepo>.Instance.InsertStateMaster(dbConn, request);
+
+            Response<CommonResponse> response = new Response<CommonResponse>();
+            response.Succeeded = true;
+            response.ResponseMessage = "Master saved Successfully.";
+            response.ResponseCode = 200;
+
+            return response;
+        }
+        public Response<List<STATE_MASTER>> GetStateMasterList()
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            Response<List<STATE_MASTER>> response = new Response<List<STATE_MASTER>>();
+            var data = DbClientFactory<MasterRepo>.Instance.GetStateMasterList(dbConn);
+
+            if (data != null)
+            {
+                response.Succeeded = true;
+                response.ResponseCode = 200;
+                response.ResponseMessage = "Success";
+                response.Data = data;
+            }
+            else
+            {
+                response.Succeeded = false;
+                response.ResponseCode = 500;
+                response.ResponseMessage = "No Data";
+            }
+
+            return response;
+        }
+        public Response<STATE_MASTER> GetStateMasterDetails(int ID)
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            Response<STATE_MASTER> response = new Response<STATE_MASTER>();
+            var data = DbClientFactory<MasterRepo>.Instance.GetStateMasterDetails(dbConn, ID);
+
+            if (data != null)
+            {
+                response.Succeeded = true;
+                response.ResponseCode = 200;
+                response.ResponseMessage = "Success";
+                response.Data = data;
+            }
+            else
+            {
+                response.Succeeded = false;
+                response.ResponseCode = 500;
+                response.ResponseMessage = "No Data";
+            }
+
+            return response;
+        }
+        public Response<CommonResponse> UpdateStateMasterList(STATE_MASTER request)
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            Response<CommonResponse> response = new Response<CommonResponse>();
+            DbClientFactory<MasterRepo>.Instance.UpdateStateMasterList(dbConn, request);
+
+            response.Succeeded = true;
+            response.ResponseMessage = "Master updated Successfully.";
+            response.ResponseCode = 200;
+
+            return response;
+        }
+        public Response<CommonResponse> DeleteStateMasterList(int ID)
+        {
+            string dbConn = _config.GetConnectionString("ConnectionString");
+
+            Response<CommonResponse> response = new Response<CommonResponse>();
+
+            if ((ID == 0) || (ID == 0))
+            {
+                response.ResponseCode = 500;
+                response.ResponseMessage = "Please provide ID ";
+                return response;
+            }
+
+            DbClientFactory<MasterRepo>.Instance.DeleteStateMaster(dbConn, ID);
+
+            response.Succeeded = true;
+            response.ResponseMessage = "Master deleted Successfully.";
+            response.ResponseCode = 200;
+
+            return response;
+        }
+        #endregion
     }
-
-
-
 }
